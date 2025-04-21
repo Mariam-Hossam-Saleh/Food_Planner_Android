@@ -5,14 +5,18 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff3f4"
+    android:background="#ffffff"
     tools:context=".SplashScreenActivity">
 
     <pl.droidsonroids.gif.GifImageView
-        android:layout_width="250dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="80dp"
-        android:src="@drawable/splashscreen"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_margin="16dp"
+        android:src="@drawable/foodiemaryam"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
