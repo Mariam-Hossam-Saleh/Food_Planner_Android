@@ -9,16 +9,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class RegisterActivity extends AppCompatActivity {
 
     EditText edtPassword;
     Button btnSkip;
+    Button btnRegister;
+    Button btnSignIn;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +24,8 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
         edtPassword = findViewById(R.id.edtPassword);
         btnSkip = findViewById(R.id.btnSkip);
+        btnRegister = findViewById(R.id.btnReg);
+        btnSignIn = findViewById(R.id.btnSignIn);
         edtPassword.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
 
@@ -53,8 +53,24 @@ public class RegisterActivity extends AppCompatActivity {
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, SignInActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
