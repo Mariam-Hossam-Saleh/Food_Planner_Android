@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Food_Planner</string>
+    <string name="dishdash">Dish Dash</string>
+    <string name="slogan">Everything is good when it\'s about food</string>
+    <string name="register">Register</string>
+    <string name="signin">Sign in</string>
+    <string name="btnskip">Skip</string>
+    <string name="fullname">Full Name</string>
+    <string name="email">Email Address</string>
+    <string name="password">Password</string>
+    <string name="alreadyregisterd">Already Registerd?</string>
 </resources>
