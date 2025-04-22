@@ -77,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.createUserWithEmailAndPassword(edtEmail.toString(),edtPassword.toString())
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
@@ -118,5 +118,14 @@ public class RegisterActivity extends AppCompatActivity {
             reload();
         }
     }
+
+    private void updateUI(FirebaseUser user){
+
+    }
+
+    private void reload(){
+
+    }
+
 
 }

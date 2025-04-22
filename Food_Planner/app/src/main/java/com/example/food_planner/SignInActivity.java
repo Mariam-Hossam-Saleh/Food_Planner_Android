@@ -85,7 +85,7 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mAuth.signInWithEmailAndPassword(edtEmail.toString(), edtPassword.toString())
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
@@ -119,4 +119,11 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
+    private void updateUI(FirebaseUser user){
+
+    }
+
+    private void reload(){
+
+    }
 }
