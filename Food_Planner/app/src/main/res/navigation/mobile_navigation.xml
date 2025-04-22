@@ -12,14 +12,19 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_search"
         android:name="com.example.food_planner.ui.search.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_search" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
+        android:id="@+id/nav_favourite"
         android:name="com.example.food_planner.ui.favourite.FavouriteFragment"
         android:label="@string/favourite"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_favourite" />
+    <fragment
+        android:id="@+id/nav_calender"
+        android:name="com.example.food_planner.ui.calendar.CalendarFragment"
+        android:label="@string/calendar"
+        tools:layout="@layout/fragment_calender" />
 </navigation>

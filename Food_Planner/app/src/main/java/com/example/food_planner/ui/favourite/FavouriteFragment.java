@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.food_planner.databinding.FragmentSlideshowBinding;
+import com.example.food_planner.databinding.FragmentFavouriteBinding;
 
 public class FavouriteFragment extends Fragment {
 
-    private FragmentSlideshowBinding binding;
+    private FragmentFavouriteBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SlideshowViewModel slideshowViewModel =
-                new ViewModelProvider(this).get(SlideshowViewModel.class);
+        FavouriteViewModel favouriteViewModel =
+                new ViewModelProvider(this).get(FavouriteViewModel.class);
 
-        binding = FragmentSlideshowBinding.inflate(inflater, container, false);
+        binding = FragmentFavouriteBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSlideshow;
-        slideshowViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textFavourite;
+        favouriteViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

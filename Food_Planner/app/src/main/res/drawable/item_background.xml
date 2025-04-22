@@ -1,0 +1,10 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- HOVER STATE -->
+    <item android:state_hovered="true" android:state_enabled="true" android:drawable="@color/hoverColor" />
+
+    <!-- PRESSED STATE -->
+    <item android:state_pressed="true" android:drawable="@color/pressedColor" />
+
+    <!-- DEFAULT STATE -->
+    <item android:drawable="@android:color/transparent" />
+</selector>

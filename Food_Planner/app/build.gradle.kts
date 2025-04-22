@@ -50,5 +50,7 @@ dependencies {
     implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.22")
     implementation ("androidx.drawerlayout:drawerlayout:1.2.0")
     implementation ("com.google.android.material:material:1.9.0")
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
+    implementation("com.google.firebase:firebase-auth")
 
 }

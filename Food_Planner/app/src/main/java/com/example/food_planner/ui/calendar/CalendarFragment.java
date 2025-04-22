@@ -1,4 +1,4 @@
-package com.example.food_planner.ui.search;
+package com.example.food_planner.ui.calendar;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.food_planner.databinding.FragmentSearchBinding;
+import com.example.food_planner.databinding.FragmentCalenderBinding;
 
-public class SearchFragment extends Fragment {
+public class CalendarFragment extends Fragment {
 
-    private FragmentSearchBinding binding;
+    private FragmentCalenderBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        SearchViewModel searchViewModel =
-                new ViewModelProvider(this).get(SearchViewModel.class);
+        CalendarViewModel calendarViewModel =
+                new ViewModelProvider(this).get(CalendarViewModel.class);
 
-        binding = FragmentSearchBinding.inflate(inflater, container, false);
+        binding = FragmentCalenderBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textSearch;
-        searchViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textCalendar;
+        calendarViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
