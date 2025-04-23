@@ -1,9 +1,8 @@
-package com.example.food_planner.model.pojo;
+package com.example.food_planner.model.pojos.meal;
 
 import java.util.List;
 
-public class MealsResponce {
-//    @SerializedName("products")
+public class MealsResponse {
     private List<Meal> meals;
 
     public List<Meal> getMeals() {

@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.food_planner.model.pojo.Meal;
+import com.example.food_planner.model.pojos.meal.Meal;
 
 @Database(entities  = {Meal.class},version = 1)
 public abstract class AppDatabase extends RoomDatabase {

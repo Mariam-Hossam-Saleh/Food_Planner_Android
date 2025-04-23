@@ -1,10 +1,10 @@
-package com.example.food_planner.model.repository;
+package com.example.food_planner.model.repository.meal;
 
 import androidx.lifecycle.LiveData;
 import com.example.food_planner.model.database.MealLocalDataSource;
 import com.example.food_planner.model.network.NetworkCallback;
-import com.example.food_planner.model.network.MealsRemoteDataSource;
-import com.example.food_planner.model.pojo.Meal;
+import com.example.food_planner.model.network.meal.MealsRemoteDataSource;
+import com.example.food_planner.model.pojos.meal.Meal;
 
 import java.util.List;
 
