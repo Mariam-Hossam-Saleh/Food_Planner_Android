@@ -1,4 +1,4 @@
-package com.example.food_planner.model.repository.meal;
+package com.example.food_planner.model.repositories.meal;
 
 import androidx.lifecycle.LiveData;
 import com.example.food_planner.model.database.MealLocalDataSource;
@@ -29,8 +29,14 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
-    public void getAllMeals(NetworkCallback networkCallback) {
-        remoteDataSource.makeNetworkCall(networkCallback);
+    public void getSingleRandomMeal(NetworkCallback networkCallback) {
+        remoteDataSource.makeNetworkCallForSingleRandomMeal(networkCallback);
+    }
+
+    @Override
+    public void getMealsByFirstLetter(NetworkCallback networkCallback, String letter) {
+        remoteDataSource.makeNetworkCallForMealsByFirstLetter(networkCallback,letter);
+
     }
 
     @Override

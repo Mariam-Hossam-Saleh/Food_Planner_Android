@@ -6,7 +6,7 @@
 
     <style name="Base.Theme.Food_Planner" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/dark_red</item>
+        <item name="colorPrimary">@color/light_red</item>
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Sharp</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Sharp</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Sharp</item>
