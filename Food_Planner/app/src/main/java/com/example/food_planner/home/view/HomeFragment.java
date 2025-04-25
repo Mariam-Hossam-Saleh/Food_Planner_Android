@@ -83,7 +83,6 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
     @Override
     public void onMealClickListener(ImageView imageView, Meal meal,boolean favState) {
-
         if(!favState) {
             homePresenter.addToFavourite(meal);
             Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
