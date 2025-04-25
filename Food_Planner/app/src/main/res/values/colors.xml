@@ -6,6 +6,7 @@
     <color name="gray">#393D40</color>
     <color name="medium_gray">#262523</color>
     <color name="dark_gray">#27282C</color>
+    <color name="light_gray">#a0a3a3</color>
     <color name="hoverColor">#44FFFFFF</color>
     <color name="pressedColor">#55FFFFFF</color>
 

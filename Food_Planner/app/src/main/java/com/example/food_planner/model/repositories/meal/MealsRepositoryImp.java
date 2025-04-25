@@ -6,6 +6,7 @@ import com.example.food_planner.model.network.NetworkCallback;
 import com.example.food_planner.model.network.meal.MealsRemoteDataSource;
 import com.example.food_planner.model.pojos.meal.Meal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealsRepositoryImp implements MealsRepository {
@@ -29,8 +30,18 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
+    public void searchMealByName(NetworkCallback networkCallback, String mealName) {
+        remoteDataSource.makeNetworkCallForSearchMealByName(networkCallback,mealName);
+    }
+
+    @Override
     public void getSingleRandomMeal(NetworkCallback networkCallback) {
         remoteDataSource.makeNetworkCallForSingleRandomMeal(networkCallback);
+    }
+
+    @Override
+    public void getTenRandomMeal(NetworkCallback networkCallback, ArrayList<Meal> meals) {
+        remoteDataSource.makeNetworkCallForTenRandomMeals(networkCallback,meals);
     }
 
     @Override

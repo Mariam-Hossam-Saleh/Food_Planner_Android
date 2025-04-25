@@ -5,6 +5,7 @@ import com.example.food_planner.model.network.NetworkCallback;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.repositories.meal.MealsRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomePresenterImp implements HomePresenter, NetworkCallback {
@@ -17,6 +18,21 @@ public class HomePresenterImp implements HomePresenter, NetworkCallback {
     }
 
     @Override
+    public void getSingleRandomMeal() {
+        mealsRepo.getSingleRandomMeal(this);
+    }
+
+    @Override
+    public void getTenRandomMeals(ArrayList<Meal> meals) {
+        mealsRepo.getTenRandomMeal(this,meals);
+    }
+
+    @Override
+    public void searchMealByName(String mealName) {
+        mealsRepo.searchMealByName(this,mealName);
+    }
+
+    @Override
     public void getMealsByFirstLetter(String letter) {
         mealsRepo.getMealsByFirstLetter(this,letter);
     }
@@ -24,6 +40,11 @@ public class HomePresenterImp implements HomePresenter, NetworkCallback {
     @Override
     public void addToFavourite(Meal meal) {
         mealsRepo.insertMeal(meal);
+    }
+
+    @Override
+    public void removeFromFavourite(Meal meal) {
+        mealsRepo.deleteMeal(meal);
     }
 
 

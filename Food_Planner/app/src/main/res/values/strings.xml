@@ -27,4 +27,6 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="calendar">My Calendar</string>
     <string name="logout">Log Out</string>
+
+    <string name="add_to_favourites">Add To Favourite</string>
 </resources>

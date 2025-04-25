@@ -59,6 +59,6 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
-
+    implementation ("com.github.sparrow007:carouselrecyclerview:1.2.6")
 
 }

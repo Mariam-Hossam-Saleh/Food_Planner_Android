@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:elevation="10dp"
+    android:background="@color/light_gray"
     app:cardCornerRadius="30dp">
 
     <LinearLayout
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="12dp"
+            android:background="@color/light_gray"
             android:gravity="center_vertical"
             android:weightSum="1">
 
@@ -37,9 +39,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.8"
                 android:text="Sample Meal"
+                android:fontFamily="@font/amita"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333" />
+                android:textColor="@color/white"/>
 
             <ImageView
                 android:id="@+id/addFavouritesIcon"
@@ -47,7 +50,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="0.2"
                 android:padding="6dp"
-                android:contentDescription="@string/add_to_favourites" />
+                android:contentDescription="@string/add_to_favourites"
+                android:src="@drawable/favourite"/>
         </LinearLayout>
 
     </LinearLayout>

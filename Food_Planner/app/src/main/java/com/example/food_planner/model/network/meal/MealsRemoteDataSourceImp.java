@@ -10,6 +10,7 @@ import com.example.food_planner.model.pojos.meal.MealsResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,11 +58,62 @@ public class MealsRemoteDataSourceImp implements MealsRemoteDataSource {
             }
         });
     }
+    @Override
+    public void makeNetworkCallForTenRandomMeals(NetworkCallback networkCallback, ArrayList<Meal> meals) {
+        final int totalCalls = 10;
+        final AtomicInteger completedCalls = new AtomicInteger(0); // to handle the asynchronous network calls
+
+        for (int i = 0; i < totalCalls; i++) {
+            mealService.lookupSingleRandomMeal().enqueue(new Callback<MealsResponse>() {
+                @Override
+                public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        synchronized (meals) {
+                            meals.add(response.body().getMeals().get(0));
+                        }
+                    }
+
+                    if (completedCalls.incrementAndGet() == totalCalls) {
+                        networkCallback.onSuccessResult(meals);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MealsResponse> call, Throwable t) {
+                    Log.i(TAG, "onFailure: " + t.getMessage());
+                    if (completedCalls.incrementAndGet() == totalCalls) {
+                        networkCallback.onFailureResult(t.getMessage());
+                        t.printStackTrace();
+                    }
+                }
+            });
+        }
+    }
 
     @Override
     public void makeNetworkCallForMealsByFirstLetter(NetworkCallback networkCallback, String letter) {
         List<Meal> result = new ArrayList<>();
         mealService.listMealsByFirstLetter(letter).enqueue(new Callback<MealsResponse>() {
+            @Override
+            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
+                result.addAll(response.body().getMeals());
+                networkCallback.onSuccessResult(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<MealsResponse> call, Throwable t) {
+                Log.i(TAG,"onFailure: CallBack");
+                networkCallback.onFailureResult(t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void makeNetworkCallForSearchMealByName(NetworkCallback networkCallback, String mealName) {
+        List<Meal> result = new ArrayList<>();
+        mealService.searchMealByName(mealName).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
