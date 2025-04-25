@@ -1,52 +1,53 @@
 package com.example.food_planner.model.repositories.meal;
 
 import androidx.lifecycle.LiveData;
-import com.example.food_planner.model.database.MealLocalDataSource;
-import com.example.food_planner.model.network.NetworkCallback;
-import com.example.food_planner.model.network.meal.MealsRemoteDataSource;
+
+import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSource;
+import com.example.food_planner.model.network.meal.MealNetworkCallback;
+import com.example.food_planner.model.network.meal.MealRemoteDataSource;
 import com.example.food_planner.model.pojos.meal.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MealsRepositoryImp implements MealsRepository {
-    MealsRemoteDataSource remoteDataSource;
+    MealRemoteDataSource remoteDataSource;
     MealLocalDataSource mealLocalDataSource;
     private static MealsRepositoryImp productsRepository = null;
-    public static MealsRepositoryImp getInstance(MealsRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
+    public static MealsRepositoryImp getInstance(MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
         if(productsRepository == null){
             productsRepository = new MealsRepositoryImp(remoteDataSource, mealLocalDataSource);
         }
         return productsRepository;
     }
-    private MealsRepositoryImp(MealsRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
+    private MealsRepositoryImp(MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
         this.remoteDataSource = remoteDataSource;
         this.mealLocalDataSource = mealLocalDataSource;
     }
 
-
+    @Override
     public LiveData<List<Meal>> getStoredMeals() {
         return mealLocalDataSource.getAllStoredMeals();
     }
 
     @Override
-    public void searchMealByName(NetworkCallback networkCallback, String mealName) {
-        remoteDataSource.makeNetworkCallForSearchMealByName(networkCallback,mealName);
+    public void searchMealByName(MealNetworkCallback mealNetworkCallback, String mealName) {
+        remoteDataSource.makeNetworkCallForSearchMealByName(mealNetworkCallback,mealName);
     }
 
     @Override
-    public void getSingleRandomMeal(NetworkCallback networkCallback) {
-        remoteDataSource.makeNetworkCallForSingleRandomMeal(networkCallback);
+    public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback) {
+        remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback);
     }
 
     @Override
-    public void getTenRandomMeal(NetworkCallback networkCallback, ArrayList<Meal> meals) {
-        remoteDataSource.makeNetworkCallForTenRandomMeals(networkCallback,meals);
+    public void getTenRandomMeal(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals) {
+        remoteDataSource.makeNetworkCallForTenRandomMeals(mealNetworkCallback,meals);
     }
 
     @Override
-    public void getMealsByFirstLetter(NetworkCallback networkCallback, String letter) {
-        remoteDataSource.makeNetworkCallForMealsByFirstLetter(networkCallback,letter);
+    public void getMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter) {
+        remoteDataSource.makeNetworkCallForMealsByFirstLetter(mealNetworkCallback,letter);
 
     }
 

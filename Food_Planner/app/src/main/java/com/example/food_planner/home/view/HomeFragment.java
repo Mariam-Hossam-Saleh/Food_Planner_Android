@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.food_planner.databinding.FragmentHomeBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
-import com.example.food_planner.model.database.MealLocalDataSourceImp;
-import com.example.food_planner.model.network.meal.MealsRemoteDataSourceImp;
+import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
+import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
@@ -49,9 +49,9 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
         carouselRecyclerview = binding.carouselRecyclerview;
         carouselRecyclerview.setAdapter(homeAdapter);
-        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealsRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
-//        homePresenter.getTenRandomMeals(mealArrayList);
-        homePresenter.getSingleRandomMeal();
+        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
+        homePresenter.getTenRandomMeals(mealArrayList);
+//        homePresenter.getSingleRandomMeal();
         return binding.getRoot();
     }
 

@@ -5,11 +5,11 @@ import java.util.List;
 
 public class IngredientResponse {
     @SerializedName("meals")
-    private List<Ingredient> meals;
-    public List<Ingredient> getMeals() {
-        return meals;
+    private List<Ingredient> ingredients;
+    public List<Ingredient> getIngredients() {
+        return ingredients;
     }
-    public void setMeals(List<Ingredient> meals) {
-        this.meals = meals;
+    public void setIngredients(List<Ingredient> meals) {
+        this.ingredients = meals;
     }
 }

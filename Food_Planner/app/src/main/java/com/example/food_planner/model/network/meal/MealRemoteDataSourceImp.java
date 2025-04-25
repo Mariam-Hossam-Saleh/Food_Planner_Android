@@ -4,7 +4,6 @@ import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
-import com.example.food_planner.model.network.NetworkCallback;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.MealsResponse;
 
@@ -18,11 +17,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MealsRemoteDataSourceImp implements MealsRemoteDataSource {
+public class MealRemoteDataSourceImp implements MealRemoteDataSource {
     private static final String BASE_URL = "https://www.themealdb.com/";
-    private static MealsRemoteDataSourceImp client = null;
+    private static MealRemoteDataSourceImp client = null;
     private final MealService mealService;
-    private MealsRemoteDataSourceImp(){
+    private MealRemoteDataSourceImp(){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
 //                .client(okHttpClient)
@@ -31,35 +30,35 @@ public class MealsRemoteDataSourceImp implements MealsRemoteDataSource {
         mealService = retrofit.create(MealService.class);
     }
 
-    public static MealsRemoteDataSourceImp getInstance(){
+    public static MealRemoteDataSourceImp getInstance(){
 
         if(client == null){
-            client = new MealsRemoteDataSourceImp();
+            client = new MealRemoteDataSourceImp();
         }
         return client;
     }
 
     @Override
-    public void makeNetworkCallForSingleRandomMeal(NetworkCallback networkCallback){
+    public void makeNetworkCallForSingleRandomMeal(MealNetworkCallback mealNetworkCallback){
         List<Meal> result = new ArrayList<>();
         mealService.lookupSingleRandomMeal().enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
                 result.addAll(response.body().getMeals());
-                networkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessResult(response.body().getMeals());
             }
 
             @Override
             public void onFailure(Call<MealsResponse> call, Throwable t) {
                 Log.i(TAG,"onFailure: CallBack");
-                networkCallback.onFailureResult(t.getMessage());
+                mealNetworkCallback.onFailureResult(t.getMessage());
                 t.printStackTrace();
             }
         });
     }
     @Override
-    public void makeNetworkCallForTenRandomMeals(NetworkCallback networkCallback, ArrayList<Meal> meals) {
+    public void makeNetworkCallForTenRandomMeals(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals) {
         final int totalCalls = 10;
         final AtomicInteger completedCalls = new AtomicInteger(0); // to handle the asynchronous network calls
 
@@ -74,7 +73,7 @@ public class MealsRemoteDataSourceImp implements MealsRemoteDataSource {
                     }
 
                     if (completedCalls.incrementAndGet() == totalCalls) {
-                        networkCallback.onSuccessResult(meals);
+                        mealNetworkCallback.onSuccessResult(meals);
                     }
                 }
 
@@ -82,7 +81,7 @@ public class MealsRemoteDataSourceImp implements MealsRemoteDataSource {
                 public void onFailure(Call<MealsResponse> call, Throwable t) {
                     Log.i(TAG, "onFailure: " + t.getMessage());
                     if (completedCalls.incrementAndGet() == totalCalls) {
-                        networkCallback.onFailureResult(t.getMessage());
+                        mealNetworkCallback.onFailureResult(t.getMessage());
                         t.printStackTrace();
                     }
                 }
@@ -91,46 +90,46 @@ public class MealsRemoteDataSourceImp implements MealsRemoteDataSource {
     }
 
     @Override
-    public void makeNetworkCallForMealsByFirstLetter(NetworkCallback networkCallback, String letter) {
+    public void makeNetworkCallForMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter) {
         List<Meal> result = new ArrayList<>();
         mealService.listMealsByFirstLetter(letter).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
                 result.addAll(response.body().getMeals());
-                networkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessResult(response.body().getMeals());
             }
 
             @Override
             public void onFailure(Call<MealsResponse> call, Throwable t) {
                 Log.i(TAG,"onFailure: CallBack");
-                networkCallback.onFailureResult(t.getMessage());
+                mealNetworkCallback.onFailureResult(t.getMessage());
                 t.printStackTrace();
             }
         });
     }
 
     @Override
-    public void makeNetworkCallForSearchMealByName(NetworkCallback networkCallback, String mealName) {
+    public void makeNetworkCallForSearchMealByName(MealNetworkCallback mealNetworkCallback, String mealName) {
         List<Meal> result = new ArrayList<>();
         mealService.searchMealByName(mealName).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
                 result.addAll(response.body().getMeals());
-                networkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessResult(response.body().getMeals());
             }
 
             @Override
             public void onFailure(Call<MealsResponse> call, Throwable t) {
                 Log.i(TAG,"onFailure: CallBack");
-                networkCallback.onFailureResult(t.getMessage());
+                mealNetworkCallback.onFailureResult(t.getMessage());
                 t.printStackTrace();
             }
         });
     }
 
-    public void getDataOverNetwork(NetworkCallback networkCallback){
+    public void getDataOverNetwork(MealNetworkCallback mealNetworkCallback){
 
     }
 }

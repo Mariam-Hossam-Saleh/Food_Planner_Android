@@ -1,7 +1,7 @@
 package com.example.food_planner.model.network.ingredient;
 
-import com.example.food_planner.model.network.NetworkCallback;
+import com.example.food_planner.model.network.meal.MealNetworkCallback;
 
 public interface IngredientsRemoteDataSource {
-    void makeNetworkCall(NetworkCallback networkCallback);
+    void makeNetworkCalltoGetAllIngredients(IngredientsNetworkCallback ingredientsNetworkCallback);
 }

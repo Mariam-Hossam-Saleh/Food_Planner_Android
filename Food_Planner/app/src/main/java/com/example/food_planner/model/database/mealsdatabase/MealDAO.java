@@ -1,4 +1,4 @@
-package com.example.food_planner.model.database;
+package com.example.food_planner.model.database.mealsdatabase;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

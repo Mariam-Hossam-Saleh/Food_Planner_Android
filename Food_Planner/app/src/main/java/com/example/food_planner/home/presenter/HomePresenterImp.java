@@ -1,14 +1,14 @@
 package com.example.food_planner.home.presenter;
 
 import com.example.food_planner.home.view.HomeView;
-import com.example.food_planner.model.network.NetworkCallback;
+import com.example.food_planner.model.network.meal.MealNetworkCallback;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.repositories.meal.MealsRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePresenterImp implements HomePresenter, NetworkCallback {
+public class HomePresenterImp implements HomePresenter, MealNetworkCallback {
     private HomeView view;
     private MealsRepository mealsRepo;
 
