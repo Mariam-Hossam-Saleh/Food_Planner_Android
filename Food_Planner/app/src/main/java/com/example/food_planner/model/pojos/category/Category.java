@@ -1,15 +1,26 @@
 package com.example.food_planner.model.pojos.category;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "categories_table")
 public class Category {
-
+    @PrimaryKey
+    @NonNull
     private String idCategory;
     private String strCategory;
     private String strCategoryThumb;
     private String strCategoryDescription;
 
+    public Category(@NonNull String idCategory, String strCategory, String strCategoryThumb, String strCategoryDescription) {
+        this.idCategory = idCategory;
+        this.strCategory = strCategory;
+        this.strCategoryThumb = strCategoryThumb;
+        this.strCategoryDescription = strCategoryDescription;
+    }
+
+    @NonNull
     public String getIdCategory() {
         return idCategory;
     }

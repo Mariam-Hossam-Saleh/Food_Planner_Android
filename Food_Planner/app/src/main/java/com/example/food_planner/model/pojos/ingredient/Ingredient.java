@@ -1,23 +1,31 @@
 package com.example.food_planner.model.pojos.ingredient;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 @Entity(tableName = "ingredients_table")
 public class Ingredient {
 
-    @SerializedName("idIngredient")
+    @PrimaryKey
+    @NonNull
     private String idIngredient;
 
-    @SerializedName("strIngredient")
     private String strIngredient;
 
-    @SerializedName("strDescription")
     private String strDescription;
 
-    @SerializedName("strType")
     private String strType;
 
+    public Ingredient(@NonNull String idIngredient, String strIngredient, String strDescription, String strType) {
+        this.idIngredient = idIngredient;
+        this.strIngredient = strIngredient;
+        this.strDescription = strDescription;
+        this.strType = strType;
+    }
+
+    @NonNull
     public String getIdIngredient() {
         return idIngredient;
     }

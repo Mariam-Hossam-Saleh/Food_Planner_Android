@@ -13,22 +13,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/search_home"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"> <!-- This line centers it -->
+<!--    <ScrollView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/search_home"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"> &lt;!&ndash; This line centers it &ndash;&gt;-->
 
-        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-            android:id="@+id/carouselRecyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            tools:listitem="@layout/meal_carousel" />
-    </ScrollView>
+<!--        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview-->
+<!--            android:id="@+id/carouselRecyclerview"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:clipToPadding="false"-->
+<!--            android:overScrollMode="never"-->
+<!--            tools:listitem="@layout/meal_carousel" />-->
+<!--        -->
+<!--        -->
+<!--    </ScrollView>-->
+    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+        android:id="@+id/carouselRecyclerviewTenRandomMeals"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        tools:listitem="@layout/meal_carousel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_home"
+        />
+    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+        android:id="@+id/carouselRecyclerviewIngredients"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        tools:listitem="@layout/meal_carousel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/carouselRecyclerviewTenRandomMeals"
+        />
+
 
 
 
