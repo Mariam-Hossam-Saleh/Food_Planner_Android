@@ -6,10 +6,9 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.food_planner.model.database.mealsdatabase.MealDAO;
-import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.ingredient.Ingredient;
 
-@Database(entities  = {Meal.class},version = 1)
+@Database(entities  = {Ingredient.class},version = 1)
 public abstract class IngredientsDatabase extends RoomDatabase {
     private static IngredientsDatabase instance = null;
     public abstract IngredientsDAO getIngredientDAO();
