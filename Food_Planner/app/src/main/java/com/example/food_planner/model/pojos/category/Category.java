@@ -1,5 +1,8 @@
 package com.example.food_planner.model.pojos.category;
 
+import androidx.room.Entity;
+
+@Entity(tableName = "categories_table")
 public class Category {
 
     private String idCategory;

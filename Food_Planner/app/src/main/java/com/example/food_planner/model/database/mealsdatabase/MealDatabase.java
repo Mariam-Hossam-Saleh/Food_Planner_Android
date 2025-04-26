@@ -9,12 +9,12 @@ import androidx.room.RoomDatabase;
 import com.example.food_planner.model.pojos.meal.Meal;
 
 @Database(entities  = {Meal.class},version = 1)
-public abstract class AppDatabase extends RoomDatabase {
-    private static AppDatabase instance = null;
+public abstract class MealDatabase extends RoomDatabase {
+    private static MealDatabase instance = null;
     public abstract MealDAO getMealDAO();
-    public static synchronized AppDatabase getInstance(Context context){
+    public static synchronized MealDatabase getInstance(Context context){
         if(instance == null){
-            instance = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class,"meal_database")
+            instance = Room.databaseBuilder(context.getApplicationContext(), MealDatabase.class,"meal_database")
                     .build();
         }
         return instance;

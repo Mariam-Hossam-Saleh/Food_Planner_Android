@@ -13,7 +13,7 @@ import com.example.food_planner.model.pojos.meal.Meal;
 import java.util.List;
 @Dao
 public interface IngredientsDAO {
-    @Query("SELECT * FROM meals_table")
+    @Query("SELECT * FROM ingredients_table")
     public LiveData<List<Ingredient>> getAllIngredients();
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     public void insertIngredient(Ingredient ingredient);

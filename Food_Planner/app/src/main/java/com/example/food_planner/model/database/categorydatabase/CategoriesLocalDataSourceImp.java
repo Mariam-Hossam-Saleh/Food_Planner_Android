@@ -4,9 +4,6 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.food_planner.model.database.ingredientsdatabase.IngredientsDAO;
-import com.example.food_planner.model.database.ingredientsdatabase.IngredientsDatabase;
-import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSource;
 import com.example.food_planner.model.pojos.category.Category;
 
 import java.util.List;
@@ -16,13 +13,13 @@ public class CategoriesLocalDataSourceImp implements CategoriesLocalDataSource {
     private static CategoriesLocalDataSourceImp localDataSourceImp = null;
     private final LiveData<List<Category>> storedCategories;
     private CategoriesLocalDataSourceImp(Context context){
-        CategoriesDatabase database = IngredientsDatabase.getInstance(context.getApplicationContext());
-        dao = database.getIngredientDAO();
-        storedIngredients = dao.getAllIngredients();
+        CategoriesDatabase database = CategoriesDatabase.getInstance(context.getApplicationContext());
+        dao = database.getCategoryDAO();
+        storedCategories = dao.getAllCategories();
     }
-    public static IngredientsLocalDataSourceImp getInstance(Context context){
+    public static CategoriesLocalDataSourceImp getInstance(Context context){
         if(localDataSourceImp == null){
-            localDataSourceImp = new IngredientsLocalDataSourceImp(context);
+            localDataSourceImp = new CategoriesLocalDataSourceImp(context);
         }
         return localDataSourceImp;
     }
@@ -40,6 +37,6 @@ public class CategoriesLocalDataSourceImp implements CategoriesLocalDataSource {
 
     @Override
     public LiveData<List<Category>> getAllStoredCategories() {
-        return storedCategory;
+        return storedCategories;
     }
 }

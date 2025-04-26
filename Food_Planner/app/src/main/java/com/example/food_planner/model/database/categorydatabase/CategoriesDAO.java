@@ -13,7 +13,7 @@ import java.util.List;
 
 @Dao
 public interface CategoriesDAO {
-    @Query("SELECT * FROM meals_table")
+    @Query("SELECT * FROM categories_table")
     public LiveData<List<Category>> getAllCategories();
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     public void insertCategory(Category category);

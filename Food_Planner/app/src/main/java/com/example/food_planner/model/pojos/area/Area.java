@@ -1,7 +1,8 @@
 package com.example.food_planner.model.pojos.area;
 
-import com.google.gson.annotations.SerializedName;
+import androidx.room.Entity;
 
+@Entity(tableName = "areas_table")
 public class Area {
     private String strArea;
     public String getStrArea() {

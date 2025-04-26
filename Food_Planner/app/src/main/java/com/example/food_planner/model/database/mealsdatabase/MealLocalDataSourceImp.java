@@ -13,7 +13,7 @@ public class MealLocalDataSourceImp implements MealLocalDataSource {
     private static MealLocalDataSourceImp localDataSourceImp = null;
     private final LiveData<List<Meal>> storedMeals;
     private MealLocalDataSourceImp(Context context){
-        AppDatabase database = AppDatabase.getInstance(context.getApplicationContext());
+        MealDatabase database = MealDatabase.getInstance(context.getApplicationContext());
         dao = database.getMealDAO();
         storedMeals = dao.getAllMeals();
     }

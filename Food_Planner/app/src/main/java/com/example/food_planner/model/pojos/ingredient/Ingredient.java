@@ -1,7 +1,9 @@
 package com.example.food_planner.model.pojos.ingredient;
 
-import com.google.gson.annotations.SerializedName;
+import androidx.room.Entity;
 
+import com.google.gson.annotations.SerializedName;
+@Entity(tableName = "ingredients_table")
 public class Ingredient {
 
     @SerializedName("idIngredient")
