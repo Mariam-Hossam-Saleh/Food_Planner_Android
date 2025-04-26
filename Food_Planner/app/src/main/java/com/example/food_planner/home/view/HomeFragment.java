@@ -17,24 +17,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.food_planner.databinding.FragmentHomeBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
+import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
+import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSourceImp;
 import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements HomeView, OnMealClickListener{
+public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnIngredientClickListener{
 
     ArrayList<Meal> tenRandomMealArrayList;
     ArrayList<Ingredient> ingredientArrayList;
     CarouselRecyclerview carouselRecyclerviewTenRandomMeals;
     CarouselRecyclerview carouselRecyclerviewIngredients;
-    HomeAdapter homeAdapterTenRandomMeals;
-    HomeAdapter homeAdapterIngredients;
+    MealAdapter mealAdapterTenRandomMeals;
+    IngredientAdapter ingredientAdapter;
     HomePresenter homePresenter;
     LinearLayoutManager linearLayoutManager;
     private FragmentHomeBinding binding;
@@ -43,20 +46,25 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        tenRandomMealArrayList = new ArrayList<>();
-        homeAdapterTenRandomMeals = new HomeAdapter(getContext(), tenRandomMealArrayList,this);
-//        homeAdapterIngredients = new HomeAdapter(getContext(),ingredientArrayList,this);
+//        tenRandomMealArrayList = new ArrayList<>();
+//        mealAdapterTenRandomMeals = new MealAdapter(getContext(), tenRandomMealArrayList,this);
+
+        ingredientArrayList = new ArrayList<>();
+        ingredientAdapter = new IngredientAdapter(getContext(),ingredientArrayList,this);
 
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
-        carouselRecyclerviewTenRandomMeals = binding.carouselRecyclerviewTenRandomMeals;
-        carouselRecyclerviewTenRandomMeals.setAdapter(homeAdapterTenRandomMeals);
+//        carouselRecyclerviewTenRandomMeals = binding.carouselRecyclerviewTenRandomMeals;
+//        carouselRecyclerviewTenRandomMeals.setAdapter(mealAdapterTenRandomMeals);
 
         carouselRecyclerviewIngredients = binding.carouselRecyclerviewIngredients;
-        carouselRecyclerviewIngredients.setAdapter(homeAdapterTenRandomMeals);
-        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
-        homePresenter.getTenRandomMeals(tenRandomMealArrayList);
+        carouselRecyclerviewIngredients.setAdapter(ingredientAdapter);
+
+        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())), IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),this);
+        homePresenter.getAllIngredients();
+//        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
+//        homePresenter.getTenRandomMeals(tenRandomMealArrayList);
 //        homePresenter.getSingleRandomMeal();
         return binding.getRoot();
     }
@@ -74,8 +82,14 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
     @Override
     public void ShowMeals(List<Meal> mealList) {
-        homeAdapterTenRandomMeals.setMeals(mealList);
-        homeAdapterTenRandomMeals.notifyDataSetChanged();
+        mealAdapterTenRandomMeals.setMeals(mealList);
+        mealAdapterTenRandomMeals.notifyDataSetChanged();
+    }
+
+    @Override
+    public void ShowIngredients(List<Ingredient> ingredientList) {
+        ingredientAdapter.setIngredients(ingredientList);
+        ingredientAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -97,5 +111,10 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
             homePresenter.removeFromFavourite(meal);
             Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onIngredientClickListener(ImageView imageView, Ingredient ingredient) {
+
     }
 }

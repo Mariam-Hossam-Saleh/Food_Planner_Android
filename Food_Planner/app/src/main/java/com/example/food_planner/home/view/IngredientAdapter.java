@@ -18,44 +18,43 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
-import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.ingredient.Ingredient;
 
 import java.util.List;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
-
+public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
     private final Context context;
-    private List<Meal> meals;
-    private final OnMealClickListener listener;
+    private List<Ingredient> ingredients;
+    private final OnIngredientClickListener listener;
     private static final String TAG = "HomeRecyclerView";
 
-    public HomeAdapter(Context _context, List<Meal> meals, OnMealClickListener _listener) {
+    public IngredientAdapter(Context _context, List<Ingredient> ingredients, OnIngredientClickListener _listener) {
         this.context = _context;
-        this.meals = meals;
+        this.ingredients = ingredients;
         this.listener = _listener;
     }
 
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
+    public IngredientAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         View view = LayoutInflater.from(recyclerView.getContext())
                 .inflate(R.layout.meal_carousel, recyclerView, false);
-        return new ViewHolder(view);
+        return new IngredientAdapter.ViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Meal meal = meals.get(position);
+    public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
+        Ingredient ingredient = ingredients.get(position);
 
-        holder.txtMealTitle.setText(meal.getStrMeal());
+        holder.txtMealTitle.setText(ingredient.getStrIngredient());
 
         Glide.with(context)
-                .load(meal.getStrMealThumb())
+                .load("https://www.themealdb.com/images/ingredients/"+ingredient.getStrIngredient()+".png")
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .transform(new CenterCrop(), new RoundedCorners(30))
@@ -74,7 +73,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             boolean isFavorite = v.getTag() != null && (boolean) v.getTag();
 
             if (listener != null) {
-                listener.onMealClickListener(holder.addFavouritesIcon, meal,isFavorite);
+                listener.onIngredientClickListener(holder.addFavouritesIcon, ingredient);
             }
 
             if (isFavorite) {
@@ -87,15 +86,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         });
 
 
-        Log.i(TAG, "Bound meal: " + meal.getStrMeal());
+        Log.i(TAG, "Bound meal: " + ingredient.getStrIngredient());
     }
 
     @Override
     public int getItemCount() {
-        if(meals.isEmpty())
+        if(ingredients.isEmpty())
             return 0;
         else
-            return meals.size();
+            return ingredients.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

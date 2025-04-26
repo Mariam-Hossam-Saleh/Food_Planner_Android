@@ -6,6 +6,6 @@ import com.example.food_planner.model.pojos.meal.Meal;
 import java.util.List;
 
 public interface IngredientsNetworkCallback {
-    public void onSuccessResult(List<Ingredient> meals);
-    public void onFailureResult(String errorMSG);
+    public void onSuccessIngredient(List<Ingredient> meals);
+    public void onFailureIngredient(String errorMSG);
 }

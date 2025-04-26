@@ -1,20 +1,22 @@
 package com.example.food_planner.model.repositories.ingredent;
 
+import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSource;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSource;
 import com.example.food_planner.model.network.ingredient.IngredientsNetworkCallback;
 import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSource;
+import com.example.food_planner.model.pojos.ingredient.Ingredient;
 
 public class IngredientsRepositoryImp implements IngredientsRepository{
     IngredientsRemoteDataSource ingredietsRemoteDataSource;
     MealLocalDataSource mealLocalDataSource;
     private static IngredientsRepositoryImp productsRepository = null;
-    public static IngredientsRepositoryImp getInstance(IngredientsRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
+    public static IngredientsRepositoryImp getInstance(IngredientsRemoteDataSource remoteDataSource, IngredientsLocalDataSource ingredientsLocalDataSource){
         if(productsRepository == null){
-            productsRepository = new IngredientsRepositoryImp(remoteDataSource, mealLocalDataSource);
+            productsRepository = new IngredientsRepositoryImp(remoteDataSource, ingredientsLocalDataSource);
         }
         return productsRepository;
     }
-    private IngredientsRepositoryImp(IngredientsRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
+    private IngredientsRepositoryImp(IngredientsRemoteDataSource remoteDataSource, IngredientsLocalDataSource ingredientsLocalDataSource){
         this.ingredietsRemoteDataSource = remoteDataSource;
         this.mealLocalDataSource = mealLocalDataSource;
     }

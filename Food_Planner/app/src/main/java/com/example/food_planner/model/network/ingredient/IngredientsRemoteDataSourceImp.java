@@ -46,13 +46,13 @@ public class IngredientsRemoteDataSourceImp implements IngredientsRemoteDataSour
             public void onResponse(Call<IngredientResponse> call, Response<IngredientResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
                 result.addAll(response.body().getIngredients());
-                ingredientsNetworkCallback.onSuccessResult(response.body().getIngredients());
+                ingredientsNetworkCallback.onSuccessIngredient(response.body().getIngredients());
             }
 
             @Override
             public void onFailure(Call<IngredientResponse> call, Throwable t) {
                 Log.i(TAG,"onFailure: CallBack");
-                ingredientsNetworkCallback.onFailureResult(t.getMessage());
+                ingredientsNetworkCallback.onFailureIngredient(t.getMessage());
                 t.printStackTrace();
             }
         });

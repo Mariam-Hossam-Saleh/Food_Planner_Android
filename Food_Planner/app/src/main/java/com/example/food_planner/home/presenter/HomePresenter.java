@@ -9,6 +9,7 @@ public interface HomePresenter {
     public void getTenRandomMeals(ArrayList<Meal> meals);
     public void searchMealByName(String mealName);
     public void getMealsByFirstLetter(String letter);
+    public void getAllIngredients();
     public void addToFavourite(Meal meal);
     public void removeFromFavourite(Meal meal);
 
