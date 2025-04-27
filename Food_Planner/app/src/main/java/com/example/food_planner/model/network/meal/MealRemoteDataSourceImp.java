@@ -110,6 +110,26 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
     }
 
     @Override
+    public void makeNetworkCallToFilterMealByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient) {
+        List<Meal> result = new ArrayList<>();
+        mealService.getMealsByIngredient(ingredient).enqueue(new Callback<MealsResponse>() {
+            @Override
+            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
+                result.addAll(response.body().getMeals());
+                mealNetworkCallback.onSuccessResult(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<MealsResponse> call, Throwable t) {
+                Log.i(TAG,"onFailure: CallBack");
+                mealNetworkCallback.onFailureResult(t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
     public void makeNetworkCallForSearchMealByName(MealNetworkCallback mealNetworkCallback, String mealName) {
         List<Meal> result = new ArrayList<>();
         mealService.searchMealByName(mealName).enqueue(new Callback<MealsResponse>() {
@@ -127,9 +147,5 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
                 t.printStackTrace();
             }
         });
-    }
-
-    public void getDataOverNetwork(MealNetworkCallback mealNetworkCallback){
-
     }
 }

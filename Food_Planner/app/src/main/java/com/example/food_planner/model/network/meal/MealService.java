@@ -16,4 +16,6 @@ public interface MealService {
     Call<MealsResponse> lookupFullMealByID(@Query("i") String id);
     @GET("api/json/v1/1/random.php")
     Call<MealsResponse> lookupSingleRandomMeal();
+    @GET("api/json/v1/1/filter.php")
+    Call<MealsResponse> getMealsByIngredient(@Query("i") String ingredient);
 }

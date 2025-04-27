@@ -8,6 +8,7 @@ public interface MealRemoteDataSource {
     void makeNetworkCallForSearchMealByName(MealNetworkCallback mealNetworkCallback, String mealName);
     void makeNetworkCallForSingleRandomMeal(MealNetworkCallback mealNetworkCallback);
     void makeNetworkCallForMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter);
+    void makeNetworkCallToFilterMealByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient);
     void makeNetworkCallForTenRandomMeals(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals);
 
 }
