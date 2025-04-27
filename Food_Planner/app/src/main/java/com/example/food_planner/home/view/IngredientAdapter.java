@@ -42,7 +42,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     @Override
     public IngredientAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         View view = LayoutInflater.from(recyclerView.getContext())
-                .inflate(R.layout.meal_carousel, recyclerView, false);
+                .inflate(R.layout.ingredient_recycleview, recyclerView, false);
         return new IngredientAdapter.ViewHolder(view);
     }
 
@@ -63,28 +63,13 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
 
-//        holder.addFavouritesIcon.setOnClickListener(v -> {
-//            if (listener != null) {
-//                listener.onMealClickListener(holder.addFavouritesIcon, meal);
-//                holder.addFavouritesIcon.setImageResource(R.drawable.lover);
-//            }
-//        });
-        holder.addFavouritesIcon.setOnClickListener(v -> {
-            boolean isFavorite = v.getTag() != null && (boolean) v.getTag();
+        holder.imageView.setOnClickListener(v -> {
 
             if (listener != null) {
-                listener.onIngredientClickListener(holder.addFavouritesIcon, ingredient);
+                listener.onIngredientClickListener(holder.imageView, ingredient);
             }
 
-            if (isFavorite) {
-                holder.addFavouritesIcon.setImageResource(R.drawable.favourite); // Not favorite
-            } else {
-                holder.addFavouritesIcon.setImageResource(R.drawable.lover); // Favorite
-            }
-
-            v.setTag(!isFavorite);
         });
-
 
         Log.i(TAG, "Bound meal: " + ingredient.getStrIngredient());
     }
@@ -100,13 +85,11 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtMealTitle;
         ImageView imageView;
-        ImageView addFavouritesIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtMealTitle = itemView.findViewById(R.id.mealName);
-            imageView = itemView.findViewById(R.id.mealImage);
-            addFavouritesIcon = itemView.findViewById(R.id.addFavouritesIcon);
+            txtMealTitle = itemView.findViewById(R.id.ingredientName);
+            imageView = itemView.findViewById(R.id.ingredientImage);
         }
     }
 }

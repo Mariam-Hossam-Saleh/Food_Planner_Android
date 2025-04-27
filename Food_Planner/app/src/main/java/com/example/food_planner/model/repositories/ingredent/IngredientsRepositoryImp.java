@@ -25,4 +25,5 @@ public class IngredientsRepositoryImp implements IngredientsRepository{
     public void getAllIngredients(IngredientsNetworkCallback ingredientsNetworkCallback) {
         ingredietsRemoteDataSource.makeNetworkCalltoGetAllIngredients(ingredientsNetworkCallback);
     }
+
 }
