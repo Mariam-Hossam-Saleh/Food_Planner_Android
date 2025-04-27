@@ -1,5 +1,6 @@
-package com.example.food_planner.home.presenter;
+package com.example.food_planner.favourite.presenter;
 
+import com.example.food_planner.favourite.view.FavouriteView;
 import com.example.food_planner.home.view.HomeView;
 import com.example.food_planner.model.network.ingredient.IngredientsNetworkCallback;
 import com.example.food_planner.model.network.meal.MealNetworkCallback;
@@ -11,48 +12,27 @@ import com.example.food_planner.model.repositories.meal.MealsRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePresenterImp implements HomePresenter, MealNetworkCallback , IngredientsNetworkCallback {
-    private HomeView view;
+public class FavouritePresenterImp implements FavouritePresenter, MealNetworkCallback , IngredientsNetworkCallback {
+    private FavouriteView view;
     private MealsRepository mealsRepo;
     private IngredientsRepository ingredientsRepository;
 
-    public HomePresenterImp(MealsRepository mealsRepo,IngredientsRepository ingredientsRepository, HomeView view) {
+    public FavouritePresenterImp(MealsRepository mealsRepo, IngredientsRepository ingredientsRepository, FavouriteView view) {
         this.mealsRepo = mealsRepo;
         this.view = view;
         this.ingredientsRepository = ingredientsRepository;
     }
 
     @Override
-    public void getSingleRandomMeal() {
-        mealsRepo.getSingleRandomMeal(this);
+    public void addMealToFavourite(Meal meal) {
+        mealsRepo.insertMeal(meal);
     }
-
-    @Override
-    public void getTenRandomMeals(ArrayList<Meal> meals) {
-        mealsRepo.getTenRandomMeal(this,meals);
-    }
-
-    @Override
-    public void searchMealByName(String mealName) {
-        mealsRepo.searchMealByName(this,mealName);
-    }
-
-    @Override
-    public void getMealsByFirstLetter(String letter) { mealsRepo.getMealsByFirstLetter(this,letter); }
-
-    @Override
-    public void filterByMainIngredient(String ingredient) { mealsRepo.filterByIngredient(this,ingredient);}
-
-    @Override
-    public void getAllIngredients() { ingredientsRepository.getAllIngredients(this); }
-
-    @Override
-    public void addMealToFavourite(Meal meal) { mealsRepo.insertMeal(meal); }
 
     @Override
     public void removeMealFromFavourite(Meal meal) {
         mealsRepo.deleteMeal(meal);
     }
+
 
     @Override
     public void onSuccessResult(List<Meal> meals) {
@@ -68,5 +48,7 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
     public void onSuccessIngredient(List<Ingredient> ingredients) { view.ShowIngredients(ingredients); }
 
     @Override
-    public void onFailureIngredient(String errorMSG) { view.ShowErrMsg(errorMSG); }
+    public void onFailureIngredient(String errorMSG) {
+
+    }
 }

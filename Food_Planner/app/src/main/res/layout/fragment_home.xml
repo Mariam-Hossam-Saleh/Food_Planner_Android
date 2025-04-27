@@ -6,13 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.view.HomeFragment">
 
-    <SearchView
-        android:id="@+id/search_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 <!--    <ScrollView-->
 <!--        android:layout_width="wrap_content"-->
 <!--        android:layout_height="wrap_content"-->
@@ -41,10 +34,11 @@
         tools:listitem="@layout/meal_carousel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_home"
+        app:layout_constraintTop_toTopOf="parent"
         />
-    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-        android:id="@+id/carouselRecyclerviewIngredients"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewIngredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -55,7 +49,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/carouselRecyclerviewTenRandomMeals"
         />
-
 
 
 

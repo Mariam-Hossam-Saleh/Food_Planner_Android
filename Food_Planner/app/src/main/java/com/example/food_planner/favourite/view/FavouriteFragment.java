@@ -1,0 +1,118 @@
+//package com.example.food_planner.favourite.view;
+//
+//import android.os.Bundle;
+//import android.view.LayoutInflater;
+//import android.view.View;
+//import android.view.ViewGroup;
+//import android.widget.ImageView;
+//import android.widget.Toast;
+//
+//import androidx.annotation.NonNull;
+//import androidx.annotation.Nullable;
+//import androidx.appcompat.app.AlertDialog;
+//import androidx.fragment.app.Fragment;
+//import androidx.recyclerview.widget.LinearLayoutManager;
+//import androidx.recyclerview.widget.RecyclerView;
+//
+//import com.example.food_planner.databinding.FragmentHomeBinding;
+//import com.example.food_planner.favourite.presenter.FavouritePresenter;
+//import com.example.food_planner.favourite.presenter.FavouritePresenterImp;
+//import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
+//import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
+//import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSourceImp;
+//import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
+//import com.example.food_planner.model.pojos.ingredient.Ingredient;
+//import com.example.food_planner.model.pojos.meal.Meal;
+//import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
+//import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
+//import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//public class FavouriteFragment extends Fragment implements FavouriteView, OnMealClickListener, OnIngredientClickListener {
+//
+//    ArrayList<Meal> tenRandomMealArrayList;
+//    ArrayList<Ingredient> ingredientArrayList;
+//    CarouselRecyclerview carouselRecyclerviewTenRandomMeals;
+//    CarouselRecyclerview carouselRecyclerviewIngredients;
+//    MealAdapter mealAdapterTenRandomMeals;
+//    IngredientAdapter ingredientAdapter;
+//    FavouritePresenter favouritePresenter;
+//    LinearLayoutManager linearLayoutManager;
+//    private FragmentHomeBinding binding;
+//
+//    public View onCreateView(@NonNull LayoutInflater inflater,
+//                             ViewGroup container, Bundle savedInstanceState) {
+//        binding = FragmentHomeBinding.inflate(inflater, container, false);
+//
+////        tenRandomMealArrayList = new ArrayList<>();
+////        mealAdapterTenRandomMeals = new MealAdapter(getContext(), tenRandomMealArrayList,this);
+//
+//        ingredientArrayList = new ArrayList<>();
+//        ingredientAdapter = new IngredientAdapter(getContext(),ingredientArrayList,this);
+//
+//        linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+//
+//        carouselRecyclerviewIngredients = binding.carouselRecyclerviewIngredients;
+//        carouselRecyclerviewIngredients.setAdapter(ingredientAdapter);
+//
+//        favouritePresenter = new FavouritePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())), IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),this);
+////        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
+////        homePresenter.getTenRandomMeals(tenRandomMealArrayList);
+////        homePresenter.getSingleRandomMeal();
+//        return binding.getRoot();
+//    }
+//
+//    @Override
+//    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        binding = null;
+//    }
+//
+//    @Override
+//    public void ShowMeals(List<Meal> mealList) {
+//        mealAdapterTenRandomMeals.setMeals(mealList);
+//        mealAdapterTenRandomMeals.notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void ShowIngredients(List<Ingredient> ingredientList) {
+//        ingredientAdapter.setIngredients(ingredientList);
+//        ingredientAdapter.notifyDataSetChanged();
+//    }
+//
+//    @Override
+//    public void ShowErrMsg(String error) {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//        builder.setMessage(error).setTitle("An Error Occured");
+//        AlertDialog dialog = builder.create();
+//        dialog.show();
+//    }
+//
+//
+//    @Override
+//    public void onMealClickListener(ImageView imageView, Meal meal,boolean favState) {
+//        if(!favState) {
+//            favouritePresenter.addMealToFavourite(meal);
+//            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+//        }
+//        else{
+//            favouritePresenter.removeMealFromFavourite(meal);
+//            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+//        }
+//    }
+//
+//    @Override
+//    public void onIngredientClickListener(ImageView imageView, Ingredient ingredient) {
+////        homePresenter.;
+//        Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+//
+//    }
+//}
