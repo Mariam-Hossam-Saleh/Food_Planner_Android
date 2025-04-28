@@ -11,6 +11,8 @@ public interface HomePresenter {
     public void getMealsByFirstLetter(String letter);
     public void filterByMainIngredient(String ingredient);
     public void getAllIngredients();
+    public void getAllCategories();
+    public void filterMealByCategory(String category);
     public void addMealToFavourite(Meal meal);
     public void removeMealFromFavourite(Meal meal);
 

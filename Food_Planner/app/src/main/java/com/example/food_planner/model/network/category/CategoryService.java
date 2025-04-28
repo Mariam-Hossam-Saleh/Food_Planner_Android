@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface CategoryService {
-    @GET("api/json/v1/1/list.php?c=list")
+    @GET("api/json/v1/1/categories.php")
     Call<CategoryResponse> getAllCategories();
 
 }

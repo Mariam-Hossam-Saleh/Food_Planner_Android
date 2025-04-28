@@ -7,20 +7,20 @@
     android:padding="10dp">
 
     <ImageView
-        android:id="@+id/ingredientImage"
+        android:id="@+id/categoryImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background" />
 
     <TextView
-        android:id="@+id/ingredientName"
+        android:id="@+id/categoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_text_background"
         android:fontFamily="@font/amita"
         android:gravity="center"
-        android:text="Sample Ingredient"
+        android:text="Sample Category"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold" />

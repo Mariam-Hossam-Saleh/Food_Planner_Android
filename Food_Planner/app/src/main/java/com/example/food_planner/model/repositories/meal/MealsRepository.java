@@ -15,6 +15,7 @@ public interface MealsRepository {
     public void getTenRandomMeal(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals);
     public void getMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter);
     public void filterByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient);
+    public void filterByCategory(MealNetworkCallback mealNetworkCallback, String category);
     public void insertMeal(Meal meal);
     public void deleteMeal(Meal meal);
 }

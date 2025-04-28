@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.food_planner.databinding.FragmentCategoryMealsBinding;
 import com.example.food_planner.databinding.FragmentHomeBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
@@ -38,13 +39,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class IngredientMealsFragment extends Fragment implements HomeView,OnMealClickListener {
+public class CategoryMealsFragment extends Fragment implements HomeView,OnMealClickListener {
     ArrayList<Meal> mealsArrayList;
     RecyclerView recyclerviewMeals;
     MealAdapter mealAdapter;
     HomePresenter homePresenter;
     LinearLayoutManager linearLayoutManager;
-    private FragmentHomeBinding binding;
+    private FragmentCategoryMealsBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,9 +56,9 @@ public class IngredientMealsFragment extends Fragment implements HomeView,OnMeal
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         if (getArguments() != null) {
-            String ingredientName = getArguments().getString("ingredientName");
+            String categoryName = getArguments().getString("categoryName");
             // Now you can use ingredientName inside this fragment
-            binding = FragmentHomeBinding.inflate(inflater, container, false);
+            binding = FragmentCategoryMealsBinding.inflate(inflater, container, false);
 
 
             mealsArrayList = new ArrayList<>();
@@ -67,12 +68,12 @@ public class IngredientMealsFragment extends Fragment implements HomeView,OnMeal
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
 
-            recyclerviewMeals = binding.recyclerviewIngredients;
+            recyclerviewMeals = binding.recyclerviewCategoryMeal;
             recyclerviewMeals.setLayoutManager(linearLayoutManager);
             recyclerviewMeals.setAdapter(mealAdapter);
 
             homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())), IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())), CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())), this);
-            homePresenter.filterByMainIngredient(ingredientName);
+            homePresenter.filterMealByCategory(categoryName);
         }
         return binding.getRoot();
     }

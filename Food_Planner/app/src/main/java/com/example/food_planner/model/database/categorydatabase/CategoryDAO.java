@@ -12,7 +12,7 @@ import com.example.food_planner.model.pojos.category.Category;
 import java.util.List;
 
 @Dao
-public interface CategoriesDAO {
+public interface CategoryDAO {
     @Query("SELECT * FROM categories_table")
     public LiveData<List<Category>> getAllCategories();
     @Insert(onConflict = OnConflictStrategy.IGNORE)

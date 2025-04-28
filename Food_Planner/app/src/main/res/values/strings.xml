@@ -30,4 +30,5 @@
 
     <string name="add_to_favourites">Add To Favourite</string>
     <string name="ingredientfragment">Ingredient Fragment</string>
+    <string name="categoryfragment">Category Fragment</string>
 </resources>

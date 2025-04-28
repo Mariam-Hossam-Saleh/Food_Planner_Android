@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".home.view.HomeFragment">
+    android:fillViewport="true">
 
-<!--    <ScrollView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/search_home"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"> &lt;!&ndash; This line centers it &ndash;&gt;-->
-
-<!--        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview-->
-<!--            android:id="@+id/carouselRecyclerview"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:clipToPadding="false"-->
-<!--            android:overScrollMode="never"-->
-<!--            tools:listitem="@layout/meal_carousel" />-->
-<!--        -->
-<!--        -->
-<!--    </ScrollView>-->
-    <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-        android:id="@+id/carouselRecyclerviewTenRandomMeals"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        tools:listitem="@layout/meal_carousel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".home.view.HomeFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerviewIngredients"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        tools:listitem="@layout/meal_carousel"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/carouselRecyclerviewTenRandomMeals"
-        />
+        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+            android:id="@+id/carouselRecyclerviewTenRandomMeals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            tools:listitem="@layout/meal_carousel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewIngredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            tools:listitem="@layout/meal_carousel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/carouselRecyclerviewTenRandomMeals"
+            />
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewCategories"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:clipToPadding="false"
+            android:overScrollMode="never"
+            tools:listitem="@layout/meal_carousel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerviewIngredients"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

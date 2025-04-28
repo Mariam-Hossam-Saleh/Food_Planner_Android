@@ -1,6 +1,7 @@
 package com.example.food_planner.home.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +17,20 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.food_planner.IngredientMealsFragment;
 import com.example.food_planner.R;
 import com.example.food_planner.databinding.FragmentHomeBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
+import com.example.food_planner.model.database.categorydatabase.CategoryLocalDataSourceImp;
 import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
+import com.example.food_planner.model.network.category.CategoryRemoteDataSourceImp;
 import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSourceImp;
 import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
+import com.example.food_planner.model.pojos.category.Category;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.repositories.category.CategoryRepositoryImp;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
@@ -34,16 +38,20 @@ import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnIngredientClickListener {
+public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnIngredientClickListener , OnCategoryClickListener{
 
     ArrayList<Meal> tenRandomMealArrayList;
     ArrayList<Ingredient> ingredientArrayList;
+    ArrayList<Category> categoryArrayList;
     CarouselRecyclerview carouselRecyclerviewTenRandomMeals;
-    RecyclerView recyclerviewIngredients;
-    MealAdapter mealAdapterTenRandomMeals;
+    RecyclerView recyclerViewIngredients;
+    RecyclerView recyclerViewCategories;
+    MealAdapter tenRandomMealAdapter;
     IngredientAdapter ingredientAdapter;
+    CategoryAdapter categoryAdapter;
     HomePresenter homePresenter;
-    LinearLayoutManager linearLayoutManager;
+    LinearLayoutManager ingredientLayoutManager;
+    LinearLayoutManager categoryLayoutManager;
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -51,26 +59,37 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         tenRandomMealArrayList = new ArrayList<>();
-        mealAdapterTenRandomMeals = new MealAdapter(getContext(), tenRandomMealArrayList, this);
+        tenRandomMealAdapter = new MealAdapter(getContext(), tenRandomMealArrayList, this);
 
         ingredientArrayList = new ArrayList<>();
         ingredientAdapter = new IngredientAdapter(getContext(), ingredientArrayList, this);
 
-        linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        categoryArrayList = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getContext(), categoryArrayList, this);
+
+        ingredientLayoutManager = new LinearLayoutManager(getActivity());
+        ingredientLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+        categoryLayoutManager = new LinearLayoutManager(getActivity());
+        categoryLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
         carouselRecyclerviewTenRandomMeals = binding.carouselRecyclerviewTenRandomMeals;
-        carouselRecyclerviewTenRandomMeals.setAdapter(mealAdapterTenRandomMeals);
+        carouselRecyclerviewTenRandomMeals.setAdapter(tenRandomMealAdapter);
 
-        recyclerviewIngredients = binding.recyclerviewIngredients;
-        recyclerviewIngredients.setLayoutManager(linearLayoutManager);
-        recyclerviewIngredients.setAdapter(ingredientAdapter);
+        recyclerViewIngredients = binding.recyclerviewIngredients;
+        recyclerViewIngredients.setLayoutManager(ingredientLayoutManager);
+        recyclerViewIngredients.setAdapter(ingredientAdapter);
+
+        recyclerViewCategories = binding.recyclerviewCategories;
+        recyclerViewCategories.setLayoutManager(categoryLayoutManager);
+        recyclerViewCategories.setAdapter(categoryAdapter);
 
 
-
-        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())), IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())), this);
-        homePresenter.getAllIngredients();
+        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())), IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())), CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())), this);
         homePresenter.getTenRandomMeals(tenRandomMealArrayList);
+        homePresenter.getAllIngredients();
+        homePresenter.getAllCategories();
+
 
         return binding.getRoot();
     }
@@ -88,14 +107,22 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
     @Override
     public void ShowMeals(List<Meal> mealList) {
-        mealAdapterTenRandomMeals.setMeals(mealList);
-        mealAdapterTenRandomMeals.notifyDataSetChanged();
+        tenRandomMealAdapter.setMeals(mealList);
+        tenRandomMealAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void ShowIngredients(List<Ingredient> ingredientList) {
         ingredientAdapter.setIngredients(ingredientList);
         ingredientAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void ShowCategories(List<Category> categoryList) {
+        categoryAdapter.setCategories(categoryList);
+        categoryAdapter.notifyDataSetChanged();
+        Log.d("HomeFragment", "Categories received: " + categoryList.size());
+
     }
 
     @Override
@@ -128,6 +155,19 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
             navController.navigate(R.id.ingredientMealsFragment, bundle);
         } else {
             Toast.makeText(getActivity(), "Ingredient is missing!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onCategoryClickListener(ImageView imageView, Category category) {
+        if (category != null && category.getStrCategory() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("categoryName", category.getStrCategory());
+
+            NavController navController = NavHostFragment.findNavController(HomeFragment.this);
+            navController.navigate(R.id.categoryMealsFragment, bundle);
+        } else {
+            Toast.makeText(getActivity(), "Category is missing!", Toast.LENGTH_SHORT).show();
         }
     }
 }

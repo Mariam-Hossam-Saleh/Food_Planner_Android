@@ -6,7 +6,7 @@ import com.example.food_planner.model.pojos.category.Category;
 
 import java.util.List;
 
-public interface CategoriesLocalDataSource {
+public interface CategoryLocalDataSource {
     void insertCategory(Category category);
     void deleteCategory(Category category);
     LiveData<List<Category>> getAllStoredCategories();

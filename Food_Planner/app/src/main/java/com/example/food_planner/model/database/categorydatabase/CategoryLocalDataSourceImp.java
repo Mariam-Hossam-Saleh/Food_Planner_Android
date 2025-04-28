@@ -8,18 +8,18 @@ import com.example.food_planner.model.pojos.category.Category;
 
 import java.util.List;
 
-public class CategoriesLocalDataSourceImp implements CategoriesLocalDataSource {
-    private final CategoriesDAO dao;
-    private static CategoriesLocalDataSourceImp localDataSourceImp = null;
+public class CategoryLocalDataSourceImp implements CategoryLocalDataSource {
+    private final CategoryDAO dao;
+    private static CategoryLocalDataSourceImp localDataSourceImp = null;
     private final LiveData<List<Category>> storedCategories;
-    private CategoriesLocalDataSourceImp(Context context){
+    private CategoryLocalDataSourceImp(Context context){
         CategoriesDatabase database = CategoriesDatabase.getInstance(context.getApplicationContext());
         dao = database.getCategoryDAO();
         storedCategories = dao.getAllCategories();
     }
-    public static CategoriesLocalDataSourceImp getInstance(Context context){
+    public static CategoryLocalDataSourceImp getInstance(Context context){
         if(localDataSourceImp == null){
-            localDataSourceImp = new CategoriesLocalDataSourceImp(context);
+            localDataSourceImp = new CategoryLocalDataSourceImp(context);
         }
         return localDataSourceImp;
     }

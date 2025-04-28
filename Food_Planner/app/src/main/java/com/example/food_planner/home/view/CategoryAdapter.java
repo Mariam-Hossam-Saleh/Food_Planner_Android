@@ -18,47 +18,47 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
+import com.example.food_planner.model.pojos.category.Category;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
 
 import java.util.List;
 
-public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.ViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private final Context context;
-    private List<Ingredient> ingredients;
-    private final OnIngredientClickListener listener;
+    private List<Category> categories;
+    private final OnCategoryClickListener listener;
     private static final String TAG = "HomeRecyclerView";
 
-    public IngredientAdapter(Context _context, List<Ingredient> ingredients, OnIngredientClickListener _listener) {
+    public CategoryAdapter(Context _context, List<Category> categories, OnCategoryClickListener _listener) {
         this.context = _context;
-        this.ingredients = ingredients;
+        this.categories = categories;
         this.listener = _listener;
     }
 
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     @NonNull
     @Override
-    public IngredientAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
+    public CategoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         View view = LayoutInflater.from(recyclerView.getContext())
-                .inflate(R.layout.ingredient_recycleview, recyclerView, false);
-        return new IngredientAdapter.ViewHolder(view);
+                .inflate(R.layout.category_recycleview, recyclerView, false);
+        return new CategoryAdapter.ViewHolder(view);
     }
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull IngredientAdapter.ViewHolder holder, int position) {
-        Ingredient ingredient = ingredients.get(position);
+    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
+        Category category = categories.get(position);
 
-        holder.txtMealTitle.setText(ingredient.getStrIngredient());
+        holder.txtMealTitle.setText(category.getStrCategory());
 
         Glide.with(context)
-                .load("https://www.themealdb.com/images/ingredients/"+ingredient.getStrIngredient()+".png")
+                .load(category.getStrCategoryThumb())
                 .apply(new RequestOptions()
+                        .circleCrop()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .transform(new CenterCrop(), new RoundedCorners(30))
-                        .override(150, 150)
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
@@ -66,20 +66,20 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         holder.imageView.setOnClickListener(v -> {
 
             if (listener != null) {
-                listener.onIngredientClickListener(holder.imageView, ingredient);
+                listener.onCategoryClickListener(holder.imageView, category);
             }
 
         });
 
-        Log.i(TAG, "Bound meal: " + ingredient.getStrIngredient());
+        Log.i(TAG, "Bound meal: " + category.getStrCategory());
     }
 
     @Override
     public int getItemCount() {
-        if(ingredients.isEmpty())
+        if(categories.isEmpty())
             return 0;
         else
-            return ingredients.size();
+            return categories.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -88,8 +88,9 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtMealTitle = itemView.findViewById(R.id.ingredientName);
-            imageView = itemView.findViewById(R.id.ingredientImage);
+            txtMealTitle = itemView.findViewById(R.id.categoryName);
+            imageView = itemView.findViewById(R.id.categoryImage);
         }
     }
 }
+

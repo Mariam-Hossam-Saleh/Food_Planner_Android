@@ -57,6 +57,11 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
+    public void filterByCategory(MealNetworkCallback mealNetworkCallback, String category) {
+        remoteDataSource.makeNetworkCallToFilterMealByCategory(mealNetworkCallback,category);
+    }
+
+    @Override
     public void insertMeal(Meal meal) {
         mealLocalDataSource.insertMeal(meal);
     }
