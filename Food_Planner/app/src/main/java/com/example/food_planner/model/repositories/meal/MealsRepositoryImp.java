@@ -36,13 +36,8 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
-    public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback) {
-        remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback);
-    }
-
-    @Override
-    public void getTenRandomMeal(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals) {
-        remoteDataSource.makeNetworkCallForTenRandomMeals(mealNetworkCallback,meals);
+    public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback,Boolean isSingle) {
+        remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback, isSingle);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.food_planner.home.view;
+package com.example.food_planner.utils;
 
 import android.widget.ImageView;
 

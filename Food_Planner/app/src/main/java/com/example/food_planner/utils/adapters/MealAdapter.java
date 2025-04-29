@@ -1,4 +1,4 @@
-package com.example.food_planner.home.view;
+package com.example.food_planner.utils.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.utils.OnMealClickListener;
 
 import java.util.List;
 

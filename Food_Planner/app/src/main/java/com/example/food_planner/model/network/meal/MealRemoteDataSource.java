@@ -6,10 +6,8 @@ import java.util.ArrayList;
 
 public interface MealRemoteDataSource {
     void makeNetworkCallForSearchMealByName(MealNetworkCallback mealNetworkCallback, String mealName);
-    void makeNetworkCallForSingleRandomMeal(MealNetworkCallback mealNetworkCallback);
+    void makeNetworkCallForSingleRandomMeal(MealNetworkCallback mealNetworkCallback,Boolean isSingle);
     void makeNetworkCallForMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter);
     void makeNetworkCallToFilterMealByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient);
     void makeNetworkCallToFilterMealByCategory(MealNetworkCallback mealNetworkCallback, String category);
-    void makeNetworkCallForTenRandomMeals(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals);
-
 }

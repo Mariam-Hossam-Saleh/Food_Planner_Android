@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface HomePresenter {
     public void getSingleRandomMeal();
-    public void getTenRandomMeals(ArrayList<Meal> meals);
+    public void getTenRandomMeals();
     public void searchMealByName(String mealName);
     public void getMealsByFirstLetter(String letter);
     public void filterByMainIngredient(String ingredient);

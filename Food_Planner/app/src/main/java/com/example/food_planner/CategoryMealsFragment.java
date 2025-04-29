@@ -16,12 +16,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.food_planner.databinding.FragmentCategoryMealsBinding;
-import com.example.food_planner.databinding.FragmentHomeBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
 import com.example.food_planner.home.view.HomeView;
-import com.example.food_planner.home.view.MealAdapter;
-import com.example.food_planner.home.view.OnMealClickListener;
+import com.example.food_planner.utils.adapters.MealAdapter;
+import com.example.food_planner.utils.OnMealClickListener;
 import com.example.food_planner.model.database.categorydatabase.CategoryLocalDataSourceImp;
 import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;

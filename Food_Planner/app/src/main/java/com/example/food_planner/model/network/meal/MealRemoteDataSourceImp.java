@@ -4,12 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.util.Log;
 
-import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.MealsResponse;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,16 +34,13 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
     }
 
     @Override
-    public void makeNetworkCallForSingleRandomMeal(MealNetworkCallback mealNetworkCallback){
-        List<Meal> result = new ArrayList<>();
+    public void makeNetworkCallForSingleRandomMeal(MealNetworkCallback mealNetworkCallback, Boolean isSingle){
         mealService.lookupSingleRandomMeal().enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
-                result.addAll(response.body().getMeals());
-                mealNetworkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessMeal(response.body().getMeals());
             }
-
             @Override
             public void onFailure(Call<MealsResponse> call, Throwable t) {
                 Log.i(TAG,"onFailure: CallBack");
@@ -57,47 +49,14 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
             }
         });
     }
-    @Override
-    public void makeNetworkCallForTenRandomMeals(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals) {
-        final int totalCalls = 10;
-        final AtomicInteger completedCalls = new AtomicInteger(0); // to handle the asynchronous network calls
-
-        for (int i = 0; i < totalCalls; i++) {
-            mealService.lookupSingleRandomMeal().enqueue(new Callback<MealsResponse>() {
-                @Override
-                public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        synchronized (meals) {
-                            meals.add(response.body().getMeals().get(0));
-                        }
-                    }
-
-                    if (completedCalls.incrementAndGet() == totalCalls) {
-                        mealNetworkCallback.onSuccessResult(meals);
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<MealsResponse> call, Throwable t) {
-                    Log.i(TAG, "onFailure: " + t.getMessage());
-                    if (completedCalls.incrementAndGet() == totalCalls) {
-                        mealNetworkCallback.onFailureResult(t.getMessage());
-                        t.printStackTrace();
-                    }
-                }
-            });
-        }
-    }
 
     @Override
     public void makeNetworkCallForMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter) {
-        List<Meal> result = new ArrayList<>();
         mealService.listMealsByFirstLetter(letter).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
-                result.addAll(response.body().getMeals());
-                mealNetworkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessMeal(response.body().getMeals());
             }
 
             @Override
@@ -111,13 +70,11 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
 
     @Override
     public void makeNetworkCallToFilterMealByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient) {
-        List<Meal> result = new ArrayList<>();
         mealService.getMealsByIngredient(ingredient).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
-                result.addAll(response.body().getMeals());
-                mealNetworkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessMeal(response.body().getMeals());
             }
 
             @Override
@@ -131,13 +88,11 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
 
     @Override
     public void makeNetworkCallToFilterMealByCategory(MealNetworkCallback mealNetworkCallback, String category) {
-        List<Meal> result = new ArrayList<>();
         mealService.getMealsByCategory(category).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
-                result.addAll(response.body().getMeals());
-                mealNetworkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessMeal(response.body().getMeals());
             }
 
             @Override
@@ -151,13 +106,11 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
 
     @Override
     public void makeNetworkCallForSearchMealByName(MealNetworkCallback mealNetworkCallback, String mealName) {
-        List<Meal> result = new ArrayList<>();
         mealService.searchMealByName(mealName).enqueue(new Callback<MealsResponse>() {
             @Override
             public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
                 Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
-                result.addAll(response.body().getMeals());
-                mealNetworkCallback.onSuccessResult(response.body().getMeals());
+                mealNetworkCallback.onSuccessMeal(response.body().getMeals());
             }
 
             @Override
@@ -168,4 +121,5 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
             }
         });
     }
+
 }

@@ -19,6 +19,9 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
     private MealsRepository mealsRepo;
     private IngredientsRepository ingredientsRepo;
     private CategoryRepository categoryRepo;
+    private static final int mealsCount = 10;
+    private Boolean isSingleMeal = true;
+    private final List<Meal> tenRandomMeals = new ArrayList<>();
 
     public HomePresenterImp(MealsRepository mealsRepo, IngredientsRepository ingredientsRepo, CategoryRepository categoryRepo, HomeView view) {
         this.mealsRepo = mealsRepo;
@@ -29,12 +32,17 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
 
     @Override
     public void getSingleRandomMeal() {
-        mealsRepo.getSingleRandomMeal(this);
+        isSingleMeal = true;
+        mealsRepo.getSingleRandomMeal(this,true);
     }
 
     @Override
-    public void getTenRandomMeals(ArrayList<Meal> meals) {
-        mealsRepo.getTenRandomMeal(this,meals);
+    public void getTenRandomMeals() {
+        isSingleMeal = false;
+        tenRandomMeals.clear();
+        for(int itr = 0 ; itr < mealsCount ; itr++){
+            mealsRepo.getSingleRandomMeal(this,false);
+        }
     }
 
     @Override
@@ -66,8 +74,18 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
     }
 
     @Override
-    public void onSuccessResult(List<Meal> meals) {
-        view.ShowMeals(meals);
+    public void onSuccessMeal(List<Meal> meals) {
+        if (isSingleMeal) {
+            view.ShowMeals(meals);
+        }
+        else {
+            if (!meals.isEmpty()) {
+                tenRandomMeals.add(meals.get(0));
+            }
+            if (tenRandomMeals.size() == mealsCount) {
+                view.ShowMeals(new ArrayList<>(tenRandomMeals));
+            }
+        }
     }
 
     @Override

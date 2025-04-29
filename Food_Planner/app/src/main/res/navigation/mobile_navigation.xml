@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="com.example.food_planner.home.view.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_ingredientMealsFragment"
+            app:destination="@id/ingredientMealsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_search"
@@ -29,7 +33,7 @@
         tools:layout="@layout/fragment_calender" />
     <fragment
         android:id="@+id/ingredientMealsFragment"
-        android:name="com.example.food_planner.IngredientMealsFragment"
+        android:name="com.example.food_planner.utils.ingredient_meals.view.IngredientMealsFragment"
         android:label="@string/ingredientfragment"
         tools:layout="@layout/fragment_ingredient_meals" />
     <fragment

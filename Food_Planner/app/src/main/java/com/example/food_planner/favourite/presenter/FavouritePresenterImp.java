@@ -35,7 +35,7 @@ public class FavouritePresenterImp implements FavouritePresenter, MealNetworkCal
 
 
     @Override
-    public void onSuccessResult(List<Meal> meals) {
+    public void onSuccessMeal(List<Meal> meals) {
         view.ShowMeals(meals);
     }
 

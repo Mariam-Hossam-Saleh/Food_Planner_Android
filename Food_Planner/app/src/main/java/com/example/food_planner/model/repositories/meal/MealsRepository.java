@@ -11,8 +11,7 @@ import java.util.List;
 public interface MealsRepository {
     public LiveData<List<Meal>> getStoredMeals();
     public void searchMealByName(MealNetworkCallback mealNetworkCallback, String mealName);
-    public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback);
-    public void getTenRandomMeal(MealNetworkCallback mealNetworkCallback, ArrayList<Meal> meals);
+    public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback,Boolean isSingle);
     public void getMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter);
     public void filterByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient);
     public void filterByCategory(MealNetworkCallback mealNetworkCallback, String category);
