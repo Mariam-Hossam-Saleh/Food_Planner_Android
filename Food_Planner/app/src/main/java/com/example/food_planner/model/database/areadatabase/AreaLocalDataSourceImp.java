@@ -9,18 +9,18 @@ import com.example.food_planner.model.pojos.area.Area;
 
 import java.util.List;
 
-public class AreasLocalDataSourceImp implements AreasLocalDataSource {
-    private final AreasDAO dao;
-    private static AreasLocalDataSourceImp localDataSourceImp = null;
+public class AreaLocalDataSourceImp implements AreaLocalDataSource {
+    private final AreaDAO dao;
+    private static AreaLocalDataSourceImp localDataSourceImp = null;
     private final LiveData<List<Area>> storedAreas;
-    private AreasLocalDataSourceImp(Context context){
-        AreasDatabase database = AreasDatabase.getInstance(context.getApplicationContext());
+    private AreaLocalDataSourceImp(Context context){
+        AreaDatabase database = AreaDatabase.getInstance(context.getApplicationContext());
         dao = database.getAreaDAO();
         storedAreas = dao.getAllAreas();
     }
-    public static AreasLocalDataSourceImp getInstance(Context context){
+    public static AreaLocalDataSourceImp getInstance(Context context){
         if(localDataSourceImp == null){
-            localDataSourceImp = new AreasLocalDataSourceImp(context);
+            localDataSourceImp = new AreaLocalDataSourceImp(context);
         }
         return localDataSourceImp;
     }

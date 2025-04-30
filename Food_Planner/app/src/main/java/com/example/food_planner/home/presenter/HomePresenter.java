@@ -2,8 +2,6 @@ package com.example.food_planner.home.presenter;
 
 import com.example.food_planner.model.pojos.meal.Meal;
 
-import java.util.ArrayList;
-
 public interface HomePresenter {
     public void getSingleRandomMeal();
     public void getTenRandomMeals();
@@ -12,6 +10,7 @@ public interface HomePresenter {
     public void filterByMainIngredient(String ingredient);
     public void getAllIngredients();
     public void getAllCategories();
+    public void getAllAreas();
     public void filterMealByCategory(String category);
     public void addMealToFavourite(Meal meal);
     public void removeMealFromFavourite(Meal meal);

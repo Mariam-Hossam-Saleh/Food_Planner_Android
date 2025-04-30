@@ -6,7 +6,7 @@ import com.example.food_planner.model.pojos.area.Area;
 
 import java.util.List;
 
-public interface AreasLocalDataSource {
+public interface AreaLocalDataSource {
     void insertArea(Area area);
     void deleteArea(Area area);
     LiveData<List<Area>> getAllStoredAreas();

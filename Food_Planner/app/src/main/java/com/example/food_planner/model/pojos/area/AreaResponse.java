@@ -6,13 +6,13 @@ import java.util.List;
 
 public class AreaResponse {
     @SerializedName("meals")
-    private List<Area> meals;
+    private List<Area> areas;
 
-    public List<Area> getMeals() {
-        return meals;
+    public List<Area> getAreas() {
+        return areas;
     }
 
-    public void setMeals(List<Area> meals) {
-        this.meals = meals;
+    public void setAreas(List<Area> areas) {
+        this.areas = areas;
     }
 }

@@ -19,6 +19,10 @@ import com.example.food_planner.databinding.FragmentCategoryMealsBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
 import com.example.food_planner.home.view.HomeView;
+import com.example.food_planner.model.database.areadatabase.AreaLocalDataSourceImp;
+import com.example.food_planner.model.network.area.AreaRemoteDataSourceImp;
+import com.example.food_planner.model.pojos.area.Area;
+import com.example.food_planner.model.repositories.area.AreaRepositoryImp;
 import com.example.food_planner.utils.adapters.MealAdapter;
 import com.example.food_planner.utils.OnMealClickListener;
 import com.example.food_planner.model.database.categorydatabase.CategoryLocalDataSourceImp;
@@ -71,7 +75,10 @@ public class CategoryMealsFragment extends Fragment implements HomeView,OnMealCl
             recyclerviewMeals.setLayoutManager(linearLayoutManager);
             recyclerviewMeals.setAdapter(mealAdapter);
 
-            homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())), IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())), CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())), this);
+            homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
+                    IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),
+                    CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())),
+                    AreaRepositoryImp.getInstance(AreaRemoteDataSourceImp.getInstance(), AreaLocalDataSourceImp.getInstance(getContext())),this);
             homePresenter.filterMealByCategory(categoryName);
         }
         return binding.getRoot();
@@ -101,6 +108,11 @@ public class CategoryMealsFragment extends Fragment implements HomeView,OnMealCl
 
     @Override
     public void ShowCategories(List<Category> categoryList) {
+
+    }
+
+    @Override
+    public void ShowAreas(List<Area> areaList) {
 
     }
 

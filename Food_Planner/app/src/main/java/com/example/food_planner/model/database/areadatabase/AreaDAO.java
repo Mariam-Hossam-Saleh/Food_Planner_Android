@@ -12,7 +12,7 @@ import com.example.food_planner.model.pojos.area.Area;
 import java.util.List;
 
 @Dao
-public interface AreasDAO {
+public interface AreaDAO {
     @Query("SELECT * FROM areas_table")
     public LiveData<List<Area>> getAllAreas();
     @Insert(onConflict = OnConflictStrategy.IGNORE)

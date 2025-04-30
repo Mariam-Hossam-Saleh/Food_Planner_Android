@@ -66,12 +66,6 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
 
-//        holder.addFavouritesIcon.setOnClickListener(v -> {
-//            if (listener != null) {
-//                listener.onMealClickListener(holder.addFavouritesIcon, meal);
-//                holder.addFavouritesIcon.setImageResource(R.drawable.lover);
-//            }
-//        });
         holder.addFavouritesIcon.setOnClickListener(v -> {
             boolean isFavorite = v.getTag() != null && (boolean) v.getTag();
 
