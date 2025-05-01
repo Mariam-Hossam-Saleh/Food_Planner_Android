@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,6 +65,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     ArrayList<Category> categoryArrayList;
     ArrayList<Area> areaArrayList;
     ImageView singleRandomMeal;
+    TextView singleRandomMealText;
     CarouselRecyclerview carouselRecyclerviewTenRandomMeals;
     RecyclerView recyclerViewIngredients;
     RecyclerView recyclerViewCategories;
@@ -103,6 +106,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         areaLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
         singleRandomMeal = binding.singleRandomMeal;
+        singleRandomMealText = binding.mealName;
 
         carouselRecyclerviewTenRandomMeals = binding.carouselRecyclerviewTenRandomMeals;
         carouselRecyclerviewTenRandomMeals.setAdapter(tenRandomMealAdapter);
@@ -149,6 +153,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     @Override
     public void ShowMeals(List<Meal> mealList) {
         if (mealList.size() == 1) {
+
             Meal meal = mealList.get(0);
             Glide.with(getContext())
                     .load(meal.getStrMealThumb())
@@ -159,6 +164,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                             .placeholder(R.drawable.loading)
                             .error(R.drawable.imagefailed))
                     .into(singleRandomMeal);
+            singleRandomMealText.setText(meal.getStrMeal());
         } else {
             tenRandomMealAdapter.setMeals(mealList);
             tenRandomMealAdapter.notifyDataSetChanged();

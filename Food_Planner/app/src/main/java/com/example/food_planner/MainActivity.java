@@ -1,8 +1,10 @@
 package com.example.food_planner;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Button;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -15,11 +17,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food_planner.databinding.ActivityMainBinding;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+    private Button btnLogOut;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        mAuth = FirebaseAuth.getInstance();
+
+        btnLogOut = binding.btnLogOut;
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                startActivity(new Intent(MainActivity.this,WelcomeActivity.class));
+                finish();
+            }
+        });
         setSupportActionBar(binding.appBarMain.toolbar);
 
         DrawerLayout drawer = binding.drawerLayout;

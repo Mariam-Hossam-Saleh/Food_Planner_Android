@@ -18,17 +18,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private EditText edtName;
     private EditText edtPassword;
     private EditText edtEmail;
-    private Button btnSkip;
-    private Button btnRegister;
-    private Button btnSignIn;
     private FirebaseAuth mAuth;
 
     @SuppressLint("ClickableViewAccessibility")
@@ -36,12 +36,15 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        btnSkip = findViewById(R.id.btnSkip);
-        btnRegister = findViewById(R.id.btnReg);
-        btnSignIn = findViewById(R.id.btnSignIn);
+        Button btnSkip = findViewById(R.id.btnSkip);
+        Button btnRegister = findViewById(R.id.btnReg);
+        Button btnSignIn = findViewById(R.id.btnSignIn);
+        edtName = findViewById(R.id.edtFullName);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
+
         mAuth = FirebaseAuth.getInstance();
+
         edtPassword.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
 
@@ -66,6 +69,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
             return false;
         });
+
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,32 +77,57 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.createUserWithEmailAndPassword(edtEmail.toString(),edtPassword.toString())
+                String email = edtEmail.getText().toString().trim();
+                String password = edtPassword.getText().toString().trim();
+                String name = edtName.getText().toString().trim();
+
+                if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
+                    Toast.makeText(RegisterActivity.this, "All fields are required!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                mAuth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "createUserWithEmail:success");
+                                    Log.d("FireBase", "createUserWithEmail:success");
                                     FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
+
+                                    if (user != null) {
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(name)
+                                                .build();
+
+                                        user.updateProfile(profileUpdates)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Log.d("FireBase", "User profile updated.");
+                                                            updateUI(user);
+                                                        } else {
+                                                            Log.e("FireBase", "Failed to update profile", task.getException());
+                                                            Toast.makeText(RegisterActivity.this, "Failed to set username.", Toast.LENGTH_SHORT).show();
+                                                            updateUI(null);
+                                                        }
+                                                    }
+                                                });
+                                    }
                                 } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                    Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
+                                    Log.w("FireBase", "createUserWithEmail:failure", task.getException());
+                                    Toast.makeText(RegisterActivity.this, "Authentication failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                     updateUI(null);
                                 }
                             }
                         });
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
+
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,12 +144,23 @@ public class RegisterActivity extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            reload();
+            updateUI(currentUser);
         }
     }
 
     private void updateUI(FirebaseUser user){
-
+        if(user != null) {
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            edtName.setText("");
+            edtEmail.setText("");
+            edtPassword.setText("");
+        }
+        Toast.makeText(this, "Welcome " + user.getDisplayName(),
+                Toast.LENGTH_SHORT).show();
     }
 
     private void reload(){

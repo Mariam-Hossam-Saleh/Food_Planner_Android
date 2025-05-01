@@ -49,7 +49,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "ResourceType"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meal meal = meals.get(position);

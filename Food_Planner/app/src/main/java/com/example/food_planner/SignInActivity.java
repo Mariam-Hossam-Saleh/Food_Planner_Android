@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -14,12 +15,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
@@ -84,27 +92,66 @@ public class SignInActivity extends AppCompatActivity {
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signInWithEmailAndPassword(edtEmail.toString(), edtPassword.toString())
+                String email = edtEmail.getText().toString().trim();
+                String password = edtPassword.getText().toString().trim();
+
+                if (email.isEmpty() || password.isEmpty()) {
+                    Toast.makeText(SignInActivity.this, "Email or password cannot be empty", Toast.LENGTH_SHORT).show();
+                    return; // Don't proceed with sign-in if fields are empty
+                }
+
+                mAuth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
+                                FirebaseUser user = null;
                                 if (task.isSuccessful()) {
-                                    // Sign in success, update UI with the signed-in user's information
-                                    Log.d(TAG, "signInWithEmail:success");
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    updateUI(user);
-                                } else {
-                                    // If sign in fails, display a message to the user.
-                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                    Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    user = getFirebaseUser();
+                                    Log.d("FireBase", "signInWithEmail:success");
+                                    Toast.makeText(SignInActivity.this, "Welcome " + user.getDisplayName(),
                                             Toast.LENGTH_SHORT).show();
-                                    updateUI(null);
+                                } else {
+                                    Exception exception = task.getException();
+                                    if (exception instanceof FirebaseAuthInvalidUserException) {
+                                        Toast.makeText(SignInActivity.this, "No account with this email, please register",
+                                                Toast.LENGTH_SHORT).show();
+                                        Log.e("FireBase", "No account with this email!");
+                                    } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                                        // Wrong password or malformed email
+                                        Toast.makeText(SignInActivity.this, "Email or Password is incorrect!",
+                                                Toast.LENGTH_SHORT).show();
+                                        Log.e("FireBase", "Invalid credentials.");
+                                    } else {
+                                        // General error
+                                        Log.e("FireBase", "Sign-in failed: " + exception.getMessage());
+                                        Toast.makeText(SignInActivity.this, "Something went wrong, please try again!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+                                updateUI(user); // or provide a more detailed UI update
+                            }
+
+                            @Nullable
+                            private FirebaseUser getFirebaseUser() {
+                                FirebaseUser user = mAuth.getInstance().getCurrentUser();
+                                if (user != null) {
+                                    // Name, email address, and profile photo Url
+                                    String name = user.getDisplayName();
+                                    String email = user.getEmail();
+//                                    Uri photoUrl = user.getPhotoUrl();
+
+                                    // Check if user's email is verified
+                                    boolean emailVerified = user.isEmailVerified();
+
+                                    // The user's ID, unique to the Firebase project. Do NOT use this value to
+                                    // authenticate with your backend server, if you have one. Use
+                                    // FirebaseUser.getIdToken() instead.
+                                    String uid = user.getUid();
+                                    Log.i("FireBase",email);
+                                }
+                                return user;
                             }
                         });
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
     }
@@ -120,7 +167,15 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user){
-
+        if(user != null) {
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else{
+            edtEmail.setText("");
+            edtPassword.setText("");
+        }
     }
 
     private void reload(){
