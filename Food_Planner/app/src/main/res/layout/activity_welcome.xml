@@ -29,7 +29,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.317" />
+        app:layout_constraintVertical_bias="0.278" />
 
     <TextView
         android:layout_width="match_parent"
@@ -51,16 +51,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="208dp"
         android:padding="14dp"
         android:text="@string/register"
-        android:textSize="20sp"
         android:textAllCaps="false"
+        android:textSize="20sp"
+        app:cornerRadius="10dp"
+        app:flow_verticalBias="0.7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:flow_verticalBias="0.7"
-        app:cornerRadius="10dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.button.MaterialButton
@@ -78,6 +78,50 @@
         app:layout_constraintTop_toBottomOf="@+id/btnReg"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/btnSignIn"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignIn"
+        app:layout_constraintEnd_toEndOf="@+id/btnSignIn">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            app:cardCornerRadius="25dp"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/googleSign"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:padding="8dp"
+                android:src="@drawable/google_icon" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            app:cardCornerRadius="25dp"
+            app:strokeColor="@color/blue"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/facebookSign"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerInside"
+                android:background="@color/blue"
+                android:src="@drawable/facebook"
+                android:padding="8dp"/>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSkip"
         android:layout_width="91dp"

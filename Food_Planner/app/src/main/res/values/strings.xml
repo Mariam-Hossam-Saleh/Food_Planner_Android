@@ -33,4 +33,8 @@
     <string name="categoryfragment">Category Fragment</string>
     <string name="areamealsfragment">Area Meals Fragment</string>
     <string name="areafragment">Area Fragment</string>
+    
+    <string name="default_web_client_id">211155314520-4tjbphvgi43o9cu5t3squfq1c6i24hbm.apps.googleusercontent.com</string>
+    <string name="facebook_app_id">9747980655294520</string>
+    <string name="facebook_client_token">2f5efd3ee8a951b13d1ec2159956e214</string>
 </resources>

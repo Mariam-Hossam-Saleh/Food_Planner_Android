@@ -1,4 +1,4 @@
-package com.example.food_planner.utils.ingredient_meals.view;
+package com.example.food_planner;
 
 import android.os.Bundle;
 

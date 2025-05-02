@@ -48,7 +48,7 @@
         tools:layout="@layout/fragment_calender" />
     <fragment
         android:id="@+id/ingredientMealsFragment"
-        android:name="com.example.food_planner.utils.ingredient_meals.view.IngredientMealsFragment"
+        android:name="com.example.food_planner.IngredientMealsFragment"
         android:label="@string/ingredientfragment"
         tools:layout="@layout/fragment_ingredient_meals" />
     <fragment

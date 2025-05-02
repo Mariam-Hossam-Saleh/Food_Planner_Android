@@ -68,6 +68,13 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
 
+    // Credential Manager libraries
+    implementation("androidx.credentials:credentials:1.3.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
+    implementation("com.facebook.android:facebook-android-sdk:16.3.0")
+
     // gson & retrofit
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.squareup.retrofit2:retrofit:2.4.0")

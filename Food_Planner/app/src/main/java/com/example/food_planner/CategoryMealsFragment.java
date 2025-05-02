@@ -1,5 +1,6 @@
 package com.example.food_planner;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -60,16 +61,13 @@ public class CategoryMealsFragment extends Fragment implements HomeView,OnMealCl
                              ViewGroup container, Bundle savedInstanceState) {
         if (getArguments() != null) {
             String categoryName = getArguments().getString("categoryName");
-            // Now you can use ingredientName inside this fragment
             binding = FragmentCategoryMealsBinding.inflate(inflater, container, false);
-
 
             mealsArrayList = new ArrayList<>();
             mealAdapter = new MealAdapter(getContext(), mealsArrayList, this);
 
             linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-
 
             recyclerviewMeals = binding.recyclerviewCategoryMeal;
             recyclerviewMeals.setLayoutManager(linearLayoutManager);
@@ -95,6 +93,7 @@ public class CategoryMealsFragment extends Fragment implements HomeView,OnMealCl
         binding = null;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void ShowMeals(List<Meal> mealList) {
         mealAdapter.setMeals(mealList);
