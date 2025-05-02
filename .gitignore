@@ -1,0 +1,18 @@
+# Secrets
+local.properties
+*.keystore
+*.jks
+keystore.properties
+google-services.json
+credentials.json
+
+# Build system
+.gradle/
+build/
+app/build/
+
+# IDE and OS
+.idea/
+*.iml
+.DS_Store
+
