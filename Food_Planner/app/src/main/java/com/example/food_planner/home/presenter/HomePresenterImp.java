@@ -71,6 +71,11 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
     public void filterMealByCategory(String category) { mealsRepo.filterByCategory(this,category); }
 
     @Override
+    public void filterByArea(String area) {
+        mealsRepo.filterByArea(this,area);
+    }
+
+    @Override
     public void addMealToFavourite(Meal meal) { mealsRepo.insertMeal(meal); }
 
     @Override

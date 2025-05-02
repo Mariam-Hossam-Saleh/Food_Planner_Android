@@ -105,6 +105,24 @@ public class MealRemoteDataSourceImp implements MealRemoteDataSource {
     }
 
     @Override
+    public void makeNetworkCallToFilterMealByArea(MealNetworkCallback mealNetworkCallback, String area) {
+        mealService.getMealsByArea(area).enqueue(new Callback<MealsResponse>() {
+            @Override
+            public void onResponse(Call<MealsResponse> call, Response<MealsResponse> response) {
+                Log.i(TAG,"onResponce: CallBack"+response.raw()+response.body());
+                mealNetworkCallback.onSuccessMeal(response.body().getMeals());
+            }
+
+            @Override
+            public void onFailure(Call<MealsResponse> call, Throwable t) {
+                Log.i(TAG,"onFailure: CallBack");
+                mealNetworkCallback.onFailureResult(t.getMessage());
+                t.printStackTrace();
+            }
+        });
+    }
+
+    @Override
     public void makeNetworkCallForSearchMealByName(MealNetworkCallback mealNetworkCallback, String mealName) {
         mealService.searchMealByName(mealName).enqueue(new Callback<MealsResponse>() {
             @Override

@@ -1,5 +1,6 @@
 package com.example.food_planner;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -63,7 +64,6 @@ public class IngredientMealsFragment extends Fragment implements HomeView,OnMeal
             // Now you can use ingredientName inside this fragment
             binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-
             mealsArrayList = new ArrayList<>();
             mealAdapter = new MealAdapter(getContext(), mealsArrayList, this);
 
@@ -95,6 +95,7 @@ public class IngredientMealsFragment extends Fragment implements HomeView,OnMeal
         binding = null;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void ShowMeals(List<Meal> mealList) {
         mealAdapter.setMeals(mealList);

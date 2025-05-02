@@ -10,4 +10,5 @@ public interface MealRemoteDataSource {
     void makeNetworkCallForMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter);
     void makeNetworkCallToFilterMealByIngredient(MealNetworkCallback mealNetworkCallback, String ingredient);
     void makeNetworkCallToFilterMealByCategory(MealNetworkCallback mealNetworkCallback, String category);
+    void makeNetworkCallToFilterMealByArea(MealNetworkCallback mealNetworkCallback, String area);
 }

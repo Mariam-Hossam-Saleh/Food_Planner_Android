@@ -60,7 +60,7 @@ public class AreaMealsFragment extends Fragment implements HomeView,OnMealClickL
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         if (getArguments() != null) {
-            String categoryName = getArguments().getString("categoryName");
+            String areaName = getArguments().getString("areaName");
 
             binding = FragmentCategoryMealsBinding.inflate(inflater, container, false);
 
@@ -79,7 +79,7 @@ public class AreaMealsFragment extends Fragment implements HomeView,OnMealClickL
                     IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),
                     CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())),
                     AreaRepositoryImp.getInstance(AreaRemoteDataSourceImp.getInstance(), AreaLocalDataSourceImp.getInstance(getContext())),this);
-            homePresenter.filterMealByCategory(categoryName);
+            homePresenter.filterByArea(areaName);
         }
         return binding.getRoot();
     }

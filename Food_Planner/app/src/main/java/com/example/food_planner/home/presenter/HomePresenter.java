@@ -12,6 +12,7 @@ public interface HomePresenter {
     public void getAllCategories();
     public void getAllAreas();
     public void filterMealByCategory(String category);
+    public void filterByArea(String area);
     public void addMealToFavourite(Meal meal);
     public void removeMealFromFavourite(Meal meal);
 
