@@ -51,7 +51,10 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.setClientToken(getString(R.string.facebook_client_token));
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(this);
+        FacebookSdk.setAutoInitEnabled(true);
+        FacebookSdk.setAutoLogAppEventsEnabled(true);
+        FacebookSdk.setAdvertiserIDCollectionEnabled(true);
         AppEventsLogger.activateApp(getApplication());
         setContentView(R.layout.activity_welcome);
 
@@ -101,6 +104,7 @@ public class WelcomeActivity extends AppCompatActivity {
             LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
+                    Log.i("Facebook","Facebook Login Success");
                     handleFacebookAccessToken(loginResult.getAccessToken());
                 }
 
@@ -111,8 +115,9 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(FacebookException error) {
-                    Log.e(TAG, "Facebook login failed", error);
+                    Log.e("Facebook", "Facebook login failed", error);
                 }
+
             });
         });
     }
@@ -139,31 +144,9 @@ public class WelcomeActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
+
                 });
     }
-
-//    private void handleFacebookAccessToken(AccessToken token) {
-//        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-//        mAuth.signInWithCredential(credential)
-//            .addOnCompleteListener(this, task -> {
-//                @Override
-//                public void onComplete(this, new OnCompleteListener<AuthResult> task){
-//                    if (task.isSuccessful()) {
-//                        // Sign in success, update UI with the signed-in user's information
-//                        Log.d(TAG, "signInWithCredential:success");
-//                        FirebaseUser user = mAuth.getCurrentUser();
-//                        Toast.makeText(this, "Welcome " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-//                        startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-//                        finish();
-//                    } else {
-//                        // If sign in fails, display a message to the user.
-//                        Log.w(TAG, "signInWithCredential:failure", task.getException());
-//                        Toast.makeText(WelcomeActivity.this, "Authentication failed.",
-//                                Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-//    }
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
