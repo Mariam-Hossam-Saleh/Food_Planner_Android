@@ -11,11 +11,8 @@
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_nav_home_to_ingredientMealsFragment"
-            app:destination="@id/ingredientMealsFragment" />
-        <action
-            android:id="@+id/action_nav_home_to_categoryMealsFragment"
-            app:destination="@id/categoryMealsFragment" />
+            android:id="@+id/action_nav_home_to_mealsFragment"
+            app:destination="@id/mealsFragment" />
         <action
             android:id="@+id/action_nav_home_to_nav_favourite"
             app:destination="@id/nav_favourite" />
@@ -26,8 +23,8 @@
             android:id="@+id/action_nav_home_to_nav_calender"
             app:destination="@id/nav_calender" />
         <action
-            android:id="@+id/action_nav_home_to_areaMealsFragment"
-            app:destination="@id/areaMealsFragment" />
+            android:id="@+id/action_nav_home_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
     </fragment>
 
     <fragment
@@ -47,19 +44,18 @@
         android:label="@string/calendar"
         tools:layout="@layout/fragment_calender" />
     <fragment
-        android:id="@+id/ingredientMealsFragment"
-        android:name="com.example.food_planner.IngredientMealsFragment"
-        android:label="@string/ingredientfragment"
-        tools:layout="@layout/fragment_ingredient_meals" />
+        android:id="@+id/mealsFragment"
+        android:name="com.example.food_planner.MealsFragment"
+        android:label="@string/filtered_meals"
+        tools:layout="@layout/fragment_meals" >
+        <action
+            android:id="@+id/action_mealsFragment_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/categoryMealsFragment"
-        android:name="com.example.food_planner.CategoryMealsFragment"
-        android:label="@string/categoryfragment"
-        tools:layout="@layout/fragment_category_meals" />
-    <fragment
-        android:id="@+id/areaMealsFragment"
-        android:name="com.example.food_planner.AreaMealsFragment"
-        android:label="@string/areafragment"
-        tools:layout="@layout/fragment_area_meals" />
+        android:id="@+id/mealDetailsFragment"
+        android:name="com.example.food_planner.meal_details.view.MealDetailsFragment"
+        android:label="@string/meal_details"
+        tools:layout="@layout/fragment_meal_details" />
 
 </navigation>

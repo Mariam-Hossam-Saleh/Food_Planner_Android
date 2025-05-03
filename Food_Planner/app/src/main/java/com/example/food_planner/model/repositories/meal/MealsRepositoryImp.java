@@ -36,6 +36,11 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
+    public void searchMealByID(MealNetworkCallback mealNetworkCallback, String mealID) {
+        remoteDataSource.makeNetworkCallToFilterMealByID(mealNetworkCallback, mealID);
+    }
+
+    @Override
     public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback,Boolean isSingle) {
         remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback, isSingle);
     }

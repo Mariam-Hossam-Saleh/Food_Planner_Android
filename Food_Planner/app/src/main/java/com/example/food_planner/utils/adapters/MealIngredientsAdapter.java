@@ -18,26 +18,24 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
+import com.example.food_planner.model.pojos.ingredient.Ingredient;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.utils.OnMealClickListener;
 
 import java.util.List;
 
-public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
+public class MealIngredientsAdapter extends RecyclerView.Adapter<MealIngredientsAdapter.ViewHolder> {
 
     private final Context context;
-    private List<Meal> meals;
-    private final OnMealClickListener listener;
-    private static final String TAG = "HomeRecyclerView";
+    private List<Ingredient> ingredients;
 
-    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener _listener) {
+    public MealIngredientsAdapter(Context _context, List<Ingredient> ingredients) {
         this.context = _context;
-        this.meals = meals;
-        this.listener = _listener;
+        this.ingredients = ingredients;
     }
 
-    public void setMeals(List<Meal> meals) {
-        this.meals = meals;
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
 
@@ -45,71 +43,49 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         View view = LayoutInflater.from(recyclerView.getContext())
-                .inflate(R.layout.meal_carousel, recyclerView, false);
+                .inflate(R.layout.meal_ingredients_recycleview, recyclerView, false);
         return new ViewHolder(view);
     }
 
     @SuppressLint({"SetTextI18n", "ResourceType"})
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Meal meal = meals.get(position);
+        Ingredient ingredient = ingredients.get(position);
 
-        holder.txtMealTitle.setText(meal.getStrMeal());
+        holder.ingredientName.setText(ingredient.getStrIngredient());
+        holder.ingredientMeasure.setText(ingredient.getMeasure());
 
         Glide.with(context)
-                .load(meal.getStrMealThumb())
+                .load("https://www.themealdb.com/images/ingredients/"+ingredient.getStrIngredient()+".png")
                 .apply(new RequestOptions()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .transform(new CenterCrop(), new RoundedCorners(30))
                         .override(200, 200)
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
-                .into(holder.imageView);
+                .into(holder.ingredientImage);
 
-        holder.addFavouritesIcon.setOnClickListener(v -> {
-            boolean isFavorite = v.getTag() != null && (boolean) v.getTag();
-
-            if (listener != null) {
-                listener.onMealClickListener(holder.addFavouritesIcon, meal,isFavorite);
-            }
-
-            if (isFavorite) {
-                holder.addFavouritesIcon.setImageResource(R.drawable.favourite); // Not favorite
-            } else {
-                holder.addFavouritesIcon.setImageResource(R.drawable.lover); // Favorite
-            }
-
-            v.setTag(!isFavorite);
-        });
-
-        holder.imageView.setOnClickListener( v -> {
-            if (listener != null) {
-                listener.onMealClickListener(holder.addFavouritesIcon, meal,false);
-            }
-        });
-
-
-        Log.i(TAG, "Bound meal: " + meal.getStrMeal());
+        Log.i("MealIngredients", "Bound meal: " + ingredient.getStrIngredient());
     }
 
     @Override
     public int getItemCount() {
-        if(meals.isEmpty())
+        if(ingredients.isEmpty())
             return 0;
         else
-            return meals.size();
+            return ingredients.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtMealTitle;
-        ImageView imageView;
-        ImageView addFavouritesIcon;
+        TextView ingredientName;
+        TextView ingredientMeasure;
+        ImageView ingredientImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            txtMealTitle = itemView.findViewById(R.id.mealName);
-            imageView = itemView.findViewById(R.id.mealImage);
-            addFavouritesIcon = itemView.findViewById(R.id.addFavouritesIcon);
+            ingredientName = itemView.findViewById(R.id.ingredientName);
+            ingredientMeasure = itemView.findViewById(R.id.ingredientMeasure);
+            ingredientImage = itemView.findViewById(R.id.ingredientImage);
         }
     }
 }

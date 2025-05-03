@@ -2,6 +2,7 @@ package com.example.food_planner.model.pojos.ingredient;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
@@ -17,6 +18,7 @@ public class Ingredient {
     private String strDescription;
 
     private String strType;
+    private String measure;
 
     public Ingredient(@NonNull String idIngredient, String strIngredient, String strDescription, String strType) {
         this.idIngredient = idIngredient;
@@ -25,12 +27,26 @@ public class Ingredient {
         this.strType = strType;
     }
 
+    @Ignore
+    public Ingredient(String strIngredient, String measure){
+        this.strIngredient = strIngredient;
+        this.measure = measure;
+    }
+
+    public void setMeasure(String measure) {
+        this.measure = measure;
+    }
+
+    public String getMeasure() {
+        return measure;
+    }
+
     @NonNull
     public String getIdIngredient() {
         return idIngredient;
     }
 
-    public void setIdIngredient(String idIngredient) {
+    public void setIdIngredient(@NonNull String idIngredient) {
         this.idIngredient = idIngredient;
     }
 

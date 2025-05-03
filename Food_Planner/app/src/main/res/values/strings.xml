@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Dish Dash</string>
-    <string name="dishdash">Dish Dash</string>
+    <string name="dish_dash">Dish Dash</string>
     <string name="slogan">Everything is good when it\'s about food</string>
     <string name="register">Register</string>
-    <string name="signin">Sign in</string>
-    <string name="btnskip">Skip</string>
-    <string name="fullname">Full Name</string>
+    <string name="sign_in">Sign in</string>
+    <string name="btn_skip">Skip</string>
+    <string name="full_name">Full Name</string>
     <string name="email">Email Address</string>
     <string name="password">Password</string>
-    <string name="alreadyregisterd">Already Registerd?</string>
-    <string name="donthaveaccount">Don\'t have an account?</string>
+    <string name="already_registered">Already Registerd?</string>
+    <string name="do_not_have_account">Don\'t have an account?</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="favourite">Favourite</string>
     <string name="search">Search</string>
@@ -29,12 +29,16 @@
     <string name="logout">Log Out</string>
 
     <string name="add_to_favourites">Add To Favourite</string>
-    <string name="ingredientfragment">Ingredient Fragment</string>
-    <string name="categoryfragment">Category Fragment</string>
-    <string name="areamealsfragment">Area Meals Fragment</string>
-    <string name="areafragment">Area Fragment</string>
-    
+    <string name="ingredient_fragment">Ingredient Fragment</string>
+    <string name="category_fragment">Category Fragment</string>
+    <string name="area_meals_fragment">Area Meals Fragment</string>
+    <string name="area_fragment">Area Fragment</string>
+
     <string name="default_web_client_id">211155314520-4tjbphvgi43o9cu5t3squfq1c6i24hbm.apps.googleusercontent.com</string>
     <string name="facebook_app_id">9747980655294520</string>
     <string name="facebook_client_token">2f5efd3ee8a951b13d1ec2159956e214</string>
+    <string name="filtered_meals">Filtered Meals</string>
+    <string name="meal_details">Meal Details</string>
+    <string name="instructions">Instructions</string>
+    <string name="ingredients">Ingredients</string>
 </resources>

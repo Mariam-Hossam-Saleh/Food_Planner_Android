@@ -10,10 +10,10 @@ import retrofit2.http.Query;
 public interface MealService {
     @GET("api/json/v1/1/search.php")
     Call<MealsResponse> searchMealByName(@Query("s") String name);
+    @GET("api/json/v1/1/lookup.php")
+    Call<MealsResponse> searchMealByID(@Query("i") String name);
     @GET("api/json/v1/1/search.php")
     Call<MealsResponse> listMealsByFirstLetter(@Query("f") String letter);
-    @GET("api/json/v1/1/lookup.php")
-    Call<MealsResponse> lookupFullMealByID(@Query("i") String id);
     @GET("api/json/v1/1/random.php")
     Call<MealsResponse> lookupSingleRandomMeal();
     @GET("api/json/v1/1/filter.php")

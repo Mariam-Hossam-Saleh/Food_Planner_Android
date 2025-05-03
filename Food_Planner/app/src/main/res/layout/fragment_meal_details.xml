@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         tools:context=".home.view.HomeFragment">
 
         <!-- Featured Meal Card -->
@@ -34,7 +34,7 @@
 
                 <!-- Meal Image -->
                 <ImageView
-                    android:id="@+id/singleRandomMeal"
+                    android:id="@+id/mealImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -72,18 +72,21 @@
                     android:textStyle="bold" />
             </FrameLayout>
         </com.google.android.material.card.MaterialCardView>
-        <!-- Carousel for Random Meals -->
-        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-            android:id="@+id/carouselRecyclerviewTenRandomMeals"
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/ingredients"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/amita"
+            android:gravity="center"
+            android:text="@string/ingredients"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_red"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardView" />
+
 
         <!-- Ingredients RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -93,36 +96,46 @@
             android:layout_marginTop="10dp"
             android:clipToPadding="false"
             android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/carouselRecyclerviewTenRandomMeals"
+            app:layout_constraintTop_toBottomOf="@id/ingredients"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:listitem="@layout/meal_carousel" />
 
-        <!-- Categories RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewCategories"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/recyclerviewIngredients"
-            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/amita"
+            android:gravity="center"
+            android:text="@string/instructions"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            android:textColor="@color/light_red"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerviewIngredients" />
 
-        <!-- Areas RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewAreas"
+        <TextView
+            android:id="@+id/mealInstructions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:fontFamily="@font/atma_medium"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:text="Meal Name"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerviewIngredients" />
+
+        <WebView
+            android:id="@+id/youtubeVideo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mealInstructions" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -164,6 +164,17 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                             .error(R.drawable.imagefailed))
                     .into(singleRandomMeal);
             singleRandomMealText.setText(meal.getStrMeal());
+            singleRandomMeal.setOnClickListener(v -> {
+                if (meal.getStrMeal() != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("mealID", meal.getIdMeal());
+
+                    NavController navController = NavHostFragment.findNavController(HomeFragment.this);
+                    navController.navigate(R.id.action_nav_home_to_mealDetailsFragment, bundle);
+                } else {
+                    Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
+                }
+            });
         } else {
             tenRandomMealAdapter.setMeals(mealList);
             tenRandomMealAdapter.notifyDataSetChanged();
@@ -206,13 +217,22 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
     @Override
     public void onMealClickListener(ImageView imageView, Meal meal, boolean favState) {
-        if (!favState) {
-            homePresenter.addMealToFavourite(meal);
-            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+        if (meal != null && meal.getStrMeal() != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("mealID", meal.getIdMeal());
+
+            NavController navController = NavHostFragment.findNavController(HomeFragment.this);
+            navController.navigate(R.id.action_nav_home_to_mealDetailsFragment, bundle);
         } else {
-            homePresenter.removeMealFromFavourite(meal);
-            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
         }
+//        if (!favState) {
+//            homePresenter.addMealToFavourite(meal);
+//            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+//        } else {
+//            homePresenter.removeMealFromFavourite(meal);
+//            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+//        }
     }
 
     @Override
@@ -220,9 +240,10 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         if (ingredient != null && ingredient.getStrIngredient() != null) {
             Bundle bundle = new Bundle();
             bundle.putString("ingredientName", ingredient.getStrIngredient());
+            bundle.putString("meal","ingredient");
 
             NavController navController = NavHostFragment.findNavController(HomeFragment.this);
-            navController.navigate(R.id.action_nav_home_to_ingredientMealsFragment, bundle);
+            navController.navigate(R.id.action_nav_home_to_mealsFragment, bundle);
         } else {
             Toast.makeText(requireContext(), "Ingredient is missing!", Toast.LENGTH_SHORT).show();
         }
@@ -233,9 +254,10 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         if (category != null && category.getStrCategory() != null) {
             Bundle bundle = new Bundle();
             bundle.putString("categoryName", category.getStrCategory());
+            bundle.putString("meal","category");
 
             NavController navController = NavHostFragment.findNavController(HomeFragment.this);
-            navController.navigate(R.id.action_nav_home_to_categoryMealsFragment, bundle);
+            navController.navigate(R.id.action_nav_home_to_mealsFragment, bundle);
         } else {
             Toast.makeText(getActivity(), "Category is missing!", Toast.LENGTH_SHORT).show();
         }
@@ -246,9 +268,10 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         if (area != null && area.getStrArea() != null) {
             Bundle bundle = new Bundle();
             bundle.putString("areaName", area.getStrArea());
+            bundle.putString("meal","area");
 
             NavController navController = NavHostFragment.findNavController(HomeFragment.this);
-            navController.navigate(R.id.action_nav_home_to_areaMealsFragment, bundle);
+            navController.navigate(R.id.action_nav_home_to_mealsFragment, bundle);
         } else {
             Toast.makeText(getActivity(), "Area is missing!", Toast.LENGTH_SHORT).show();
         }

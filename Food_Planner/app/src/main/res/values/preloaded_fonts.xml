@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/abyssinica_sil</item>
         <item>@font/aguafina_script</item>
         <item>@font/alex_brush</item>
         <item>@font/amita</item>
+        <item>@font/atma_medium</item>
         <item>@font/charm_bold</item>
+        <item>@font/stylish</item>
     </array>
 </resources>
