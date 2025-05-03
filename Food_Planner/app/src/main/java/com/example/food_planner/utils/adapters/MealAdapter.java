@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
 
 import java.util.List;
@@ -27,13 +28,15 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     private final Context context;
     private List<Meal> meals;
-    private final OnMealClickListener listener;
+    private final OnMealClickListener onMealClickListener;
+    private final OnFavIconClickListener onFavIconClickListener;
     private static final String TAG = "HomeRecyclerView";
 
-    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener _listener) {
+    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener) {
         this.context = _context;
         this.meals = meals;
-        this.listener = _listener;
+        this.onMealClickListener = onMealClickListener;
+        this.onFavIconClickListener = onFavIconClickListener;
     }
 
     public void setMeals(List<Meal> meals) {
@@ -45,7 +48,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         View view = LayoutInflater.from(recyclerView.getContext())
-                .inflate(R.layout.meal_carousel, recyclerView, false);
+                .inflate(R.layout.meal_recycleview_element, recyclerView, false);
         return new ViewHolder(view);
     }
 
@@ -66,25 +69,15 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
 
-        holder.addFavouritesIcon.setOnClickListener(v -> {
-            boolean isFavorite = v.getTag() != null && (boolean) v.getTag();
-
-            if (listener != null) {
-                listener.onMealClickListener(holder.addFavouritesIcon, meal,isFavorite);
+        holder.favouriteIcon.setOnClickListener(v -> {
+            if (onFavIconClickListener != null) {
+                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, meal,false);
             }
-
-            if (isFavorite) {
-                holder.addFavouritesIcon.setImageResource(R.drawable.favourite); // Not favorite
-            } else {
-                holder.addFavouritesIcon.setImageResource(R.drawable.lover); // Favorite
-            }
-
-            v.setTag(!isFavorite);
         });
 
         holder.imageView.setOnClickListener( v -> {
-            if (listener != null) {
-                listener.onMealClickListener(holder.addFavouritesIcon, meal,false);
+            if (onMealClickListener != null) {
+                onMealClickListener.onMealClickListener(holder.favouriteIcon, meal);
             }
         });
 
@@ -103,13 +96,13 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtMealTitle;
         ImageView imageView;
-        ImageView addFavouritesIcon;
+        ImageView favouriteIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMealTitle = itemView.findViewById(R.id.mealName);
             imageView = itemView.findViewById(R.id.mealImage);
-            addFavouritesIcon = itemView.findViewById(R.id.addFavouritesIcon);
+            favouriteIcon = itemView.findViewById(R.id.addFavouritesIcon);
         }
     }
 }

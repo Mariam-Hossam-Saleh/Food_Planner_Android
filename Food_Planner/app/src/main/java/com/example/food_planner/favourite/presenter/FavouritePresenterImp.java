@@ -1,5 +1,7 @@
 package com.example.food_planner.favourite.presenter;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.food_planner.favourite.view.FavouriteView;
 import com.example.food_planner.home.view.HomeView;
 import com.example.food_planner.model.network.ingredient.IngredientsNetworkCallback;
@@ -12,20 +14,18 @@ import com.example.food_planner.model.repositories.meal.MealsRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavouritePresenterImp implements FavouritePresenter, MealNetworkCallback , IngredientsNetworkCallback {
+public class FavouritePresenterImp implements FavouritePresenter, MealNetworkCallback {
     private FavouriteView view;
     private MealsRepository mealsRepo;
-    private IngredientsRepository ingredientsRepository;
 
-    public FavouritePresenterImp(MealsRepository mealsRepo, IngredientsRepository ingredientsRepository, FavouriteView view) {
+    public FavouritePresenterImp(MealsRepository mealsRepo , FavouriteView view) {
         this.mealsRepo = mealsRepo;
         this.view = view;
-        this.ingredientsRepository = ingredientsRepository;
     }
 
     @Override
-    public void addMealToFavourite(Meal meal) {
-        mealsRepo.insertMeal(meal);
+    public LiveData<List<Meal>> getFavouriteMeals() {
+        return mealsRepo.getStoredMeals();
     }
 
     @Override
@@ -44,11 +44,5 @@ public class FavouritePresenterImp implements FavouritePresenter, MealNetworkCal
         view.ShowErrMsg(errorMSG);
     }
 
-    @Override
-    public void onSuccessIngredient(List<Ingredient> ingredients) { view.ShowIngredients(ingredients); }
 
-    @Override
-    public void onFailureIngredient(String errorMSG) {
-
-    }
 }

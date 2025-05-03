@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface FavouriteView {
     public void ShowMeals(List<Meal> mealList);
-    public void ShowIngredients(List<Ingredient> ingredientList);
     public void ShowErrMsg(String error);
 }

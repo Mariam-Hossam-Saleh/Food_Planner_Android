@@ -4,6 +4,6 @@ import android.widget.ImageView;
 
 import com.example.food_planner.model.pojos.meal.Meal;
 
-public interface OnMealClickListener {
-    void onMealClickListener(ImageView imageView, Meal meal);
+public interface OnFavIconClickListener {
+    void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState);
 }

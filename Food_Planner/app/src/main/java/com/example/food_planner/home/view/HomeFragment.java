@@ -45,6 +45,7 @@ import com.example.food_planner.model.repositories.category.CategoryRepositoryIm
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.example.food_planner.utils.OnAreaClickListener;
+import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.adapters.AreaAdapter;
 import com.example.food_planner.utils.adapters.CategoryAdapter;
 import com.example.food_planner.utils.adapters.IngredientAdapter;
@@ -57,7 +58,7 @@ import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnIngredientClickListener, OnCategoryClickListener, OnAreaClickListener {
+public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnFavIconClickListener,OnIngredientClickListener, OnCategoryClickListener, OnAreaClickListener {
 
     ArrayList<Meal> tenRandomMealArrayList;
     ArrayList<Ingredient> ingredientArrayList;
@@ -65,6 +66,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     ArrayList<Area> areaArrayList;
     ImageView singleRandomMeal;
     TextView singleRandomMealText;
+    ImageView favouriteIcon;
     CarouselRecyclerview carouselRecyclerviewTenRandomMeals;
     RecyclerView recyclerViewIngredients;
     RecyclerView recyclerViewCategories;
@@ -84,7 +86,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         tenRandomMealArrayList = new ArrayList<>();
-        tenRandomMealAdapter = new MealAdapter(getContext(), tenRandomMealArrayList, this);
+        tenRandomMealAdapter = new MealAdapter(getContext(), tenRandomMealArrayList, this,this);
 
         ingredientArrayList = new ArrayList<>();
         ingredientAdapter = new IngredientAdapter(getContext(), ingredientArrayList, this);
@@ -106,6 +108,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
         singleRandomMeal = binding.singleRandomMeal;
         singleRandomMealText = binding.mealName;
+        favouriteIcon = binding.addFavouritesIcon;
 
         carouselRecyclerviewTenRandomMeals = binding.carouselRecyclerviewTenRandomMeals;
         carouselRecyclerviewTenRandomMeals.setAdapter(tenRandomMealAdapter);
@@ -175,6 +178,9 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                     Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
                 }
             });
+            favouriteIcon.setOnClickListener(v -> {
+                onFavIconClickListener(favouriteIcon, meal,false);
+            });
         } else {
             tenRandomMealAdapter.setMeals(mealList);
             tenRandomMealAdapter.notifyDataSetChanged();
@@ -216,7 +222,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
 
     @Override
-    public void onMealClickListener(ImageView imageView, Meal meal, boolean favState) {
+    public void onMealClickListener(ImageView imageView, Meal meal) {
         if (meal != null && meal.getStrMeal() != null) {
             Bundle bundle = new Bundle();
             bundle.putString("mealID", meal.getIdMeal());
@@ -226,13 +232,16 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         } else {
             Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
         }
-//        if (!favState) {
-//            homePresenter.addMealToFavourite(meal);
-//            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
-//        } else {
-//            homePresenter.removeMealFromFavourite(meal);
-//            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
-//        }
+
+    }
+    @Override
+    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+        if(favState) {
+            homePresenter.removeMealFromFavourite(meal);
+        }
+        else{
+            homePresenter.addMealToFavourite(meal);
+        }
     }
 
     @Override
@@ -276,4 +285,5 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
             Toast.makeText(getActivity(), "Area is missing!", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

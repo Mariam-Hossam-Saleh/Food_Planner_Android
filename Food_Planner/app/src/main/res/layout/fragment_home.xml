@@ -83,7 +83,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            tools:listitem="@layout/meal_recycleview_element" />
 
         <!-- Ingredients RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -96,7 +96,7 @@
             app:layout_constraintTop_toBottomOf="@id/carouselRecyclerviewTenRandomMeals"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            tools:listitem="@layout/meal_recycleview_element" />
 
         <!-- Categories RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -109,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@id/recyclerviewIngredients"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            tools:listitem="@layout/meal_recycleview_element" />
 
         <!-- Areas RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -122,7 +122,7 @@
             app:layout_constraintTop_toBottomOf="@id/recyclerviewCategories"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            tools:listitem="@layout/meal_recycleview_element" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

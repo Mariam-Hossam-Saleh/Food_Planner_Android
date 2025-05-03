@@ -33,16 +33,15 @@ import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
+import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnIngredientClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
-import com.example.food_planner.utils.adapters.IngredientAdapter;
-import com.example.food_planner.utils.adapters.MealIngredientsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MealDetailsFragment extends Fragment implements MealDetailsView, OnIngredientClickListener ,OnMealClickListener{
+public class MealDetailsFragment extends Fragment implements MealDetailsView, OnIngredientClickListener , OnFavIconClickListener {
     ArrayList<Ingredient> ingredientArrayList;
     ImageView mealImage;
     ImageView addFavouritesIcon;
@@ -120,6 +119,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
                 .into(mealImage);
+
+        addFavouritesIcon.setOnClickListener(v -> {
+            onFavIconClickListener(addFavouritesIcon,meal,false);
+        });
         mealName.setText(meal.getStrMeal());
         mealInstructions.setText(meal.getStrInstructions());
         String videoURL = meal.getStrYoutube();
@@ -177,14 +180,12 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
 
 
     @Override
-    public void onMealClickListener(ImageView imageView, Meal meal, boolean favState) {
-        if(!favState) {
-            mealDetailsPresenter.addMealToFavourite(meal);
-            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+        if(favState) {
+            mealDetailsPresenter.removeMealFromFavourite(meal);
         }
         else{
-            mealDetailsPresenter.removeMealFromFavourite(meal);
-            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+            mealDetailsPresenter.addMealToFavourite(meal);
         }
     }
 

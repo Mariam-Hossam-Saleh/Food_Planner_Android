@@ -35,9 +35,13 @@
 
     <fragment
         android:id="@+id/nav_favourite"
-        android:name="com.example.food_planner.ui.favourite.FavouriteFragment"
+        android:name="com.example.food_planner.favourite.view.FavouriteFragment"
         android:label="@string/favourite"
-        tools:layout="@layout/fragment_favourite" />
+        tools:layout="@layout/fragment_favourite" >
+        <action
+            android:id="@+id/action_nav_favourite_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_calender"
         android:name="com.example.food_planner.ui.calendar.CalendarFragment"

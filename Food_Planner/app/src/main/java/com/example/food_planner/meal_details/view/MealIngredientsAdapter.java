@@ -1,4 +1,4 @@
-package com.example.food_planner.utils.adapters;
+package com.example.food_planner.meal_details.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,8 +19,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
-import com.example.food_planner.model.pojos.meal.Meal;
-import com.example.food_planner.utils.OnMealClickListener;
 
 import java.util.List;
 
@@ -43,7 +41,7 @@ public class MealIngredientsAdapter extends RecyclerView.Adapter<MealIngredients
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerView, int viewType) {
         View view = LayoutInflater.from(recyclerView.getContext())
-                .inflate(R.layout.meal_ingredients_recycleview, recyclerView, false);
+                .inflate(R.layout.meal_ingredients_recycleview_element, recyclerView, false);
         return new ViewHolder(view);
     }
 
@@ -80,6 +78,7 @@ public class MealIngredientsAdapter extends RecyclerView.Adapter<MealIngredients
         TextView ingredientName;
         TextView ingredientMeasure;
         ImageView ingredientImage;
+        ImageView favouriteIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

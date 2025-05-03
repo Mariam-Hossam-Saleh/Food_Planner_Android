@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".AreaMealsFragment">
+    tools:context=".MealsFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewAreaMeal"
@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        tools:listitem="@layout/meal_carousel"
+        tools:listitem="@layout/meal_recycleview_element"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

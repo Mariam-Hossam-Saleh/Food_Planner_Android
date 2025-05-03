@@ -9,7 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".home.view.HomeFragment">
+        tools:context=".home.view.HomeFragment"
+        tools:ignore="WebViewLayout">
 
         <!-- Featured Meal Card -->
         <com.google.android.material.card.MaterialCardView
@@ -80,7 +81,7 @@
             android:fontFamily="@font/amita"
             android:gravity="center"
             android:text="@string/ingredients"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/light_red"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +100,7 @@
             app:layout_constraintTop_toBottomOf="@id/ingredients"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_carousel" />
+            tools:listitem="@layout/meal_recycleview_element" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -107,7 +108,7 @@
             android:fontFamily="@font/amita"
             android:gravity="center"
             android:text="@string/instructions"
-            android:textSize="22dp"
+            android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@color/light_red"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,7 +125,7 @@
             android:paddingTop="10dp"
             android:text="Meal Name"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recyclerviewIngredients" />
@@ -139,7 +140,7 @@
             android:text="YouTube Video"
             android:textColor="@color/light_red"
             android:textStyle="bold"
-            android:textSize="22dp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/mealInstructions" />

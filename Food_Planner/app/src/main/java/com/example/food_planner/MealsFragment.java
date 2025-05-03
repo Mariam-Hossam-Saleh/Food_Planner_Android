@@ -37,6 +37,7 @@ import com.example.food_planner.model.repositories.area.AreaRepositoryImp;
 import com.example.food_planner.model.repositories.category.CategoryRepositoryImp;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
+import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
 import com.example.food_planner.utils.adapters.MealAdapter;
 
@@ -45,7 +46,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class MealsFragment extends Fragment implements HomeView,OnMealClickListener {
+public class MealsFragment extends Fragment implements HomeView,OnMealClickListener , OnFavIconClickListener {
     ArrayList<Meal> mealsArrayList;
     RecyclerView recyclerviewMeals;
     MealAdapter mealAdapter;
@@ -67,7 +68,7 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
             binding = FragmentMealsBinding.inflate(inflater, container, false);
 
             mealsArrayList = new ArrayList<>();
-            mealAdapter = new MealAdapter(getContext(), mealsArrayList, this);
+            mealAdapter = new MealAdapter(getContext(), mealsArrayList, this,this);
 
             linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -135,7 +136,7 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
 
 
     @Override
-    public void onMealClickListener(ImageView imageView, Meal meal, boolean favState) {
+    public void onMealClickListener(ImageView imageView, Meal meal) {
         if (meal != null && meal.getStrMeal() != null) {
             Bundle bundle = new Bundle();
             bundle.putString("mealID", meal.getIdMeal());
@@ -155,4 +156,13 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
 //        }
     }
 
+    @Override
+    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+        if(favState) {
+            homePresenter.removeMealFromFavourite(meal);
+        }
+        else{
+            homePresenter.addMealToFavourite(meal);
+        }
+    }
 }

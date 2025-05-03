@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        tools:listitem="@layout/meal_carousel"
+        tools:listitem="@layout/meal_recycleview_element"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
