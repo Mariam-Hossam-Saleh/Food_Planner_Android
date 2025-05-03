@@ -1,10 +1,13 @@
 package com.example.food_planner.meal_details.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +48,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
     ImageView addFavouritesIcon;
     TextView mealName;
     TextView mealInstructions;
+    WebView youtubeVideo;
     MealIngredientsAdapter mealIngredientsAdapter;
     RecyclerView recyclerviewIngredients;
     MealDetailsPresenter mealDetailsPresenter;
@@ -57,6 +61,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
     }
 
 
+    @SuppressLint("SetJavaScriptEnabled")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         if (getArguments() != null) {
@@ -67,6 +72,12 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
             addFavouritesIcon = binding.addFavouritesIcon;
             mealName = binding.mealName;
             mealInstructions = binding.mealInstructions;
+
+            youtubeVideo = binding.youtubeVideo;
+            youtubeVideo.getSettings().setJavaScriptEnabled(true);
+            youtubeVideo.getSettings().setDomStorageEnabled(true);
+            youtubeVideo.setWebChromeClient(new WebChromeClient()); // required for video playback
+            youtubeVideo.setWebViewClient(new WebViewClient());
 
             ingredientArrayList = new ArrayList<>();
             mealIngredientsAdapter = new MealIngredientsAdapter(getContext(), ingredientArrayList);
@@ -111,6 +122,10 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
                 .into(mealImage);
         mealName.setText(meal.getStrMeal());
         mealInstructions.setText(meal.getStrInstructions());
+        String videoURL = meal.getStrYoutube();
+        String videoID = extractVideoID(videoURL);
+        String embedUrl = "https://www.youtube.com/embed/" + videoID;
+        youtubeVideo.loadUrl(embedUrl);
 
         for(int count = 1 ; count < 20 ; count++)
         {
@@ -176,5 +191,21 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
     @Override
     public void onIngredientClickListener(ImageView imageView, Ingredient ingredient) {
 
+    }
+
+    private String extractVideoID(String videoUrl){
+        String videoId = "";
+
+        if (videoUrl.contains("v=")) {
+            int index = videoUrl.indexOf("v=") + 2;
+            videoId = videoUrl.substring(index);
+
+            // In case there are additional parameters (e.g., &t=2s)
+            int ampIndex = videoId.indexOf("&");
+            if (ampIndex != -1) {
+                videoId = videoId.substring(0, ampIndex);
+            }
+        }
+        return videoId;
     }
 }
