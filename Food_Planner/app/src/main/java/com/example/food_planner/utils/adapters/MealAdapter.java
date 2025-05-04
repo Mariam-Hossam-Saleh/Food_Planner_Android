@@ -18,7 +18,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
+import com.example.food_planner.utils.OnCalendarIconClickListener;
 import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
 
@@ -30,13 +33,15 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     private List<Meal> meals;
     private final OnMealClickListener onMealClickListener;
     private final OnFavIconClickListener onFavIconClickListener;
+    private final OnCalendarIconClickListener onCalendarIconClickListener;
     private static final String TAG = "HomeRecyclerView";
 
-    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener) {
+    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener, OnCalendarIconClickListener onCalendarIconClickListener) {
         this.context = _context;
         this.meals = meals;
         this.onMealClickListener = onMealClickListener;
         this.onFavIconClickListener = onFavIconClickListener;
+        this.onCalendarIconClickListener = onCalendarIconClickListener;
     }
 
     public void setMeals(List<Meal> meals) {
@@ -71,7 +76,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
         holder.favouriteIcon.setOnClickListener(v -> {
             if (onFavIconClickListener != null) {
-                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, meal,false);
+                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, new FavoriteMeal(meal),false);
             }
         });
 
@@ -81,6 +86,11 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
             }
         });
 
+        holder.calendarIcon.setOnClickListener(v -> {
+            if (onCalendarIconClickListener != null) {
+                onCalendarIconClickListener.onCalendarIconClickListener(new PlannedMeal(meal,""));
+            }
+        });
 
         Log.i(TAG, "Bound meal: " + meal.getStrMeal());
     }
@@ -97,12 +107,14 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
         TextView txtMealTitle;
         ImageView imageView;
         ImageView favouriteIcon;
+        ImageView calendarIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMealTitle = itemView.findViewById(R.id.mealName);
             imageView = itemView.findViewById(R.id.mealImage);
             favouriteIcon = itemView.findViewById(R.id.addFavouritesIcon);
+            calendarIcon = itemView.findViewById(R.id.addCalendarIcon);
         }
     }
 }

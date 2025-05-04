@@ -4,10 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "meals_table")
 public class Meal {
-    @PrimaryKey
-    @NonNull
     public String idMeal;
     public String strMeal;
     public String strMealAlternate;
@@ -57,73 +54,16 @@ public class Meal {
     public String strMeasure18;
     public String strMeasure19;
     public String strMeasure20;
-    private String strSource;
-    private String strImageSource;
-    private String strCreativeCommonsConfirmed;
-    private String dateModified;
+    public String strSource;
+    public String strImageSource;
+    public String strCreativeCommonsConfirmed;
+    public String dateModified;
 
-    public Meal(@NonNull String idMeal, String strMeal, String strMealAlternate, String strCategory, String strInstructions, String strArea, String strMealThumb, String strTags, String strYoutube, String strIngredient1, String strIngredient2, String strIngredient3, String strIngredient4, String strIngredient5, String strIngredient17, String strIngredient15, String strIngredient13, String strIngredient14, String strIngredient16, String strIngredient10, String strIngredient6, String strIngredient9, String strIngredient7, String strIngredient8, String strIngredient12, String strIngredient11, String strIngredient18, String strIngredient19, String strIngredient20, String strMeasure1, String strMeasure2, String strMeasure3, String strMeasure4, String strMeasure5, String strMeasure6, String strMeasure7, String strMeasure8, String strMeasure9, String strMeasure10, String strMeasure11, String strMeasure12, String strMeasure13, String strMeasure14, String strMeasure15, String strMeasure16, String strMeasure17, String strMeasure18, String strMeasure19, String strMeasure20, String strSource, String strImageSource, String strCreativeCommonsConfirmed, String dateModified) {
-        this.idMeal = idMeal;
-        this.strMeal = strMeal;
-        this.strMealAlternate = strMealAlternate;
-        this.strCategory = strCategory;
-        this.strInstructions = strInstructions;
-        this.strArea = strArea;
-        this.strMealThumb = strMealThumb;
-        this.strTags = strTags;
-        this.strYoutube = strYoutube;
-        this.strIngredient1 = strIngredient1;
-        this.strIngredient2 = strIngredient2;
-        this.strIngredient3 = strIngredient3;
-        this.strIngredient4 = strIngredient4;
-        this.strIngredient5 = strIngredient5;
-        this.strIngredient17 = strIngredient17;
-        this.strIngredient15 = strIngredient15;
-        this.strIngredient13 = strIngredient13;
-        this.strIngredient14 = strIngredient14;
-        this.strIngredient16 = strIngredient16;
-        this.strIngredient10 = strIngredient10;
-        this.strIngredient6 = strIngredient6;
-        this.strIngredient9 = strIngredient9;
-        this.strIngredient7 = strIngredient7;
-        this.strIngredient8 = strIngredient8;
-        this.strIngredient12 = strIngredient12;
-        this.strIngredient11 = strIngredient11;
-        this.strIngredient18 = strIngredient18;
-        this.strIngredient19 = strIngredient19;
-        this.strIngredient20 = strIngredient20;
-        this.strMeasure1 = strMeasure1;
-        this.strMeasure2 = strMeasure2;
-        this.strMeasure3 = strMeasure3;
-        this.strMeasure4 = strMeasure4;
-        this.strMeasure5 = strMeasure5;
-        this.strMeasure6 = strMeasure6;
-        this.strMeasure7 = strMeasure7;
-        this.strMeasure8 = strMeasure8;
-        this.strMeasure9 = strMeasure9;
-        this.strMeasure10 = strMeasure10;
-        this.strMeasure11 = strMeasure11;
-        this.strMeasure12 = strMeasure12;
-        this.strMeasure13 = strMeasure13;
-        this.strMeasure14 = strMeasure14;
-        this.strMeasure15 = strMeasure15;
-        this.strMeasure16 = strMeasure16;
-        this.strMeasure17 = strMeasure17;
-        this.strMeasure18 = strMeasure18;
-        this.strMeasure19 = strMeasure19;
-        this.strMeasure20 = strMeasure20;
-        this.strSource = strSource;
-        this.strImageSource = strImageSource;
-        this.strCreativeCommonsConfirmed = strCreativeCommonsConfirmed;
-        this.dateModified = dateModified;
-    }
-
-    @NonNull
     public String getIdMeal() {
         return idMeal;
     }
 
-    public void setIdMeal(@NonNull String idMeal) {
+    public void setIdMeal(String idMeal) {
         this.idMeal = idMeal;
     }
 

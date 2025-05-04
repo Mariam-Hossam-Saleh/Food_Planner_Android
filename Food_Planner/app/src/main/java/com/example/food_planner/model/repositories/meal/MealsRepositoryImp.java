@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSource;
 import com.example.food_planner.model.network.meal.MealNetworkCallback;
 import com.example.food_planner.model.network.meal.MealRemoteDataSource;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MealsRepositoryImp implements MealsRepository {
@@ -23,11 +24,6 @@ public class MealsRepositoryImp implements MealsRepository {
     private MealsRepositoryImp(MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource){
         this.remoteDataSource = remoteDataSource;
         this.mealLocalDataSource = mealLocalDataSource;
-    }
-
-    @Override
-    public LiveData<List<Meal>> getStoredMeals() {
-        return mealLocalDataSource.getAllStoredMeals();
     }
 
     @Override
@@ -67,12 +63,28 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
-    public void insertMeal(Meal meal) {
-        mealLocalDataSource.insertMeal(meal);
+    public void insertFavoriteMeal(FavoriteMeal meal) {
+        mealLocalDataSource.insertFavoriteMeal(meal);
     }
 
     @Override
-    public void deleteMeal(Meal meal) {
-        mealLocalDataSource.deleteMeal(meal);
+    public void deleteFavoriteMeal(FavoriteMeal meal) {
+        mealLocalDataSource.deleteFavoriteMeal(meal);
     }
+
+    @Override
+    public void insertPlannedMeal(PlannedMeal meal) {
+        mealLocalDataSource.insertPlannedMeal(meal);
+    }
+
+    @Override
+    public void deletePlannedMeal(PlannedMeal meal) {
+        mealLocalDataSource.deletePlannedMeal(meal);
+    }
+
+    @Override
+    public LiveData<List<FavoriteMeal>> getStoredFavoriteMeals() {
+        return mealLocalDataSource.getStoredFavoriteMeals();
+    }
+
 }
