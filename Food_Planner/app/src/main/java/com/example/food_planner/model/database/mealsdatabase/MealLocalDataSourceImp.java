@@ -15,14 +15,14 @@ public class MealLocalDataSourceImp implements MealLocalDataSource {
     private final PlannedMealDAO plannedMealDAO;
     private static MealLocalDataSourceImp localDataSourceImp = null;
     private final LiveData<List<FavoriteMeal>> storedFavoriteMeals;
-//    private final LiveData<List<PlannedMeal>> storedPlannedMeals;
+    private final LiveData<List<PlannedMeal>> storedPlannedMeals;
     private MealLocalDataSourceImp(Context context){
         FavoriteMealDatabase favoriteMealDatabase = FavoriteMealDatabase.getInstance(context.getApplicationContext());
         PlannedMealDatabase plannedMealDatabase = PlannedMealDatabase.getInstance(context.getApplicationContext());
         favoriteMealDAO = favoriteMealDatabase.getMealDAO();
         plannedMealDAO = plannedMealDatabase.getMealDAO();
         storedFavoriteMeals = favoriteMealDAO.getAllFavoriteMeals();
-//        storedPlannedMeals = plannedMealDAO.getPlannedMealByDate();
+        storedPlannedMeals = plannedMealDAO.getPlannedMeals();
     }
     public static MealLocalDataSourceImp getInstance(Context context){
         if(localDataSourceImp == null){
@@ -56,7 +56,6 @@ public class MealLocalDataSourceImp implements MealLocalDataSource {
         new Thread(() -> plannedMealDAO.deletePlannedMeal(meal.date,meal.plannedMealID)).start();
     }
 
-    /// /////////////////////////////////////////////////////////////////////////////
     @Override
-    public LiveData<List<PlannedMeal>> getStoredPlannedMeals() { return null; }
+    public LiveData<List<PlannedMeal>> getStoredPlannedMeals() { return storedPlannedMeals; }
 }

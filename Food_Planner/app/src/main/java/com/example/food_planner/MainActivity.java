@@ -2,6 +2,7 @@ package com.example.food_planner;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
@@ -33,6 +34,26 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+        Bundle bundle = new Bundle();
+        bundle.putString("UserName", mAuth.getCurrentUser() != null ?
+                mAuth.getCurrentUser().getDisplayName() : "User");
+        Log.d("MainActivity", "Setting username: " + mAuth.getCurrentUser().getDisplayName());
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController.setGraph(R.navigation.mobile_navigation, bundle);
+
+        setSupportActionBar(binding.appBarMain.toolbar);
+
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+
+        mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_home, R.id.nav_search, R.id.nav_favourite, R.id.nav_calender)
+                .setOpenableLayout(drawer)
+                .build();
+
+        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
         Button btnLogOut = binding.btnLogOut;
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
@@ -43,18 +64,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-        setSupportActionBar(binding.appBarMain.toolbar);
-
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_search, R.id.nav_favourite, R.id.nav_calender)
-                .setOpenableLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
     }
 
     @Override

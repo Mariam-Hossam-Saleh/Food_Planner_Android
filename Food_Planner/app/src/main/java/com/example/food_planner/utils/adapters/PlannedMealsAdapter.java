@@ -76,7 +76,7 @@ public class PlannedMealsAdapter extends RecyclerView.Adapter<PlannedMealsAdapte
                 .into(holder.imageView);
 
         holder.calendarIcon.setOnClickListener(v -> {
-            showDatePickerDialog(plannedMeal);
+            onCalendarIconClickListener.onCalendarIconClickListener(plannedMeal);
         });
 
         holder.imageView.setOnClickListener( v -> {
@@ -108,39 +108,6 @@ public class PlannedMealsAdapter extends RecyclerView.Adapter<PlannedMealsAdapte
             imageView = itemView.findViewById(R.id.mealImage);
             calendarIcon = itemView.findViewById(R.id.addCalendarIcon);
         }
-    }
-    private void showDatePickerDialog(PlannedMeal meal) {
-        // Get current date as default
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                context,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Format the selected date
-                    String selectedDate = formatSelectedDate(selectedYear, selectedMonth, selectedDay);
-
-                    // Create new PlannedMeal with selected date
-                    PlannedMeal plannedMeal = new PlannedMeal(meal, selectedDate);
-
-                    // Notify listener
-                    if (onCalendarIconClickListener != null) {
-                        onCalendarIconClickListener.onCalendarIconClickListener(plannedMeal);
-                    }
-                },
-                year, month, day
-        );
-
-        // Set minimum date to today (optional)
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-
-        datePickerDialog.show();
-    }
-    private String formatSelectedDate(int year, int month, int day) {
-        // Format as YYYY-MM-DD (ISO format)
-        return String.format(Locale.US, "%04d-%02d-%02d", year, month + 1, day);
     }
 
 }

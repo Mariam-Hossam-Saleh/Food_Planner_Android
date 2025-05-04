@@ -1,6 +1,7 @@
 package com.example.food_planner.meal_details.view;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,20 +32,26 @@ import com.example.food_planner.meal_details.presenter.MealDetailsPresenterImp;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
 import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
+import com.example.food_planner.utils.OnCalendarIconClickListener;
 import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnIngredientClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 
-public class MealDetailsFragment extends Fragment implements MealDetailsView, OnIngredientClickListener , OnFavIconClickListener {
+public class MealDetailsFragment extends Fragment implements MealDetailsView, OnIngredientClickListener , OnFavIconClickListener , OnCalendarIconClickListener {
     ArrayList<Ingredient> ingredientArrayList;
     ImageView mealImage;
     ImageView addFavouritesIcon;
+    ImageView addCalendarIcon;
     TextView mealName;
     TextView mealInstructions;
     WebView youtubeVideo;
@@ -69,6 +76,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
             binding = FragmentMealDetailsBinding.inflate(inflater, container, false);
             mealImage = binding.mealImage;
             addFavouritesIcon = binding.addFavouritesIcon;
+            addCalendarIcon = binding.addCalendarIcon;
             mealName = binding.mealName;
             mealInstructions = binding.mealInstructions;
 
@@ -119,9 +127,12 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
                 .into(mealImage);
-
+        FavoriteMeal favoriteMeal = new FavoriteMeal(meal);
         addFavouritesIcon.setOnClickListener(v -> {
-            onFavIconClickListener(addFavouritesIcon,meal,false);
+            onFavIconClickListener(addFavouritesIcon,favoriteMeal,false);
+        });
+        addCalendarIcon.setOnClickListener(v -> {
+            onCalendarIconClickListener(new PlannedMeal(meal));
         });
         mealName.setText(meal.getStrMeal());
         mealInstructions.setText(meal.getStrInstructions());
@@ -155,13 +166,6 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
         }
         ShowIngredients(ingredientArrayList);
 
-//        addFavouritesIcon = binding.addFavouritesIcon;
-//        mealDescription = binding.mealDescription;
-//        mealCalories = binding.mealCalories;
-//        mealProtein = binding.mealProtein;
-//        mealCarbs = binding.mealCarbs;
-//        instructions = binding.instructions;
-
     }
 
     @Override
@@ -180,7 +184,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
 
 
     @Override
-    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
         if(favState) {
             mealDetailsPresenter.removeMealFromFavourite(meal);
         }
@@ -208,5 +212,33 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
             }
         }
         return videoId;
+    }
+
+    @Override
+    public void onCalendarIconClickListener(PlannedMeal meal) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                R.style.my_dialog_theme,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
+                            selectedYear, selectedMonth + 1, selectedDay);
+                    meal.setDate(selectedDate);
+                    mealDetailsPresenter.addMealToCalendar(meal);
+                    Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
+                },
+                year, month, day
+        );
+        // Set minimum date (today)
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        // Set maximum date (1 week from today)
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
+        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+        datePickerDialog.show();
     }
 }

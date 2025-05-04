@@ -1,6 +1,7 @@
 package com.example.food_planner;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,21 +33,26 @@ import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.area.Area;
 import com.example.food_planner.model.pojos.category.Category;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.area.AreaRepositoryImp;
 import com.example.food_planner.model.repositories.category.CategoryRepositoryImp;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
+import com.example.food_planner.utils.OnCalendarIconClickListener;
 import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
 import com.example.food_planner.utils.adapters.MealAdapter;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
-public class MealsFragment extends Fragment implements HomeView,OnMealClickListener , OnFavIconClickListener {
+public class MealsFragment extends Fragment implements HomeView,OnMealClickListener , OnFavIconClickListener , OnCalendarIconClickListener {
     ArrayList<Meal> mealsArrayList;
     RecyclerView recyclerviewMeals;
     MealAdapter mealAdapter;
@@ -62,13 +68,13 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentMealsBinding.inflate(inflater, container, false);
+
         if (getArguments() != null) {
             String meal = getArguments().getString("meal");
 
-            binding = FragmentMealsBinding.inflate(inflater, container, false);
-
             mealsArrayList = new ArrayList<>();
-            mealAdapter = new MealAdapter(getContext(), mealsArrayList, this,this);
+            mealAdapter = new MealAdapter(getContext(), mealsArrayList, this,this,this);
 
             linearLayoutManager = new LinearLayoutManager(getActivity());
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -157,12 +163,40 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
     }
 
     @Override
-    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
         if(favState) {
             homePresenter.removeMealFromFavourite(meal);
         }
         else{
             homePresenter.addMealToFavourite(meal);
         }
+    }
+
+    @Override
+    public void onCalendarIconClickListener(PlannedMeal meal) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                R.style.my_dialog_theme,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
+                            selectedYear, selectedMonth + 1, selectedDay);
+                    meal.setDate(selectedDate);
+                    homePresenter.addMealToCalendar(meal);
+                    Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
+                },
+                year, month, day
+        );
+        // Set minimum date (today)
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        // Set maximum date (1 week from today)
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
+        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+        datePickerDialog.show();
     }
 }

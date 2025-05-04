@@ -8,7 +8,9 @@ import com.example.food_planner.model.network.meal.MealNetworkCallback;
 import com.example.food_planner.model.pojos.area.Area;
 import com.example.food_planner.model.pojos.category.Category;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.area.AreaRepository;
 import com.example.food_planner.model.repositories.category.CategoryRepository;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepository;
@@ -74,10 +76,13 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
     public void filterByArea(String area) { mealsRepo.filterByArea(this,area); }
 
     @Override
-    public void addMealToFavourite(Meal meal) { mealsRepo.insertMeal(meal); }
+    public void addMealToFavourite(FavoriteMeal meal) { mealsRepo.insertFavoriteMeal(meal); }
 
     @Override
-    public void removeMealFromFavourite(Meal meal) { mealsRepo.deleteMeal(meal); }
+    public void addMealToCalendar(PlannedMeal meal) { mealsRepo.insertPlannedMeal(meal); }
+
+    @Override
+    public void removeMealFromFavourite(FavoriteMeal meal) { mealsRepo.deleteFavoriteMeal(meal); }
 
     @Override
     public void onSuccessMeal(List<Meal> meals) {

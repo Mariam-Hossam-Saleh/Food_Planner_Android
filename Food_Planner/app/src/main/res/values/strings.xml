@@ -41,4 +41,8 @@
     <string name="meal_details">Meal Details</string>
     <string name="instructions">Instructions</string>
     <string name="ingredients">Ingredients</string>
+    <string name="suggestedMeals">Suggested for You</string>
+    <string name="viewByIngredoent">View by Ingredient</string>
+    <string name="viewByCategory">View by Category</string>
+    <string name="viewByArea">View by Country</string>
 </resources>

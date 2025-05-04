@@ -44,9 +44,13 @@
     </fragment>
     <fragment
         android:id="@+id/nav_calender"
-        android:name="com.example.food_planner.ui.calendar.CalendarFragment"
+        android:name="com.example.food_planner.calendar.view.CalendarFragment"
         android:label="@string/calendar"
-        tools:layout="@layout/fragment_calender" />
+        tools:layout="@layout/fragment_calender" >
+        <action
+            android:id="@+id/action_nav_calender_to_mealDetailsFragment"
+            app:destination="@id/mealDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mealsFragment"
         android:name="com.example.food_planner.MealsFragment"

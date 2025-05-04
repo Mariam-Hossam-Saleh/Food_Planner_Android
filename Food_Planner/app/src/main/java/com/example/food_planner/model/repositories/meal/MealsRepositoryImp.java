@@ -83,6 +83,11 @@ public class MealsRepositoryImp implements MealsRepository {
     }
 
     @Override
+    public LiveData<List<PlannedMeal>> getStoredPlannedMeals() {
+        return mealLocalDataSource.getStoredPlannedMeals();
+    }
+
+    @Override
     public LiveData<List<FavoriteMeal>> getStoredFavoriteMeals() {
         return mealLocalDataSource.getStoredFavoriteMeals();
     }

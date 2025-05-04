@@ -22,4 +22,5 @@ public interface MealsRepository {
     public void deleteFavoriteMeal(FavoriteMeal meal);
     public void insertPlannedMeal(PlannedMeal meal);
     public void deletePlannedMeal(PlannedMeal meal);
+    public LiveData<List<PlannedMeal>> getStoredPlannedMeals();
 }

@@ -1,6 +1,7 @@
 package com.example.food_planner.favourite.view;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,20 +31,26 @@ import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSource
 import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSourceImp;
 import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
+import com.example.food_planner.utils.OnCalendarIconClickListener;
 import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.adapters.FavoriteMealsAdapter;
 import com.example.food_planner.utils.adapters.MealAdapter;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-public class FavouriteFragment extends Fragment implements FavouriteView, OnMealClickListener, OnFavIconClickListener {
+public class FavouriteFragment extends Fragment implements FavouriteView, OnMealClickListener, OnFavIconClickListener, OnCalendarIconClickListener {
 
-    LiveData<List<Meal>> mealArrayList;
-    MealAdapter mealAdapter;
+    LiveData<List<FavoriteMeal>> mealArrayList;
+    FavoriteMealsAdapter favoriteMealsAdapter;
     RecyclerView mealRecyclerView;
     FavouritePresenter favouritePresenter;
     LinearLayoutManager linearLayoutManager;
@@ -62,12 +69,12 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
 
         favouritePresenter = new FavouritePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
         mealArrayList = favouritePresenter.getFavouriteMeals();
-        mealArrayList.observe(getActivity(), new Observer<List<Meal>>() {
+        mealArrayList.observe(getActivity(), new Observer<List<FavoriteMeal>>() {
             @Override
-            public void onChanged(List<Meal> meals) {
-                mealAdapter = new MealAdapter(getActivity(),meals,FavouriteFragment.this,FavouriteFragment.this);
-                mealRecyclerView.setAdapter(mealAdapter);
-                mealAdapter.setMeals(meals);
+            public void onChanged(List<FavoriteMeal> meals) {
+                favoriteMealsAdapter = new FavoriteMealsAdapter(getActivity(),meals,FavouriteFragment.this,FavouriteFragment.this);
+                mealRecyclerView.setAdapter(favoriteMealsAdapter);
+                favoriteMealsAdapter.setMeals(meals);
 
             }
         });
@@ -86,13 +93,12 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
         binding = null;
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    @Override
-    public void ShowMeals(List<Meal> mealList) {
-        mealAdapter.setMeals(mealList);
-        mealAdapter.notifyDataSetChanged();
-    }
 
+    @Override
+    public void ShowFavoriteMeals(List<FavoriteMeal> mealList) {
+        favoriteMealsAdapter.setMeals(mealList);
+        favoriteMealsAdapter.notifyDataSetChanged();
+    }
 
     @Override
     public void ShowErrMsg(String error) {
@@ -117,8 +123,36 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
     }
 
     @Override
-    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
         favouritePresenter.removeMealFromFavourite(meal);
         Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCalendarIconClickListener(PlannedMeal meal) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                R.style.my_dialog_theme,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
+                            selectedYear, selectedMonth + 1, selectedDay);
+                    meal.setDate(selectedDate);
+                    favouritePresenter.addMealToCalendar(meal);
+                    Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
+                },
+                year, month, day
+        );
+        // Set minimum date (today)
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        // Set maximum date (1 week from today)
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
+        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+        datePickerDialog.show();
     }
 }

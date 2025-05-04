@@ -55,7 +55,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation ("com.google.android.material:material:1.9.0")
+    implementation ("com.google.android.material:material:1.12.0")
 
     // GIF dependency for splash screen
     implementation("pl.droidsonroids.gif:android-gif-drawable:1.2.22")

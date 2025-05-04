@@ -22,4 +22,6 @@
     <style name="Theme.Food_Planner.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Food_Planner.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar"/>
+
 </resources>

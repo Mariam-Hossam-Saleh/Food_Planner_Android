@@ -1,6 +1,7 @@
 package com.example.food_planner.home.view;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,12 +40,15 @@ import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.area.Area;
 import com.example.food_planner.model.pojos.category.Category;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.area.AreaRepositoryImp;
 import com.example.food_planner.model.repositories.category.CategoryRepositoryImp;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.example.food_planner.utils.OnAreaClickListener;
+import com.example.food_planner.utils.OnCalendarIconClickListener;
 import com.example.food_planner.utils.OnFavIconClickListener;
 import com.example.food_planner.utils.adapters.AreaAdapter;
 import com.example.food_planner.utils.adapters.CategoryAdapter;
@@ -53,20 +57,26 @@ import com.example.food_planner.utils.adapters.MealAdapter;
 import com.example.food_planner.utils.OnCategoryClickListener;
 import com.example.food_planner.utils.OnIngredientClickListener;
 import com.example.food_planner.utils.OnMealClickListener;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
-public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnFavIconClickListener,OnIngredientClickListener, OnCategoryClickListener, OnAreaClickListener {
+public class HomeFragment extends Fragment implements HomeView, OnMealClickListener, OnFavIconClickListener, OnCalendarIconClickListener,OnIngredientClickListener, OnCategoryClickListener, OnAreaClickListener {
 
     ArrayList<Meal> tenRandomMealArrayList;
     ArrayList<Ingredient> ingredientArrayList;
     ArrayList<Category> categoryArrayList;
     ArrayList<Area> areaArrayList;
+    TextView welcomeMessage;
     ImageView singleRandomMeal;
     TextView singleRandomMealText;
     ImageView favouriteIcon;
+    ImageView calendarIcon;
     CarouselRecyclerview carouselRecyclerviewTenRandomMeals;
     RecyclerView recyclerViewIngredients;
     RecyclerView recyclerViewCategories;
@@ -86,7 +96,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
         tenRandomMealArrayList = new ArrayList<>();
-        tenRandomMealAdapter = new MealAdapter(getContext(), tenRandomMealArrayList, this,this);
+        tenRandomMealAdapter = new MealAdapter(getContext(), tenRandomMealArrayList, this,this,this);
 
         ingredientArrayList = new ArrayList<>();
         ingredientAdapter = new IngredientAdapter(getContext(), ingredientArrayList, this);
@@ -106,9 +116,11 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         areaLayoutManager = new LinearLayoutManager(getActivity());
         areaLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
 
+        welcomeMessage = binding.welcomeMessage;
         singleRandomMeal = binding.singleRandomMeal;
         singleRandomMealText = binding.mealName;
         favouriteIcon = binding.addFavouritesIcon;
+        calendarIcon = binding.addCalendarIcon;
 
         carouselRecyclerviewTenRandomMeals = binding.carouselRecyclerviewTenRandomMeals;
         carouselRecyclerviewTenRandomMeals.setAdapter(tenRandomMealAdapter);
@@ -143,6 +155,23 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String userName; // Default value
+        if (getArguments() != null) {
+            userName = getArguments().getString("UserName", "Guest");
+            Log.d("HomeFragment", "Received username: " + userName);
+        }
+        else{
+            userName = "Guest";
+            Log.e("HomeFragment", "No arguments received!");
+        }
+        welcomeMessage.setText("Welcome " + userName);
+        Log.d("HomeFragment", "Setting username: " + userName);
+        getView().post(() -> {
+            if (getArguments() != null) {
+                String updatedName = getArguments().getString("UserName", userName);
+                welcomeMessage.setText("Welcome " + updatedName);
+            }
+        });
     }
 
     @Override
@@ -179,7 +208,10 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                 }
             });
             favouriteIcon.setOnClickListener(v -> {
-                onFavIconClickListener(favouriteIcon, meal,false);
+                onFavIconClickListener(favouriteIcon, new FavoriteMeal(meal),false);
+            });
+            calendarIcon.setOnClickListener(v -> {
+                onCalendarIconClickListener(new PlannedMeal(meal));
             });
         } else {
             tenRandomMealAdapter.setMeals(mealList);
@@ -235,7 +267,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
     }
     @Override
-    public void onFavIconClickListener(ImageView imageView, Meal meal, boolean favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
         if(favState) {
             homePresenter.removeMealFromFavourite(meal);
         }
@@ -286,4 +318,31 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         }
     }
 
+    @Override
+    public void onCalendarIconClickListener(PlannedMeal meal) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(
+                requireContext(),
+                R.style.my_dialog_theme,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
+                            selectedYear, selectedMonth + 1, selectedDay);
+                    meal.setDate(selectedDate);
+                    homePresenter.addMealToCalendar(meal);
+                    Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
+                },
+                year, month, day
+        );
+        // Set minimum date (today)
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+        // Set maximum date (1 week from today)
+        Calendar maxDate = Calendar.getInstance();
+        maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
+        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+        datePickerDialog.show();
+    }
 }

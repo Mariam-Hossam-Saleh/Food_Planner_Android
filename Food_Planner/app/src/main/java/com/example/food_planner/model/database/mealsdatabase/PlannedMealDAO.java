@@ -16,6 +16,8 @@ import java.util.List;
 public interface PlannedMealDAO {
     @Query("SELECT * FROM planned_meals_table WHERE date = :date")
     public LiveData<List<PlannedMeal>> getPlannedMealByDate(String date);
+    @Query("SELECT * FROM planned_meals_table")
+    public LiveData<List<PlannedMeal>> getPlannedMeals();
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     public void insertPlannedMeal(PlannedMeal meal);
     @Query("DELETE FROM planned_meals_table WHERE date = :date AND idMeal = :mealId")
