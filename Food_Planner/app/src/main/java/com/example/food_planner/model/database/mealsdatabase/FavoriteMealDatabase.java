@@ -6,15 +6,15 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 
-@Database(entities  = {Meal.class},version = 1)
-public abstract class MealDatabase extends RoomDatabase {
-    private static MealDatabase instance = null;
-    public abstract MealDAO getMealDAO();
-    public static synchronized MealDatabase getInstance(Context context){
+@Database(entities  = {FavoriteMeal.class},version = 1)
+public abstract class FavoriteMealDatabase extends RoomDatabase {
+    private static FavoriteMealDatabase instance = null;
+    public abstract FavoriteMealDAO getMealDAO();
+    public static synchronized FavoriteMealDatabase getInstance(Context context){
         if(instance == null){
-            instance = Room.databaseBuilder(context.getApplicationContext(), MealDatabase.class,"meal_database")
+            instance = Room.databaseBuilder(context.getApplicationContext(), FavoriteMealDatabase.class,"favorite_meal_database")
                     .build();
         }
         return instance;
