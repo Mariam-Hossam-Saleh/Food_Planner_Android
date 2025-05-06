@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.food_planner.databinding.FragmentMealsBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
-import com.example.food_planner.home.view.HomeView;
+import com.example.food_planner.meals.view.MealsView;
 import com.example.food_planner.model.database.areadatabase.AreaLocalDataSourceImp;
 import com.example.food_planner.model.database.categorydatabase.CategoryLocalDataSourceImp;
 import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
@@ -52,7 +52,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 
-public class MealsFragment extends Fragment implements HomeView,OnMealClickListener , OnFavIconClickListener , OnCalendarIconClickListener {
+public class MealsFragment extends Fragment implements MealsView,OnMealClickListener , OnFavIconClickListener , OnCalendarIconClickListener {
     ArrayList<Meal> mealsArrayList;
     RecyclerView recyclerviewMeals;
     MealAdapter mealAdapter;
@@ -117,20 +117,6 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
         mealAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void ShowIngredients(List<Ingredient> ingredientList) {
-
-    }
-
-    @Override
-    public void ShowCategories(List<Category> categoryList) {
-
-    }
-
-    @Override
-    public void ShowAreas(List<Area> areaList) {
-
-    }
 
     @Override
     public void ShowErrMsg(String error) {
@@ -152,28 +138,26 @@ public class MealsFragment extends Fragment implements HomeView,OnMealClickListe
         } else {
             Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
         }
-//        if(!favState) {
-//            homePresenter.addMealToFavourite(meal);
-//            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
-//        }
-//        else{
-//            homePresenter.removeMealFromFavourite(meal);
-//            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
-//        }
     }
 
     @Override
-    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
-        if(favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
+        if(meal.isFavorite) {
+            imageView.setImageResource(R.drawable.favourite);
             homePresenter.removeMealFromFavourite(meal);
+            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+            meal.isFavorite = false;
         }
         else{
+            imageView.setImageResource(R.drawable.favourite_colored);
             homePresenter.addMealToFavourite(meal);
+            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+            meal.isFavorite = true;
         }
     }
 
     @Override
-    public void onCalendarIconClickListener(PlannedMeal meal) {
+    public void onCalendarIconClickListener(ImageView imageView,PlannedMeal meal) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);

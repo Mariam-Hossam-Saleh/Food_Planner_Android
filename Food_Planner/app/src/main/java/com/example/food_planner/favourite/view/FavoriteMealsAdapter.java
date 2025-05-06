@@ -70,9 +70,10 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
 
+        holder.favouriteIcon.setImageResource(R.drawable.favourite_colored);
         holder.favouriteIcon.setOnClickListener(v -> {
             if (onFavIconClickListener != null) {
-                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, new FavoriteMeal(meal),false);
+                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, new FavoriteMeal(meal));
             }
         });
 
