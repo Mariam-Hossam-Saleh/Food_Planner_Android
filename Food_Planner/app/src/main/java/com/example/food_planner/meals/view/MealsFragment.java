@@ -1,4 +1,4 @@
-package com.example.food_planner;
+package com.example.food_planner.meals.view;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -18,10 +18,12 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food_planner.R;
 import com.example.food_planner.databinding.FragmentMealsBinding;
 import com.example.food_planner.home.presenter.HomePresenter;
 import com.example.food_planner.home.presenter.HomePresenterImp;
-import com.example.food_planner.meals.view.MealsView;
+import com.example.food_planner.meals.presenter.MealsPresenter;
+import com.example.food_planner.meals.presenter.MealsPresenterImp;
 import com.example.food_planner.model.database.areadatabase.AreaLocalDataSourceImp;
 import com.example.food_planner.model.database.categorydatabase.CategoryLocalDataSourceImp;
 import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
@@ -30,9 +32,6 @@ import com.example.food_planner.model.network.area.AreaRemoteDataSourceImp;
 import com.example.food_planner.model.network.category.CategoryRemoteDataSourceImp;
 import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSourceImp;
 import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
-import com.example.food_planner.model.pojos.area.Area;
-import com.example.food_planner.model.pojos.category.Category;
-import com.example.food_planner.model.pojos.ingredient.Ingredient;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
@@ -56,7 +55,7 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
     ArrayList<Meal> mealsArrayList;
     RecyclerView recyclerviewMeals;
     MealAdapter mealAdapter;
-    HomePresenter homePresenter;
+    MealsPresenter mealsPresenter;
     LinearLayoutManager linearLayoutManager;
     private FragmentMealsBinding binding;
 
@@ -84,15 +83,12 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
             recyclerviewMeals.setLayoutManager(linearLayoutManager);
             recyclerviewMeals.setAdapter(mealAdapter);
 
-            homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
-                    IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),
-                    CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())),
-                    AreaRepositoryImp.getInstance(AreaRemoteDataSourceImp.getInstance(), AreaLocalDataSourceImp.getInstance(getContext())),this);
+            mealsPresenter = new MealsPresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
             switch (Objects.requireNonNull(meal))
             {
-                case "ingredient" : homePresenter.filterByMainIngredient(getArguments().getString("ingredientName")); break;
-                case "category" : homePresenter.filterMealByCategory(getArguments().getString("categoryName")); break;
-                case "area" : homePresenter.filterByArea(getArguments().getString("areaName")); break;
+                case "ingredient" : mealsPresenter.filterByMainIngredient(getArguments().getString("ingredientName")); break;
+                case "category" : mealsPresenter.filterMealByCategory(getArguments().getString("categoryName")); break;
+                case "area" : mealsPresenter.filterByArea(getArguments().getString("areaName")); break;
             }
 
         }
@@ -144,13 +140,13 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
     public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
         if(meal.isFavorite) {
             imageView.setImageResource(R.drawable.favourite);
-            homePresenter.removeMealFromFavourite(meal);
+            mealsPresenter.removeMealFromFavourite(meal);
             Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
             meal.isFavorite = false;
         }
         else{
             imageView.setImageResource(R.drawable.favourite_colored);
-            homePresenter.addMealToFavourite(meal);
+            mealsPresenter.addMealToFavourite(meal);
             Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
             meal.isFavorite = true;
         }
@@ -170,7 +166,7 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
                     String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
                             selectedYear, selectedMonth + 1, selectedDay);
                     meal.setDate(selectedDate);
-                    homePresenter.addMealToCalendar(meal);
+                    mealsPresenter.addMealToCalendar(meal);
                     Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
                 },
                 year, month, day
