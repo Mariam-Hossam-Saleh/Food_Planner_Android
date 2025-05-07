@@ -11,6 +11,7 @@ public class FavoriteMeal extends Meal{
     @NonNull
     @ColumnInfo(name = "id")
     public String favoriteMealID;
+    public Boolean isFavorite = false;
     public FavoriteMeal(){}
     public FavoriteMeal(Meal meal){
         this.favoriteMealID = meal.idMeal;

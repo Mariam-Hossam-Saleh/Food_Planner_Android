@@ -21,20 +21,22 @@ import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
-import com.example.food_planner.utils.OnCalendarIconClickListener;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     private final Context context;
     private List<Meal> meals;
+    private List<FavoriteMeal> favoriteMeals = new ArrayList<>();
     private final OnMealClickListener onMealClickListener;
     private final OnFavIconClickListener onFavIconClickListener;
     private final OnCalendarIconClickListener onCalendarIconClickListener;
-    private static final String TAG = "HomeRecyclerView";
+    private static final String TAG = "MealAdapter";
 
     public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener, OnCalendarIconClickListener onCalendarIconClickListener) {
         this.context = _context;
@@ -46,8 +48,13 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
+        notifyDataSetChanged();
     }
 
+    public void setFavoriteMeals(List<FavoriteMeal> favoriteMeals) {
+        this.favoriteMeals = favoriteMeals;
+        notifyDataSetChanged();
+    }
 
     @NonNull
     @Override
@@ -74,9 +81,26 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
 
+        if (favoriteMeals != null) {
+            boolean isFavorite = false;
+            for (FavoriteMeal fav : favoriteMeals) {
+                if (meal.getIdMeal().equals(fav.getIdMeal())) {
+                    holder.favouriteIcon.setImageResource(R.drawable.favourite_colored);
+                    isFavorite = true;
+                    break;
+                }
+            }
+            if (!isFavorite) {
+                holder.favouriteIcon.setImageResource(R.drawable.favourite);
+            }
+        } else {
+            holder.favouriteIcon.setImageResource(R.drawable.favourite);
+        }
+
+
         holder.favouriteIcon.setOnClickListener(v -> {
             if (onFavIconClickListener != null) {
-                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, new FavoriteMeal(meal),false);
+                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, new FavoriteMeal(meal));
             }
         });
 
@@ -88,7 +112,7 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
         holder.calendarIcon.setOnClickListener(v -> {
             if (onCalendarIconClickListener != null) {
-                onCalendarIconClickListener.onCalendarIconClickListener(new PlannedMeal(meal,""));
+                onCalendarIconClickListener.onCalendarIconClickListener(holder.calendarIcon ,new PlannedMeal(meal,""));
             }
         });
 
@@ -97,10 +121,10 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if(meals.isEmpty())
-            return 0;
-        else
+        if(meals != null)
             return meals.size();
+        else
+            return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

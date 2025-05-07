@@ -4,6 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.example.food_planner.model.pojos.ingredient.Ingredient;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Meal {
     public String idMeal;
     public String strMeal;
@@ -58,6 +63,23 @@ public class Meal {
     public String strImageSource;
     public String strCreativeCommonsConfirmed;
     public String dateModified;
+
+    public List<Ingredient> extractIngredients() {
+        List<Ingredient> ingredients = new ArrayList<>();
+        for (int index = 1; index <= 20; index++) {
+            try {
+                String ingredient = (String) this.getClass().getDeclaredField("strIngredient" + index).get(this);
+                String measure =  (String) this.getClass().getDeclaredField("strMeasure" + index).get(this);;
+
+                if ( ingredient != null && !ingredient.trim().isEmpty() && !ingredient.equals("null")) {
+                    ingredients.add(new Ingredient(ingredient, measure));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return ingredients;
+    }
 
     public String getIdMeal() {
         return idMeal;

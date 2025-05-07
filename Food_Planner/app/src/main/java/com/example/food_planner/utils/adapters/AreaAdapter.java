@@ -20,7 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.area.Area;
 import com.example.food_planner.model.pojos.area.AreaFlags;
-import com.example.food_planner.utils.OnAreaClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnAreaClickListener;
 
 import java.util.List;
 
@@ -76,10 +76,10 @@ public class AreaAdapter extends RecyclerView.Adapter<AreaAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        if(areas.isEmpty())
-            return 0;
-        else
+        if(areas != null)
             return areas.size();
+        else
+            return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

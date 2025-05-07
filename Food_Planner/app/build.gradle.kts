@@ -51,6 +51,8 @@ dependencies {
     implementation(libs.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -65,6 +67,7 @@ dependencies {
 
     // Firebase dependency
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
+    implementation("com.google.firebase:firebase-firestore:25.1.4")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
 
@@ -90,5 +93,8 @@ dependencies {
 
     // Carousel
     implementation ("com.github.sparrow007:carouselrecyclerview:1.2.6")
+
+    implementation ("com.airbnb.android:lottie:6.4.0")
+
 
 }

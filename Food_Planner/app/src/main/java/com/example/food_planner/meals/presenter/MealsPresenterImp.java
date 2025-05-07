@@ -1,5 +1,7 @@
 package com.example.food_planner.meals.presenter;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.food_planner.meals.view.MealsView;
 import com.example.food_planner.model.network.meal.MealNetworkCallback;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
@@ -34,6 +36,11 @@ public class MealsPresenterImp implements MealsPresenter, MealNetworkCallback {
 
     @Override
     public void removeMealFromFavourite(FavoriteMeal meal) { mealsRepo.deleteFavoriteMeal(meal); }
+
+    @Override
+    public LiveData<List<FavoriteMeal>> getFavouriteMeals() {
+        return mealsRepo.getStoredFavoriteMeals();
+    }
 
     @Override
     public void removeMealFromCalendar(PlannedMeal meal) { mealsRepo.deletePlannedMeal(meal); }

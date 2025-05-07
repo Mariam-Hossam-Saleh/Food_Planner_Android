@@ -1,4 +1,4 @@
-package com.example.food_planner.utils.adapters;
+package com.example.food_planner.favourite.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,8 +20,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
 
 import java.util.List;
 
@@ -83,16 +83,15 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
             }
         });
 
-
         Log.i(TAG, "Bound meal: " + meal.getStrMeal());
     }
 
     @Override
     public int getItemCount() {
-        if(meals.isEmpty())
-            return 0;
-        else
+        if(meals != null)
             return meals.size();
+        else
+            return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

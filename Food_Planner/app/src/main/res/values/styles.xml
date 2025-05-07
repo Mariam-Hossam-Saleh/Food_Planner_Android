@@ -42,4 +42,14 @@
         <item name="android:textColor">@color/light_red</item>
     </style>
 
+    <style name="CalendarViewCustom" parent="android:Widget.Material.CalendarView">
+        <item name="android:textColorPrimary">#000000</item> <!-- For day numbers -->
+        <item name="android:dateTextAppearance">@style/CalendarDateText</item>
+    </style>
+
+    <style name="CalendarDateText" parent="@android:style/TextAppearance.Material.Medium">
+        <item name="android:textColor">@color/light_red</item> <!-- Custom day color -->
+    </style>
+
+
 </resources>

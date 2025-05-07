@@ -47,20 +47,18 @@ import com.example.food_planner.model.repositories.area.AreaRepositoryImp;
 import com.example.food_planner.model.repositories.category.CategoryRepositoryImp;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
-import com.example.food_planner.utils.OnAreaClickListener;
-import com.example.food_planner.utils.OnCalendarIconClickListener;
-import com.example.food_planner.utils.OnFavIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnAreaClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
 import com.example.food_planner.utils.adapters.AreaAdapter;
 import com.example.food_planner.utils.adapters.CategoryAdapter;
 import com.example.food_planner.utils.adapters.IngredientAdapter;
 import com.example.food_planner.utils.adapters.MealAdapter;
-import com.example.food_planner.utils.OnCategoryClickListener;
-import com.example.food_planner.utils.OnIngredientClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
-import com.google.android.material.datepicker.MaterialDatePicker;
+import com.example.food_planner.utils.mutual_interfaces.OnCategoryClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnIngredientClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -155,7 +153,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String userName; // Default value
+        String userName;
         if (getArguments() != null) {
             userName = getArguments().getString("UserName", "Guest");
             Log.d("HomeFragment", "Received username: " + userName);
@@ -164,7 +162,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
             userName = "Guest";
             Log.e("HomeFragment", "No arguments received!");
         }
-        welcomeMessage.setText("Welcome " + userName);
+
         Log.d("HomeFragment", "Setting username: " + userName);
         getView().post(() -> {
             if (getArguments() != null) {
@@ -208,10 +206,10 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                 }
             });
             favouriteIcon.setOnClickListener(v -> {
-                onFavIconClickListener(favouriteIcon, new FavoriteMeal(meal),false);
+                onFavIconClickListener(favouriteIcon, new FavoriteMeal(meal));
             });
             calendarIcon.setOnClickListener(v -> {
-                onCalendarIconClickListener(new PlannedMeal(meal));
+                onCalendarIconClickListener(calendarIcon ,new PlannedMeal(meal));
             });
         } else {
             tenRandomMealAdapter.setMeals(mealList);
@@ -238,7 +236,6 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void ShowAreas(List<Area> areaList) {
-        Log.d("HomeFragment", "Areas received: " + areaList.size());
         areaAdapter.setAreas(areaList);
         areaAdapter.notifyDataSetChanged();
         Log.d("HomeFragment", "Areas received: " + areaList.size());
@@ -266,13 +263,20 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         }
 
     }
+
     @Override
-    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
-        if(favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
+        if(meal.isFavorite) {
+            imageView.setImageResource(R.drawable.favourite);
             homePresenter.removeMealFromFavourite(meal);
+            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+            meal.isFavorite = false;
         }
         else{
+            imageView.setImageResource(R.drawable.favourite_colored);
             homePresenter.addMealToFavourite(meal);
+            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+            meal.isFavorite = true;
         }
     }
 
@@ -319,7 +323,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     }
 
     @Override
-    public void onCalendarIconClickListener(PlannedMeal meal) {
+    public void onCalendarIconClickListener(ImageView imageView, PlannedMeal meal) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);

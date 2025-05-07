@@ -1,8 +1,8 @@
 package com.example.food_planner.favourite.view;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,46 +20,51 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.food_planner.R;
 import com.example.food_planner.databinding.FragmentFavouriteBinding;
-import com.example.food_planner.databinding.FragmentHomeBinding;
 import com.example.food_planner.favourite.presenter.FavouritePresenter;
 import com.example.food_planner.favourite.presenter.FavouritePresenterImp;
-import com.example.food_planner.home.view.HomeFragment;
-import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
-import com.example.food_planner.model.network.ingredient.IngredientsRemoteDataSourceImp;
 import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
-import com.example.food_planner.model.pojos.ingredient.Ingredient;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
-import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
-import com.example.food_planner.utils.OnCalendarIconClickListener;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
-import com.example.food_planner.utils.adapters.FavoriteMealsAdapter;
-import com.example.food_planner.utils.adapters.MealAdapter;
-import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
+//import com.example.food_planner.utils.FirebaseSyncHelper;
+import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class FavouriteFragment extends Fragment implements FavouriteView, OnMealClickListener, OnFavIconClickListener, OnCalendarIconClickListener {
 
-    LiveData<List<FavoriteMeal>> mealArrayList;
+    LiveData<List<FavoriteMeal>> favoriteMealArrayList;
     FavoriteMealsAdapter favoriteMealsAdapter;
     RecyclerView mealRecyclerView;
     FavouritePresenter favouritePresenter;
     LinearLayoutManager linearLayoutManager;
+    String userName;
+    LottieAnimationView favoriteAnimationView;
     private FragmentFavouriteBinding binding;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        favouritePresenter = new FavouritePresenterImp(
+                MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(),MealLocalDataSourceImp.getInstance(getContext())),
+                this);
+
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentFavouriteBinding.inflate(inflater, container, false);
-
         linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
@@ -67,9 +72,34 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
         mealRecyclerView.setHasFixedSize(true);
         mealRecyclerView.setLayoutManager(linearLayoutManager);
 
-        favouritePresenter = new FavouritePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
-        mealArrayList = favouritePresenter.getFavouriteMeals();
-        mealArrayList.observe(getActivity(), new Observer<List<FavoriteMeal>>() {
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        favoriteAnimationView = binding.favoriteAnimationView;
+
+        // check if there is signed in user to display fav meals list or not
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        userName = "Guest";
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getDisplayName() != null) {
+            userName = mAuth.getCurrentUser().getDisplayName();
+        }
+        Log.d("FavoriteFragment", "UserName from FirebaseAuth: " + userName);
+
+        if (Objects.equals(userName, "Guest")) {
+            favoriteAnimationView.setVisibility(View.VISIBLE);
+            mealRecyclerView.setVisibility(View.GONE);
+            return ;
+        } else {
+            favoriteAnimationView.setVisibility(View.GONE);
+            mealRecyclerView.setVisibility(View.VISIBLE);
+        }
+
+        favoriteMealArrayList = favouritePresenter.getFavouriteMeals();
+        favoriteMealArrayList.observe(getActivity(), new Observer<List<FavoriteMeal>>() {
             @Override
             public void onChanged(List<FavoriteMeal> meals) {
                 favoriteMealsAdapter = new FavoriteMealsAdapter(getActivity(),meals,FavouriteFragment.this,FavouriteFragment.this);
@@ -78,13 +108,6 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
 
             }
         });
-
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
@@ -123,13 +146,15 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
     }
 
     @Override
-    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
         favouritePresenter.removeMealFromFavourite(meal);
+        imageView.setImageResource(R.drawable.favourite);
         Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+        meal.isFavorite = false;
     }
 
     @Override
-    public void onCalendarIconClickListener(PlannedMeal meal) {
+    public void onCalendarIconClickListener(ImageView imageView, PlannedMeal meal) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);

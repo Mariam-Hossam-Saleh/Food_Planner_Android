@@ -85,6 +85,9 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
     public void removeMealFromFavourite(FavoriteMeal meal) { mealsRepo.deleteFavoriteMeal(meal); }
 
     @Override
+    public void removeMealFromCalendar(PlannedMeal meal) { mealsRepo.deletePlannedMeal(meal); }
+
+    @Override
     public void onSuccessMeal(List<Meal> meals) {
         if(isSingleMeal) {
             view.ShowMeals(meals);

@@ -17,5 +17,6 @@ public interface HomePresenter {
     public void addMealToFavourite(FavoriteMeal meal);
     public void addMealToCalendar(PlannedMeal meal);
     public void removeMealFromFavourite(FavoriteMeal meal);
+    public void removeMealFromCalendar(PlannedMeal meal);
 
 }

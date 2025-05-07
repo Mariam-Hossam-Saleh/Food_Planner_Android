@@ -20,7 +20,10 @@ public interface MealsRepository {
     public void filterByArea(MealNetworkCallback mealNetworkCallback, String area);
     public void insertFavoriteMeal(FavoriteMeal meal);
     public void deleteFavoriteMeal(FavoriteMeal meal);
+    public LiveData<Boolean> isMealFavorite(FavoriteMeal meal);
     public void insertPlannedMeal(PlannedMeal meal);
     public void deletePlannedMeal(PlannedMeal meal);
+    public LiveData<Boolean> isMealPlanned(PlannedMeal meal);
     public LiveData<List<PlannedMeal>> getStoredPlannedMeals();
+    public LiveData<List<PlannedMeal>> getPlannedMealsByDate(String date);
 }

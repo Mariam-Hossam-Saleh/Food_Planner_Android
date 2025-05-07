@@ -18,10 +18,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
-import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
 
 import java.util.List;
 

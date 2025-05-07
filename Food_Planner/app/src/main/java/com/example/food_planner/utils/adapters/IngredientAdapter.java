@@ -19,7 +19,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
-import com.example.food_planner.utils.OnIngredientClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnIngredientClickListener;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
     private final Context context;
     private List<Ingredient> ingredients;
     private final OnIngredientClickListener listener;
-    private static final String TAG = "HomeRecyclerView";
+    private static final String TAG = "IngredientAdapter";
 
     public IngredientAdapter(Context _context, List<Ingredient> ingredients, OnIngredientClickListener _listener) {
         this.context = _context;

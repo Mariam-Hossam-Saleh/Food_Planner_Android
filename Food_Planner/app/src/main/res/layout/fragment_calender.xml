@@ -7,20 +7,32 @@
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MealsFragment">
+        tools:context=".meals.view.MealsFragment">
 
-        <DatePicker
-            android:id="@+id/datePicker"
+        <CalendarView
+            android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:calendarViewShown="true"
-            android:spinnersShown="false"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:background="#F6D0D0"
+            android:maxDate="12/31/2025"
+            android:minDate="01/01/2025"
+            android:theme="@style/CalendarViewCustom"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/calendarAnimationView"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/calendar_empty"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerviewMeal"
@@ -30,7 +42,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/datePicker"
+            app:layout_constraintTop_toBottomOf="@+id/calendarView"
             tools:listitem="@layout/meal_recycleview_element" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

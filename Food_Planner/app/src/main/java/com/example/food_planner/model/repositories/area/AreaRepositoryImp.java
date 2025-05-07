@@ -26,6 +26,5 @@ public class AreaRepositoryImp implements AreaRepository {
     @Override
     public void getAllAreas(AreaNetworkCallback areaNetworkCallback) {
         areaRemoteDataSource.makeNetworkCalltoGetAllAreas(areaNetworkCallback);
-
     }
 }

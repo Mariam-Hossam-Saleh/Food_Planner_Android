@@ -2,6 +2,8 @@ package com.example.food_planner.meal_details.view;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,10 +39,9 @@ import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
-import com.example.food_planner.utils.OnCalendarIconClickListener;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnIngredientClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnIngredientClickListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,11 +61,15 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
     RecyclerView recyclerviewIngredients;
     MealDetailsPresenter mealDetailsPresenter;
     LinearLayoutManager linearLayoutManager;
+    private SharedPreferences sharedPreferences;
+    private String userID;
     private FragmentMealDetailsBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferences = requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE);
+        userID = sharedPreferences.getString("userId", "Guest"); // Default to "guest" if not found
     }
 
 
@@ -127,12 +133,35 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
                 .into(mealImage);
+        // check weather meal is in the favorite meal database and set the icon accordingly
         FavoriteMeal favoriteMeal = new FavoriteMeal(meal);
+        LiveData<Boolean> isFavorite = mealDetailsPresenter.isMealFavorite(favoriteMeal);
+        isFavorite.observe(getViewLifecycleOwner(), isFav -> {
+            if (isFav) {
+                addFavouritesIcon.setImageResource(R.drawable.favourite_colored);
+                favoriteMeal.isFavorite = true;
+            } else {
+                addFavouritesIcon.setImageResource(R.drawable.favourite);
+                favoriteMeal.isFavorite = false;
+            }
+        });
+        // check weather meal is in the planned meal database and set the icon accordingly
+        PlannedMeal plannedMeal = new PlannedMeal(meal);
+        LiveData<Boolean> isPlanned = mealDetailsPresenter.isMealPlanned(plannedMeal);
+        isPlanned.observe(getViewLifecycleOwner(), isPlan -> {
+            if (isPlan) {
+                addCalendarIcon.setImageResource(R.drawable.calendar_colored);
+                plannedMeal.isPlanned = true;
+            } else {
+                addCalendarIcon.setImageResource(R.drawable.calendar);
+                plannedMeal.isPlanned = false;
+            }
+        });
         addFavouritesIcon.setOnClickListener(v -> {
-            onFavIconClickListener(addFavouritesIcon,favoriteMeal,false);
+            onFavIconClickListener(addFavouritesIcon,favoriteMeal);
         });
         addCalendarIcon.setOnClickListener(v -> {
-            onCalendarIconClickListener(new PlannedMeal(meal));
+            onCalendarIconClickListener(addCalendarIcon,new PlannedMeal(meal));
         });
         mealName.setText(meal.getStrMeal());
         mealInstructions.setText(meal.getStrInstructions());
@@ -141,33 +170,12 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
         String embedUrl = "https://www.youtube.com/embed/" + videoID;
         youtubeVideo.loadUrl(embedUrl);
 
-        for(int count = 1 ; count < 20 ; count++)
-        {
-            String ingredientField = null;
-            try {
-                ingredientField = (String) Meal.class.getDeclaredField("strIngredient" + count ).get(meal);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-            String measureField = null;
-            try {
-                measureField = (String) Meal.class.getDeclaredField("strMeasure" + count ).get(meal);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-            if(ingredientField != "null") {
-                Ingredient ingredient = new Ingredient(ingredientField, measureField);
-                ingredientArrayList.add(ingredient);
-            }
-        }
+        ingredientArrayList = new ArrayList<>(meal.extractIngredients());
         ShowIngredients(ingredientArrayList);
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void ShowIngredients(List<Ingredient> ingredientList) {
         mealIngredientsAdapter.setIngredients(ingredientList);
@@ -182,14 +190,19 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
         dialog.show();
     }
 
-
     @Override
-    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal, boolean favState) {
-        if(favState) {
+    public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
+        if(meal.isFavorite) {
+            imageView.setImageResource(R.drawable.favourite);
             mealDetailsPresenter.removeMealFromFavourite(meal);
+            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+            meal.isFavorite = false;
         }
         else{
+            imageView.setImageResource(R.drawable.favourite_colored);
             mealDetailsPresenter.addMealToFavourite(meal);
+            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+            meal.isFavorite = true;
         }
     }
 
@@ -215,7 +228,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
     }
 
     @Override
-    public void onCalendarIconClickListener(PlannedMeal meal) {
+    public void onCalendarIconClickListener(ImageView imageView, PlannedMeal meal) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -241,4 +254,5 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
         datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
         datePickerDialog.show();
     }
+
 }

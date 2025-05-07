@@ -1,4 +1,4 @@
-package com.example.food_planner.utils;
+package com.example.food_planner.utils.mutual_interfaces;
 
 import android.widget.ImageView;
 

@@ -2,6 +2,8 @@ package com.example.food_planner.model.database.mealsdatabase;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.google.android.gms.tasks.Task;
@@ -11,7 +13,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MealFirestoreDataSource {
@@ -88,8 +92,14 @@ public class MealFirestoreDataSource {
             Log.e(TAG, "No user signed in");
             return;
         }
+        if (meal.date == null || meal.plannedMealID == null) {
+            Log.e(TAG, "Invalid meal data: date or plannedMealID is null");
+            return;
+        }
         String userId = user.getUid();
-        String docId = meal.plannedMealID + "_" + meal.date.replace("/", "_");
+        // Convert date to yyyy-MM-dd if needed
+        String formattedDate = meal.date.replace("/", "-"); // e.g., yyyy/MM/dd -> yyyy-MM-dd
+        String docId = meal.plannedMealID + "_" + formattedDate;
         DocumentReference docRef = db.collection("users")
                 .document(userId)
                 .collection("plannedMeals")
@@ -105,6 +115,14 @@ public class MealFirestoreDataSource {
                     .addOnSuccessListener(aVoid -> Log.d(TAG, "Planned meal deleted from Firestore: " + meal.plannedMealID))
                     .addOnFailureListener(e -> Log.e(TAG, "Error deleting planned meal", e));
         }
+    }
+
+    private Map<String, Object> plannedMealToMap(PlannedMeal meal) {
+        Map<String, Object> mealData = mealToMap(new FavoriteMeal(meal));
+        mealData.put("date", meal.date != null ? meal.date.replace("/", "-") : "");
+        mealData.put("idMeal", meal.idMeal);
+        mealData.put("isPlanned", meal.isPlanned != null ? meal.isPlanned : false);
+        return mealData;
     }
 
     private Map<String, Object> mealToMap(FavoriteMeal meal) {
@@ -133,11 +151,11 @@ public class MealFirestoreDataSource {
         return mealData;
     }
 
-    private Map<String, Object> plannedMealToMap(PlannedMeal meal) {
-        Map<String, Object> mealData = mealToMap(new FavoriteMeal(meal)); // Reuse mealToMap for common fields
-        mealData.put("date", meal.date);
-        return mealData;
-    }
+//    private Map<String, Object> plannedMealToMap(PlannedMeal meal) {
+//        Map<String, Object> mealData = mealToMap(new FavoriteMeal(meal)); // Reuse mealToMap for common fields
+//        mealData.put("date", meal.date);
+//        return mealData;
+//    }
 
     private String getField(Object obj, String fieldName) {
         try {

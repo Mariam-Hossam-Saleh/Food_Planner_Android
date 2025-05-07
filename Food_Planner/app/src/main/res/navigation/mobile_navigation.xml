@@ -29,9 +29,13 @@
 
     <fragment
         android:id="@+id/nav_search"
-        android:name="com.example.food_planner.ui.search.SearchFragment"
+        android:name="com.example.food_planner.search.view.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_nav_search_to_mealsFragment"
+            app:destination="@id/mealsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_favourite"
@@ -53,7 +57,7 @@
     </fragment>
     <fragment
         android:id="@+id/mealsFragment"
-        android:name="com.example.food_planner.MealsFragment"
+        android:name="com.example.food_planner.meals.view.MealsFragment"
         android:label="@string/filtered_meals"
         tools:layout="@layout/fragment_meals" >
         <action

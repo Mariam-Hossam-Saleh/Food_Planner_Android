@@ -129,16 +129,13 @@ public class CalendarFragment extends Fragment implements CalendarView, OnMealCl
         calendarView.setOnDateChangeListener((calendarView, year, month, dayOfMonth) -> {
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
-
-            @SuppressLint("SimpleDateFormat")
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             currentSelectedDate = sdf.format(calendar.getTime());
-
             Log.d(TAG, "Selected date: " + currentSelectedDate);
             calendarPresenter.getPlannedMealsByDate(currentSelectedDate).observe(getViewLifecycleOwner(), plannedMeals -> {
                 plannedMealsAdapter.setPlannedMeals(plannedMeals);
                 plannedMealsAdapter.notifyDataSetChanged();
-
+                Log.d("CalendarFragment", "Fetched " + (plannedMeals != null ? plannedMeals.size() : 0) + " meals for " + currentSelectedDate);
                 if (plannedMeals == null || plannedMeals.isEmpty()) {
                     calendarAnimationView.setVisibility(View.VISIBLE);
                     mealRecyclerView.setVisibility(View.GONE);
@@ -147,12 +144,7 @@ public class CalendarFragment extends Fragment implements CalendarView, OnMealCl
                     mealRecyclerView.setVisibility(View.VISIBLE);
                 }
             });
-            calendarPresenter.getPlannedMealsByDate(currentSelectedDate).observe(getViewLifecycleOwner(), plannedMeals -> {
-                plannedMealsAdapter.setPlannedMeals(plannedMeals);
-                plannedMealsAdapter.notifyDataSetChanged();
-            });
         });
-
     }
 
     @Override

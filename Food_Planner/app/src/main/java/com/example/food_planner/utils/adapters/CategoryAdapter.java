@@ -17,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.category.Category;
-import com.example.food_planner.utils.OnCategoryClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnCategoryClickListener;
 
 import java.util.List;
 
@@ -25,7 +25,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     private final Context context;
     private List<Category> categories;
     private final OnCategoryClickListener listener;
-    private static final String TAG = "HomeRecyclerView";
+    private static final String TAG = "CategoryAdapter";
 
     public CategoryAdapter(Context _context, List<Category> categories, OnCategoryClickListener _listener) {
         this.context = _context;
@@ -74,10 +74,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        if(categories.isEmpty())
-            return 0;
-        else
+        if(categories != null)
             return categories.size();
+        else
+            return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

@@ -45,4 +45,9 @@
     <string name="viewByIngredoent">View by Ingredient</string>
     <string name="viewByCategory">View by Category</string>
     <string name="viewByArea">View by Country</string>
+    <string name="categories">Categories</string>
+    <string name="countries">Countries</string>
+    <string name="welcome_guest">Welcome Guest</string>
+    <string name="meal_name">Meal Name</string>
+    <string name="meal_of_the_day">Meal of the Day</string>
 </resources>

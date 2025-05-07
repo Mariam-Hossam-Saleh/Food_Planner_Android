@@ -1,7 +1,6 @@
 package com.example.food_planner.search.view;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,15 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,14 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.food_planner.R;
-import com.example.food_planner.databinding.FragmentFavouriteBinding;
 import com.example.food_planner.databinding.FragmentSearchBinding;
-import com.example.food_planner.favourite.presenter.FavouritePresenter;
-import com.example.food_planner.favourite.presenter.FavouritePresenterImp;
-import com.example.food_planner.favourite.view.FavoriteMealsAdapter;
-import com.example.food_planner.favourite.view.FavouriteView;
-import com.example.food_planner.home.presenter.HomePresenterImp;
-import com.example.food_planner.home.view.HomeFragment;
 import com.example.food_planner.model.database.areadatabase.AreaLocalDataSourceImp;
 import com.example.food_planner.model.database.categorydatabase.CategoryLocalDataSourceImp;
 import com.example.food_planner.model.database.ingredientsdatabase.IngredientsLocalDataSourceImp;
@@ -44,27 +33,22 @@ import com.example.food_planner.model.network.meal.MealRemoteDataSourceImp;
 import com.example.food_planner.model.pojos.area.Area;
 import com.example.food_planner.model.pojos.category.Category;
 import com.example.food_planner.model.pojos.ingredient.Ingredient;
-import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
-import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.area.AreaRepositoryImp;
 import com.example.food_planner.model.repositories.category.CategoryRepositoryImp;
 import com.example.food_planner.model.repositories.ingredent.IngredientsRepositoryImp;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.example.food_planner.search.presenter.SearchPresenter;
 import com.example.food_planner.search.presenter.SearchPresenterImp;
-import com.example.food_planner.utils.OnAreaClickListener;
-import com.example.food_planner.utils.OnCalendarIconClickListener;
-import com.example.food_planner.utils.OnCategoryClickListener;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnIngredientClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnAreaClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnCategoryClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnIngredientClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
 import com.example.food_planner.utils.adapters.AreaAdapter;
 import com.example.food_planner.utils.adapters.CategoryAdapter;
 import com.example.food_planner.utils.adapters.IngredientAdapter;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -149,8 +133,8 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
                 String query = newText.trim().toLowerCase(Locale.ROOT);
 
                 if (query.isEmpty()) {
-                    searchElement = null; // Automatically reset filter
-                    mealRecyclerView.setAdapter(null); // Optional: clear previous results
+                    searchElement = null;               // reset filter
+                    mealRecyclerView.setAdapter(null);  // clear previous results
                     return true;
                 }
                 if (searchElement == null || searchElement.isEmpty()) {

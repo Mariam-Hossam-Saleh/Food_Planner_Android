@@ -12,7 +12,6 @@ public class PlannedMeal extends Meal{
     @NonNull
     @ColumnInfo(name = "id")
     public String plannedMealID;
-
     public Boolean isPlanned = false;
 
     public PlannedMeal(){}
@@ -130,7 +129,16 @@ public class PlannedMeal extends Meal{
         this.strCreativeCommonsConfirmed = meal.strCreativeCommonsConfirmed;
         this.dateModified = meal.dateModified;
     }
+
     public void setDate(@NonNull String date) {
         this.date = date;
+    }
+
+    public Boolean getIsPlanned() {
+        return isPlanned;
+    }
+
+    public void setIsPlanned(Boolean isPlanned) {
+        this.isPlanned = isPlanned;
     }
 }

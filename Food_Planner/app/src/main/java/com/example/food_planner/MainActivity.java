@@ -6,10 +6,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
+import android.widget.ImageView;
 
+import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -18,7 +23,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food_planner.databinding.ActivityMainBinding;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,9 +47,13 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Bundle bundle = new Bundle();
-        bundle.putString("UserName", mAuth.getCurrentUser() != null ?
-                mAuth.getCurrentUser().getDisplayName() : "User");
-        Log.d("MainActivity", "Setting username: " + mAuth.getCurrentUser().getDisplayName());
+
+        String userName = "User"; // default value
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getDisplayName() != null) {
+            userName = mAuth.getCurrentUser().getDisplayName();
+        }
+        bundle.putString("UserName", userName);
+        Log.d("MainActivity", "Setting username: " + userName);
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         navController.setGraph(R.navigation.mobile_navigation, bundle);
@@ -59,11 +75,25 @@ public class MainActivity extends AppCompatActivity {
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Clear local database before logging out
+                MealLocalDataSourceImp localDataSource = MealLocalDataSourceImp.getInstance(MainActivity.this);
+                localDataSource.clearAllFavoriteMeals();
+                localDataSource.clearAllPlannedMeals();
+
+                // Perform logout
                 mAuth.signOut();
-                startActivity(new Intent(MainActivity.this,WelcomeActivity.class));
+                startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
                 finish();
             }
         });
+//        btnLogOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mAuth.signOut();
+//                startActivity(new Intent(MainActivity.this,WelcomeActivity.class));
+//                finish();
+//            }
+//        });
     }
 
     @Override

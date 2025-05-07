@@ -181,7 +181,6 @@ public class WelcomeActivity extends AppCompatActivity {
             }
         }
 
-
         // Facebook Callback
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
