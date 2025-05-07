@@ -1,15 +1,19 @@
 package com.example.food_planner.model.pojos.meal;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "planned_meals_table",primaryKeys = {"date", "plannedMealID"})
+@Entity(tableName = "planned_meals_table",primaryKeys = {"date", "id"})
 public class PlannedMeal extends Meal{
     @NonNull
     public String date;
     @NonNull
+    @ColumnInfo(name = "id")
     public String plannedMealID;
+
+    public Boolean isPlanned = false;
 
     public PlannedMeal(){}
 

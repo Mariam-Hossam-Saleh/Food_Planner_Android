@@ -1,7 +1,6 @@
-package com.example.food_planner.utils.adapters;
+package com.example.food_planner.calendar.view;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,16 +18,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
-import com.example.food_planner.model.pojos.meal.FavoriteMeal;
-import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
-import com.example.food_planner.utils.OnCalendarIconClickListener;
-import com.example.food_planner.utils.OnFavIconClickListener;
-import com.example.food_planner.utils.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
+import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class PlannedMealsAdapter extends RecyclerView.Adapter<PlannedMealsAdapter.ViewHolder> {
 
@@ -36,8 +30,6 @@ public class PlannedMealsAdapter extends RecyclerView.Adapter<PlannedMealsAdapte
     private List<PlannedMeal> meals;
     private final OnMealClickListener onMealClickListener;
     private final OnCalendarIconClickListener onCalendarIconClickListener;
-    private static final String TAG = "HomeRecyclerView";
-
     public PlannedMealsAdapter(Context _context, List<PlannedMeal> meals, OnMealClickListener onMealClickListener, OnCalendarIconClickListener onCalendarIconClickListener) {
         this.context = _context;
         this.meals = meals;
@@ -74,9 +66,9 @@ public class PlannedMealsAdapter extends RecyclerView.Adapter<PlannedMealsAdapte
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
-
+        holder.calendarIcon.setImageResource(R.drawable.calendar_colored);
         holder.calendarIcon.setOnClickListener(v -> {
-            onCalendarIconClickListener.onCalendarIconClickListener(plannedMeal);
+            onCalendarIconClickListener.onCalendarIconClickListener(holder.calendarIcon ,plannedMeal);
         });
 
         holder.imageView.setOnClickListener( v -> {
@@ -84,17 +76,15 @@ public class PlannedMealsAdapter extends RecyclerView.Adapter<PlannedMealsAdapte
                 onMealClickListener.onMealClickListener(holder.calendarIcon, plannedMeal);
             }
         });
-
-
-        Log.i(TAG, "Bound meal: " + plannedMeal.getStrMeal());
+        Log.i("CalendarAdapter", "Bound meal: " + plannedMeal.getStrMeal());
     }
 
     @Override
     public int getItemCount() {
-        if(meals.isEmpty())
-            return 0;
-        else
+        if(meals != null)
             return meals.size();
+        else
+            return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

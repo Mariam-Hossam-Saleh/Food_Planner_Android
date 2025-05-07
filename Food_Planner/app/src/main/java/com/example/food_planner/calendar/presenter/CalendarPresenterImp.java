@@ -29,8 +29,18 @@ public class CalendarPresenterImp implements CalendarPresenter, PlannedMealNetwo
     }
 
     @Override
+    public LiveData<List<PlannedMeal>> getPlannedMealsByDate(String date) {
+        return mealsRepo.getPlannedMealsByDate(date);
+    }
+
+    @Override
     public void removeMealFromCalendar(PlannedMeal meal) {
         mealsRepo.deletePlannedMeal(meal);
+    }
+
+    @Override
+    public LiveData<Boolean> isMealFavorite(FavoriteMeal meal) {
+        return mealsRepo.isMealFavorite(meal);
     }
 
     @Override
