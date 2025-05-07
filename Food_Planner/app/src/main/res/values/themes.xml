@@ -4,9 +4,11 @@
         <item name="cornerSize">0dp</item>
     </style>
 
-    <style name="Base.Theme.Food_Planner" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Food_Planner" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/light_red</item>
+        <item name="android:forceDarkAllowed">false</item>
+        <!-- in styles.xml, inside Base.Theme.Food_Planner -->
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Sharp</item>
         <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Sharp</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Sharp</item>

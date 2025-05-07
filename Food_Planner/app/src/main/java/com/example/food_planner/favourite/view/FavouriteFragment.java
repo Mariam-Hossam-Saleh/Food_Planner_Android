@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,8 @@ import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.SetIconsStatus;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -41,7 +44,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-public class FavouriteFragment extends Fragment implements FavouriteView, OnMealClickListener, OnFavIconClickListener, OnCalendarIconClickListener {
+public class FavouriteFragment extends Fragment implements FavouriteView, OnMealClickListener, OnFavIconClickListener, OnCalendarIconClickListener , SetIconsStatus {
 
     LiveData<List<FavoriteMeal>> favoriteMealArrayList;
     FavoriteMealsAdapter favoriteMealsAdapter;
@@ -50,6 +53,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
     LinearLayoutManager linearLayoutManager;
     String userName;
     LottieAnimationView favoriteAnimationView;
+    TextView favText;
     private FragmentFavouriteBinding binding;
 
     @Override
@@ -68,6 +72,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
 
         mealRecyclerView = binding.recyclerviewFavourites;
+        favText = binding.favText;
         mealRecyclerView.setHasFixedSize(true);
         mealRecyclerView.setLayoutManager(linearLayoutManager);
 
@@ -89,10 +94,13 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
         Log.d("FavoriteFragment", "UserName from FirebaseAuth: " + userName);
 
         if (Objects.equals(userName, "Guest")) {
+            favText.setVisibility(View.VISIBLE);
             favoriteAnimationView.setVisibility(View.VISIBLE);
             mealRecyclerView.setVisibility(View.GONE);
+//            Snackbar.make(view,"You need to Login to access your Favorite Meals", Snackbar.LENGTH_SHORT).show();
             return ;
         } else {
+            favText.setVisibility(View.GONE);
             favoriteAnimationView.setVisibility(View.GONE);
             mealRecyclerView.setVisibility(View.VISIBLE);
         }
@@ -101,7 +109,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
         favoriteMealArrayList.observe(getActivity(), new Observer<List<FavoriteMeal>>() {
             @Override
             public void onChanged(List<FavoriteMeal> meals) {
-                favoriteMealsAdapter = new FavoriteMealsAdapter(getActivity(),meals,FavouriteFragment.this,FavouriteFragment.this);
+                favoriteMealsAdapter = new FavoriteMealsAdapter(getActivity(),meals,FavouriteFragment.this,FavouriteFragment.this, FavouriteFragment.this, FavouriteFragment.this);
                 mealRecyclerView.setAdapter(favoriteMealsAdapter);
                 favoriteMealsAdapter.setMeals(meals);
                 if (meals == null || meals.isEmpty()) {
@@ -150,13 +158,18 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
             Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
-        favouritePresenter.removeMealFromFavourite(meal);
-        imageView.setImageResource(R.drawable.favourite);
-        Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
-        meal.isFavorite = false;
+        new AlertDialog.Builder(requireContext())
+                .setMessage("Are you sure you want to delete " + meal.getStrMeal() + " from your Favorite list?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    favouritePresenter.removeMealFromFavourite(meal);
+                    imageView.setImageResource(R.drawable.favourite);
+                    Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+                    meal.isFavorite = false;
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     @Override
@@ -174,6 +187,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
                             selectedYear, selectedMonth + 1, selectedDay);
                     meal.setDate(selectedDate);
                     favouritePresenter.addMealToCalendar(meal);
+                    imageView.setImageResource(R.drawable.calendar_colored);
                     Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
                 },
                 year, month, day
@@ -184,6 +198,30 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
         Calendar maxDate = Calendar.getInstance();
         maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
         datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+        // If the date picker is canceled, leave icon
+        datePickerDialog.setOnCancelListener(dialog -> {
+            imageView.setImageResource(R.drawable.calendar);
+        });
         datePickerDialog.show();
+    }
+
+    @Override
+    public void setHeartStatus(ImageView imageView, FavoriteMeal meal) {
+
+    }
+
+    @Override
+    public void setCalendarStatus(ImageView imageView, PlannedMeal meal) {
+        PlannedMeal plannedMeal = new PlannedMeal(meal);
+        LiveData<Boolean> isPlanned = favouritePresenter.isMealPlanned(plannedMeal);
+        isPlanned.observe(getViewLifecycleOwner(), isPlan -> {
+            if (isPlan) {
+                imageView.setImageResource(R.drawable.calendar_colored);
+                plannedMeal.isPlanned = true;
+            } else {
+                imageView.setImageResource(R.drawable.calendar);
+                plannedMeal.isPlanned = false;
+            }
+        });
     }
 }

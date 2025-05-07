@@ -5,6 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".favourite.view.FavouriteFragment">
+    <TextView
+        android:id="@+id/favText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/favoriteAnimationView"
+        android:layout_margin="40dp"
+        android:text="Please sign in to access your Favorite Meals "
+        android:gravity="center"
+        android:fontFamily="@font/amita"
+        android:textColor="@color/light_red"
+        android:textSize="24sp"
+        />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/favoriteAnimationView"

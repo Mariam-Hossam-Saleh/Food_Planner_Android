@@ -20,8 +20,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
+import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.SetIconsStatus;
 
 import java.util.List;
 
@@ -31,13 +34,17 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
     private List<FavoriteMeal> meals;
     private final OnMealClickListener onMealClickListener;
     private final OnFavIconClickListener onFavIconClickListener;
+    private final OnCalendarIconClickListener onCalendarIconClickListener;
+    private final SetIconsStatus setIconsStatus;
     private static final String TAG = "HomeRecyclerView";
 
-    public FavoriteMealsAdapter(Context _context, List<FavoriteMeal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener) {
+    public FavoriteMealsAdapter(Context _context, List<FavoriteMeal> meals, OnMealClickListener onMealClickListener,  OnCalendarIconClickListener onCalendarIconClickListener, OnFavIconClickListener onFavIconClickListener,  SetIconsStatus setIconsStatus) {
         this.context = _context;
         this.meals = meals;
         this.onMealClickListener = onMealClickListener;
         this.onFavIconClickListener = onFavIconClickListener;
+        this.onCalendarIconClickListener = onCalendarIconClickListener;
+        this.setIconsStatus = setIconsStatus;
     }
 
     public void setMeals(List<FavoriteMeal> meals) {
@@ -57,6 +64,7 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meal meal = meals.get(position);
+        PlannedMeal plannedMeal = new PlannedMeal(meal);
 
         holder.txtMealTitle.setText(meal.getStrMeal());
 
@@ -69,7 +77,7 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
-
+        setIconsStatus.setCalendarStatus(holder.calendarIcon,plannedMeal);
         holder.favouriteIcon.setImageResource(R.drawable.favourite_colored);
         holder.favouriteIcon.setOnClickListener(v -> {
             if (onFavIconClickListener != null) {
@@ -80,6 +88,11 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
         holder.imageView.setOnClickListener( v -> {
             if (onMealClickListener != null) {
                 onMealClickListener.onMealClickListener(holder.favouriteIcon, meal);
+            }
+        });
+        holder.calendarIcon.setOnClickListener(v -> {
+            if (onCalendarIconClickListener != null) {
+                onCalendarIconClickListener.onCalendarIconClickListener(holder.calendarIcon ,plannedMeal);
             }
         });
 
@@ -98,12 +111,14 @@ public class FavoriteMealsAdapter extends RecyclerView.Adapter<FavoriteMealsAdap
         TextView txtMealTitle;
         ImageView imageView;
         ImageView favouriteIcon;
+        ImageView calendarIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMealTitle = itemView.findViewById(R.id.mealName);
             imageView = itemView.findViewById(R.id.mealImage);
             favouriteIcon = itemView.findViewById(R.id.addFavouritesIcon);
+            calendarIcon = itemView.findViewById(R.id.addCalendarIcon);
         }
     }
 }

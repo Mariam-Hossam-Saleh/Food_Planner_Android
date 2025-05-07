@@ -22,6 +22,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/calText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/calendarAnimationView"
+            android:layout_margin="40dp"
+            android:text="Please sign in to access your Planned Meals "
+            android:gravity="center"
+            android:fontFamily="@font/amita"
+            android:textColor="@color/light_red"
+            android:textSize="24sp"
+            />
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/calendarAnimationView"
             android:layout_width="300dp"

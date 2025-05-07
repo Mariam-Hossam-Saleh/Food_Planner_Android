@@ -30,7 +30,6 @@ public class MealDetailsPresenterImp implements MealDetailsPresenter, MealNetwor
     public void removeMealFromFavourite(FavoriteMeal meal) { mealsRepo.deleteFavoriteMeal(meal); }
 
 
-
     @Override
     public void addMealToCalendar(PlannedMeal meal) {
         mealsRepo.insertPlannedMeal(meal);

@@ -44,6 +44,16 @@ public class CalendarPresenterImp implements CalendarPresenter, PlannedMealNetwo
     }
 
     @Override
+    public void addMealToFavourite(FavoriteMeal meal) {
+        mealsRepo.insertFavoriteMeal(meal);
+    }
+
+    @Override
+    public void removeMealFromFavourite(FavoriteMeal meal) {
+        mealsRepo.deleteFavoriteMeal(meal);
+    }
+
+    @Override
     public void onSuccessPlannedMeal(List<PlannedMeal> meals) {
         view.ShowPlannedMeals(meals);
     }

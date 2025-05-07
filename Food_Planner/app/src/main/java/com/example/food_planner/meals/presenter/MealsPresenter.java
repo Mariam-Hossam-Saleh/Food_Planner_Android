@@ -16,7 +16,8 @@ public interface MealsPresenter {
     public void addMealToCalendar(PlannedMeal meal);
     public void removeMealFromFavourite(FavoriteMeal meal);
     public LiveData<List<FavoriteMeal>> getFavouriteMeals();
-
     public void removeMealFromCalendar(PlannedMeal meal);
+    public LiveData<Boolean> isMealFavorite(FavoriteMeal meal);
+    public LiveData<Boolean> isMealPlanned(PlannedMeal meal);
 
 }

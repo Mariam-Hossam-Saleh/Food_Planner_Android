@@ -28,7 +28,6 @@ public class SearchMealsAdapter extends RecyclerView.Adapter<SearchMealsAdapter.
     private final Context context;
     private List<Meal> meals;
     private final OnMealClickListener onMealClickListener;
-//    private final OnFavIconClickListener onFavIconClickListener;
     private static final String TAG = "SearchAdapter";
 
     public SearchMealsAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener) {

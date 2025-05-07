@@ -24,6 +24,7 @@ import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
+import com.example.food_planner.utils.mutual_interfaces.SetIconsStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +38,17 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     private final OnFavIconClickListener onFavIconClickListener;
     private final OnCalendarIconClickListener onCalendarIconClickListener;
     private static final String TAG = "MealAdapter";
+    private final SetIconsStatus setIconsStatus;
 
-    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener, OnCalendarIconClickListener onCalendarIconClickListener) {
+
+    public MealAdapter(Context _context, List<Meal> meals, OnMealClickListener onMealClickListener, OnFavIconClickListener onFavIconClickListener, OnCalendarIconClickListener onCalendarIconClickListener, SetIconsStatus setIconsStatus) {
         this.context = _context;
         this.meals = meals;
         this.onMealClickListener = onMealClickListener;
         this.onFavIconClickListener = onFavIconClickListener;
         this.onCalendarIconClickListener = onCalendarIconClickListener;
+        this.setIconsStatus = setIconsStatus;
+
     }
 
     public void setMeals(List<Meal> meals) {
@@ -68,7 +73,8 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Meal meal = meals.get(position);
-
+        FavoriteMeal favoriteMeal = new FavoriteMeal(meal);
+        PlannedMeal plannedMeal = new PlannedMeal(meal, "");
         holder.txtMealTitle.setText(meal.getStrMeal());
 
         Glide.with(context)
@@ -79,7 +85,10 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
                         .override(200, 200)
                         .placeholder(R.drawable.loading)
                         .error(R.drawable.imagefailed))
-                .into(holder.imageView);
+                .into(holder.mealImage);
+        setIconsStatus.setHeartStatus(holder.favouriteIcon,favoriteMeal);
+        setIconsStatus.setCalendarStatus(holder.calendarIcon,plannedMeal);
+
 
         if (favoriteMeals != null) {
             boolean isFavorite = false;
@@ -100,11 +109,11 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
         holder.favouriteIcon.setOnClickListener(v -> {
             if (onFavIconClickListener != null) {
-                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, new FavoriteMeal(meal));
+                onFavIconClickListener.onFavIconClickListener(holder.favouriteIcon, favoriteMeal);
             }
         });
 
-        holder.imageView.setOnClickListener( v -> {
+        holder.mealImage.setOnClickListener(v -> {
             if (onMealClickListener != null) {
                 onMealClickListener.onMealClickListener(holder.favouriteIcon, meal);
             }
@@ -112,9 +121,10 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
 
         holder.calendarIcon.setOnClickListener(v -> {
             if (onCalendarIconClickListener != null) {
-                onCalendarIconClickListener.onCalendarIconClickListener(holder.calendarIcon ,new PlannedMeal(meal,""));
+                onCalendarIconClickListener.onCalendarIconClickListener(holder.calendarIcon ,plannedMeal);
             }
         });
+
 
         Log.i(TAG, "Bound meal: " + meal.getStrMeal());
     }
@@ -127,16 +137,17 @@ public class MealAdapter extends RecyclerView.Adapter<MealAdapter.ViewHolder> {
             return 0;
     }
 
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtMealTitle;
-        ImageView imageView;
+        ImageView mealImage;
         ImageView favouriteIcon;
         ImageView calendarIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMealTitle = itemView.findViewById(R.id.mealName);
-            imageView = itemView.findViewById(R.id.mealImage);
+            mealImage = itemView.findViewById(R.id.mealImage);
             favouriteIcon = itemView.findViewById(R.id.addFavouritesIcon);
             calendarIcon = itemView.findViewById(R.id.addCalendarIcon);
         }

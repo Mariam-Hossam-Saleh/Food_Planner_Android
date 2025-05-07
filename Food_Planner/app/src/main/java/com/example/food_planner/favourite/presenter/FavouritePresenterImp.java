@@ -34,6 +34,11 @@ public class FavouritePresenterImp implements FavouritePresenter, FavoriteMealNe
         mealsRepo.insertPlannedMeal(meal);
     }
 
+    @Override
+    public LiveData<Boolean> isMealPlanned(PlannedMeal meal) {
+        return mealsRepo.isMealPlanned(meal);
+    }
+
 
     @Override
     public void onSuccessFavoriteMeal(List<FavoriteMeal> meals) {

@@ -1,5 +1,6 @@
 package com.example.food_planner.model.repositories.meal;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -48,6 +49,36 @@ public class MealsRepositoryImp implements MealsRepository {
 
     @Override
     public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback, Boolean isSingle) {
+        if(isSingle){
+//            SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+//            String storedDate = prefs.getString(KEY_DATE, "");
+//            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+//
+//            if (storedDate.equals(today)) {
+//                String mealsJson = prefs.getString(KEY_MEALS_JSON, "");
+//                if (!mealsJson.isEmpty()) {
+//                    try {
+//                        Gson gson = new Gson();
+//                        Type type = new TypeToken<List<Meal>>(){}.getType();
+//                        List<Meal> meals = gson.fromJson(mealsJson, type);
+//                        callback.onSuccessResult(meals);
+//                        return;
+//                    } catch (Exception e) {
+//                        // Parsing failed, proceed to fetch new meals
+//                    }
+//                }
+//            }
+//            remoteDataSource.makeNetworkCallgetRandomMeal(new NetworkCallBack<List<Meal>>() {
+//                @Override
+//                public void onSuccessResult(List<Meal> result) {
+//                    Gson gson = new Gson();
+//                    String json = gson.toJson(result);
+//                    SharedPreferences.Editor editor = prefs.edit();
+//                    editor.putString(KEY_MEALS_JSON, json);
+//                    editor.putString(KEY_DATE, today);
+//                    editor.apply();
+//                    callback.onSuccessResult(result);
+                }
         remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback, isSingle);
     }
 

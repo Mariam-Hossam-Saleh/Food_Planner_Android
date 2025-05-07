@@ -3,6 +3,7 @@ package com.example.food_planner.meal_details.view;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.food_planner.R;
+import com.example.food_planner.SignInActivity;
+import com.example.food_planner.WelcomeActivity;
 import com.example.food_planner.databinding.FragmentMealDetailsBinding;
 import com.example.food_planner.meal_details.presenter.MealDetailsPresenter;
 import com.example.food_planner.meal_details.presenter.MealDetailsPresenterImp;
@@ -42,6 +45,7 @@ import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
 import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnIngredientClickListener;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,15 +65,12 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
     RecyclerView recyclerviewIngredients;
     MealDetailsPresenter mealDetailsPresenter;
     LinearLayoutManager linearLayoutManager;
-    private SharedPreferences sharedPreferences;
-    private String userID;
+    FirebaseAuth firebaseAuth;
     private FragmentMealDetailsBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = requireContext().getSharedPreferences("user_data", Context.MODE_PRIVATE);
-        userID = sharedPreferences.getString("userId", "Guest"); // Default to "guest" if not found
     }
 
 
@@ -80,6 +81,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
             String mealID = getArguments().getString("mealID");
 
             binding = FragmentMealDetailsBinding.inflate(inflater, container, false);
+            firebaseAuth = FirebaseAuth.getInstance();
             mealImage = binding.mealImage;
             addFavouritesIcon = binding.addFavouritesIcon;
             addCalendarIcon = binding.addCalendarIcon;
@@ -192,17 +194,31 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
 
     @Override
     public void onFavIconClickListener(ImageView imageView, FavoriteMeal meal) {
-        if(meal.isFavorite) {
-            imageView.setImageResource(R.drawable.favourite);
-            mealDetailsPresenter.removeMealFromFavourite(meal);
-            Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
-            meal.isFavorite = false;
+        if (firebaseAuth.getCurrentUser() == null) {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Login Required")
+                    .setMessage("You need to log in to add meals to your favorites.")
+                    .setPositiveButton("Login", (dialog, which) -> {
+                        Intent intent = new Intent(requireContext(), WelcomeActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            return;
         }
-        else{
-            imageView.setImageResource(R.drawable.favourite_colored);
-            mealDetailsPresenter.addMealToFavourite(meal);
-            Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
-            meal.isFavorite = true;
+        else {
+            if (meal.isFavorite) {
+                imageView.setImageResource(R.drawable.favourite);
+                mealDetailsPresenter.removeMealFromFavourite(meal);
+                Toast.makeText(getActivity(), "Removed from favorite successfully!", Toast.LENGTH_SHORT).show();
+                meal.isFavorite = false;
+            } else {
+                imageView.setImageResource(R.drawable.favourite_colored);
+                mealDetailsPresenter.addMealToFavourite(meal);
+                Toast.makeText(getActivity(), "Added to favorite successfully!", Toast.LENGTH_SHORT).show();
+                meal.isFavorite = true;
+            }
         }
     }
 
@@ -229,30 +245,50 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
 
     @Override
     public void onCalendarIconClickListener(ImageView imageView, PlannedMeal meal) {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        if (firebaseAuth.getCurrentUser() == null) {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Login Required")
+                    .setMessage("You need to log in to add meals to your calendar.")
+                    .setPositiveButton("Login", (dialog, which) -> {
+                        Intent intent = new Intent(requireContext(), WelcomeActivity.class);
+                        startActivity(intent);
+                        requireActivity().finish();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            return;
+        }
+        else {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                requireContext(),
-                R.style.my_dialog_theme,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
-                            selectedYear, selectedMonth + 1, selectedDay);
-                    meal.setDate(selectedDate);
-                    mealDetailsPresenter.addMealToCalendar(meal);
-                    Toast.makeText(requireContext(), meal.getStrMeal() +" planned for " + selectedDate, Toast.LENGTH_LONG).show();
-                },
-                year, month, day
-        );
-        // Set minimum date (today)
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-        // Set maximum date (1 week from today)
-        Calendar maxDate = Calendar.getInstance();
-        maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
-        datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
-        datePickerDialog.show();
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireContext(),
+                    R.style.my_dialog_theme,
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        String selectedDate = String.format(Locale.US, "%04d-%02d-%02d",
+                                selectedYear, selectedMonth + 1, selectedDay);
+                        meal.setDate(selectedDate);
+                        mealDetailsPresenter.addMealToCalendar(meal);
+                        imageView.setImageResource(R.drawable.calendar_colored);
+                        Toast.makeText(requireContext(), meal.getStrMeal() + " planned for " + selectedDate, Toast.LENGTH_LONG).show();
+                    },
+                    year, month, day
+            );
+            // Set minimum date (today)
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+            // Set maximum date (1 week from today)
+            Calendar maxDate = Calendar.getInstance();
+            maxDate.add(Calendar.DAY_OF_YEAR, 7); // Add 7 days
+            datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
+            // If the date picker is canceled, leave icon
+            datePickerDialog.setOnCancelListener(dialog -> {
+                imageView.setImageResource(R.drawable.calendar);
+            });
+            datePickerDialog.show();
+        }
     }
 
 }

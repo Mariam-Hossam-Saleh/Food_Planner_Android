@@ -120,7 +120,7 @@ public class MealFirestoreDataSource {
     private Map<String, Object> plannedMealToMap(PlannedMeal meal) {
         Map<String, Object> mealData = mealToMap(new FavoriteMeal(meal));
         mealData.put("date", meal.date != null ? meal.date.replace("/", "-") : "");
-        mealData.put("idMeal", meal.idMeal);
+        mealData.put("idMeal", meal.getIdMeal());
         mealData.put("isPlanned", meal.isPlanned != null ? meal.isPlanned : false);
         return mealData;
     }
@@ -128,13 +128,13 @@ public class MealFirestoreDataSource {
     private Map<String, Object> mealToMap(FavoriteMeal meal) {
         Map<String, Object> mealData = new HashMap<>();
         mealData.put("id", meal.favoriteMealID);
-        mealData.put("strMeal", meal.strMeal);
-        mealData.put("strCategory", meal.strCategory);
-        mealData.put("strInstructions", meal.strInstructions);
-        mealData.put("strArea", meal.strArea);
-        mealData.put("strMealThumb", meal.strMealThumb);
-        mealData.put("strTags", meal.strTags);
-        mealData.put("strYoutube", meal.strYoutube);
+        mealData.put("strMeal", meal.getStrMeal());
+        mealData.put("strCategory", meal.getStrCategory());
+        mealData.put("strInstructions", meal.getStrInstructions());
+        mealData.put("strArea", meal.getStrArea());
+        mealData.put("strMealThumb", meal.getStrMealThumb());
+        mealData.put("strTags", meal.getStrTags());
+        mealData.put("strYoutube", meal.getStrYoutube());
         // Add ingredients and measures
         for (int i = 1; i <= 20; i++) {
             String ingredient = getField(meal, "strIngredient" + i);
@@ -144,18 +144,12 @@ public class MealFirestoreDataSource {
                 mealData.put("strMeasure" + i, measure != null ? measure : "");
             }
         }
-        mealData.put("strSource", meal.strSource);
-        mealData.put("strImageSource", meal.strImageSource);
-        mealData.put("strCreativeCommonsConfirmed", meal.strCreativeCommonsConfirmed);
-        mealData.put("dateModified", meal.dateModified);
+        mealData.put("strSource", meal.getStrSource());
+        mealData.put("strImageSource", meal.getStrImageSource());
+        mealData.put("strCreativeCommonsConfirmed", meal.getStrCreativeCommonsConfirmed());
+        mealData.put("dateModified", meal.getDateModified());
         return mealData;
     }
-
-//    private Map<String, Object> plannedMealToMap(PlannedMeal meal) {
-//        Map<String, Object> mealData = mealToMap(new FavoriteMeal(meal)); // Reuse mealToMap for common fields
-//        mealData.put("date", meal.date);
-//        return mealData;
-//    }
 
     private String getField(Object obj, String fieldName) {
         try {

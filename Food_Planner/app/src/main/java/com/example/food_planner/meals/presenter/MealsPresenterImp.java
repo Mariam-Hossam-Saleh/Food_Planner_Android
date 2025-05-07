@@ -46,21 +46,18 @@ public class MealsPresenterImp implements MealsPresenter, MealNetworkCallback {
     public void removeMealFromCalendar(PlannedMeal meal) { mealsRepo.deletePlannedMeal(meal); }
 
     @Override
+    public LiveData<Boolean> isMealFavorite(FavoriteMeal meal) {
+        return mealsRepo.isMealFavorite(meal);
+    }
+
+    @Override
+    public LiveData<Boolean> isMealPlanned(PlannedMeal meal) {
+        return mealsRepo.isMealPlanned(meal);
+    }
+
+    @Override
     public void onSuccessMeal(List<Meal> meals) {
         view.ShowMeals(meals);
-
-//        if(isSingleMeal) {
-//            view.ShowMeals(meals);
-//            isSingleMeal = false ;
-//        }
-//         else {
-//            if (!meals.isEmpty()) {
-//                tenRandomMeals.add(meals.get(0));
-//            }
-//            if (tenRandomMeals.size() == mealsCount) {
-//                view.ShowMeals(new ArrayList<>(tenRandomMeals));
-//            }
-//        }
     }
 
     @Override

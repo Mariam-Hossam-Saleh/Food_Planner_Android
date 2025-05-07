@@ -1,5 +1,7 @@
 package com.example.food_planner.home.presenter;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
 
@@ -18,5 +20,7 @@ public interface HomePresenter {
     public void addMealToCalendar(PlannedMeal meal);
     public void removeMealFromFavourite(FavoriteMeal meal);
     public void removeMealFromCalendar(PlannedMeal meal);
+    public LiveData<Boolean> isMealFavorite(FavoriteMeal meal);
+    public LiveData<Boolean> isMealPlanned(PlannedMeal meal);
 
 }

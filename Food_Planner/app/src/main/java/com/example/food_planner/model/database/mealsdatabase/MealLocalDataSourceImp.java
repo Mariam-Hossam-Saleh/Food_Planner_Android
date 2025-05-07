@@ -55,7 +55,7 @@ public class MealLocalDataSourceImp implements MealLocalDataSource {
 
     @Override
     public LiveData<Boolean> isMealFavorite(FavoriteMeal meal) {
-        return favoriteMealDAO.isMealFavorite(meal.idMeal);
+        return favoriteMealDAO.isMealFavorite(meal.getIdMeal());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class MealLocalDataSourceImp implements MealLocalDataSource {
 
     @Override
     public LiveData<Boolean> isMealPlanned(PlannedMeal meal) {
-        return plannedMealDAO.isMealPlanned(meal.idMeal);
+        return plannedMealDAO.isMealPlanned(meal.getIdMeal());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.food_planner.home.presenter;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.food_planner.home.view.HomeView;
 import com.example.food_planner.model.network.area.AreaNetworkCallback;
 import com.example.food_planner.model.network.category.CategoryNetworkCallback;
@@ -86,6 +88,16 @@ public class HomePresenterImp implements HomePresenter, MealNetworkCallback , In
 
     @Override
     public void removeMealFromCalendar(PlannedMeal meal) { mealsRepo.deletePlannedMeal(meal); }
+
+    @Override
+    public LiveData<Boolean> isMealFavorite(FavoriteMeal meal) {
+        return mealsRepo.isMealFavorite(meal);
+    }
+
+    @Override
+    public LiveData<Boolean> isMealPlanned(PlannedMeal meal) {
+        return mealsRepo.isMealPlanned(meal);
+    }
 
     @Override
     public void onSuccessMeal(List<Meal> meals) {

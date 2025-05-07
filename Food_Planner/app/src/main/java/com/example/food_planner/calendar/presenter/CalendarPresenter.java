@@ -12,4 +12,6 @@ public interface CalendarPresenter {
      LiveData<List<PlannedMeal>> getPlannedMealsByDate(String date);
      void removeMealFromCalendar(PlannedMeal meal);
      LiveData<Boolean> isMealFavorite(FavoriteMeal meal);
+     public void addMealToFavourite(FavoriteMeal meal);
+     public void removeMealFromFavourite(FavoriteMeal meal);
 }
