@@ -1,0 +1,149 @@
+package com.example.food_planner.model.database.mealsdatabase;
+
+import android.util.Log;
+
+import com.example.food_planner.model.pojos.meal.FavoriteMeal;
+import com.example.food_planner.model.pojos.meal.PlannedMeal;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class MealFirestoreDataSource {
+    private static final String TAG = "MealFirestoreDataSource";
+    private final FirebaseFirestore db;
+    private final FirebaseAuth mAuth;
+    private static MealFirestoreDataSource instance = null;
+
+    private MealFirestoreDataSource() {
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    public static MealFirestoreDataSource getInstance() {
+        if (instance == null) {
+            instance = new MealFirestoreDataSource();
+        }
+        return instance;
+    }
+
+    public Task<QuerySnapshot> getFavoriteMealsFromFirestore() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Log.e(TAG, "No user signed in");
+            return null;
+        }
+        String userId = user.getUid();
+        return db.collection("users")
+                .document(userId)
+                .collection("favoriteMeals")
+                .get();
+    }
+
+    public Task<QuerySnapshot> getPlannedMealsFromFirestore() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Log.e(TAG, "No user signed in");
+            return null;
+        }
+        String userId = user.getUid();
+        return db.collection("users")
+                .document(userId)
+                .collection("plannedMeals")
+                .get();
+    }
+
+    public void syncFavoriteMealsToFirestore(FavoriteMeal meal, boolean isInsert) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Log.e(TAG, "No user signed in");
+            return;
+        }
+        String userId = user.getUid();
+        DocumentReference docRef = db.collection("users")
+                .document(userId)
+                .collection("favoriteMeals")
+                .document(meal.favoriteMealID);
+
+        if (isInsert) {
+            Map<String, Object> mealData = mealToMap(meal);
+            docRef.set(mealData)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Favorite meal synced to Firestore: " + meal.favoriteMealID))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error syncing favorite meal", e));
+        } else {
+            docRef.delete()
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Favorite meal deleted from Firestore: " + meal.favoriteMealID))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error deleting favorite meal", e));
+        }
+    }
+
+    public void syncPlannedMealsToFirestore(PlannedMeal meal, boolean isInsert) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Log.e(TAG, "No user signed in");
+            return;
+        }
+        String userId = user.getUid();
+        String docId = meal.plannedMealID + "_" + meal.date.replace("/", "_");
+        DocumentReference docRef = db.collection("users")
+                .document(userId)
+                .collection("plannedMeals")
+                .document(docId);
+
+        if (isInsert) {
+            Map<String, Object> mealData = plannedMealToMap(meal);
+            docRef.set(mealData)
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Planned meal synced to Firestore: " + meal.plannedMealID))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error syncing planned meal", e));
+        } else {
+            docRef.delete()
+                    .addOnSuccessListener(aVoid -> Log.d(TAG, "Planned meal deleted from Firestore: " + meal.plannedMealID))
+                    .addOnFailureListener(e -> Log.e(TAG, "Error deleting planned meal", e));
+        }
+    }
+
+    private Map<String, Object> mealToMap(FavoriteMeal meal) {
+        Map<String, Object> mealData = new HashMap<>();
+        mealData.put("id", meal.favoriteMealID);
+        mealData.put("strMeal", meal.strMeal);
+        mealData.put("strCategory", meal.strCategory);
+        mealData.put("strInstructions", meal.strInstructions);
+        mealData.put("strArea", meal.strArea);
+        mealData.put("strMealThumb", meal.strMealThumb);
+        mealData.put("strTags", meal.strTags);
+        mealData.put("strYoutube", meal.strYoutube);
+        // Add ingredients and measures
+        for (int i = 1; i <= 20; i++) {
+            String ingredient = getField(meal, "strIngredient" + i);
+            String measure = getField(meal, "strMeasure" + i);
+            if (ingredient != null && !ingredient.isEmpty()) {
+                mealData.put("strIngredient" + i, ingredient);
+                mealData.put("strMeasure" + i, measure != null ? measure : "");
+            }
+        }
+        mealData.put("strSource", meal.strSource);
+        mealData.put("strImageSource", meal.strImageSource);
+        mealData.put("strCreativeCommonsConfirmed", meal.strCreativeCommonsConfirmed);
+        mealData.put("dateModified", meal.dateModified);
+        return mealData;
+    }
+
+    private Map<String, Object> plannedMealToMap(PlannedMeal meal) {
+        Map<String, Object> mealData = mealToMap(new FavoriteMeal(meal)); // Reuse mealToMap for common fields
+        mealData.put("date", meal.date);
+        return mealData;
+    }
+
+    private String getField(Object obj, String fieldName) {
+        try {
+            return (String) obj.getClass().getField(fieldName).get(obj);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            return null;
+        }
+    }
+}
