@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -30,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText edtPassword;
     private EditText edtEmail;
     private FirebaseAuth mAuth;
+    private MealLocalDataSourceImp localDataSource;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -44,6 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
 
         mAuth = FirebaseAuth.getInstance();
+        localDataSource = MealLocalDataSourceImp.getInstance(this);
 
         edtPassword.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
@@ -109,6 +112,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if (task.isSuccessful()) {
                                                             Log.d("FireBase", "User profile updated.");
+                                                            localDataSource.syncWithFirestore();
                                                             updateUI(user);
                                                         } else {
                                                             Log.e("FireBase", "Failed to update profile", task.getException());
@@ -136,36 +140,34 @@ public class RegisterActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
+            localDataSource.syncWithFirestore();
             updateUI(currentUser);
         }
     }
 
-    private void updateUI(FirebaseUser user){
-        if(user != null) {
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
             Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }
-        else{
+        } else {
             edtName.setText("");
             edtEmail.setText("");
             edtPassword.setText("");
         }
-        Toast.makeText(this, "Welcome " + user.getDisplayName(),
-                Toast.LENGTH_SHORT).show();
+        if (user != null) {
+            Toast.makeText(this, "Welcome " + user.getDisplayName(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void reload(){
-
+    private void reload() {
     }
-
-
 }

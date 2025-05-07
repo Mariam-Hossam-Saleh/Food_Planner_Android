@@ -1,10 +1,7 @@
 package com.example.food_planner;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -18,7 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +29,11 @@ import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -38,18 +43,65 @@ public class SignInActivity extends AppCompatActivity {
     Button btnRegister;
     Button btnSignIn;
     private FirebaseAuth mAuth;
+    FirebaseFirestore db;
+    private MealLocalDataSourceImp localDataSource;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         btnSkip = findViewById(R.id.btnSkip);
-        btnSkip = findViewById(R.id.btnSkip);
         btnRegister = findViewById(R.id.btnReg);
         btnSignIn = findViewById(R.id.btnSignIn);
         edtEmail = findViewById(R.id.edtEmail);
         edtPassword = findViewById(R.id.edtPassword);
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        localDataSource = MealLocalDataSourceImp.getInstance(this);
+        // Create a new user with a first and last name
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Ada");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
+
+        // Add a new document with a generated ID
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("FireStore", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FireStore", "Error adding document", e);
+                    }
+                });
+        // Create a new user with a first, middle, and last name
+        Map<String, Object> user2 = new HashMap<>();
+        user.put("first", "Alan");
+        user.put("middle", "Mathison");
+        user.put("last", "Turing");
+        user.put("born", 1912);
+
+// Add a new document with a generated ID
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("FireStore", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("FireStore", "Error adding document", e);
+                    }
+                });
         edtPassword.setOnTouchListener((v, event) -> {
             final int DRAWABLE_RIGHT = 2;
 
@@ -74,13 +126,16 @@ public class SignInActivity extends AppCompatActivity {
             }
             return false;
         });
+
         btnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
+
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +144,7 @@ public class SignInActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +153,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(SignInActivity.this, "Email or password cannot be empty", Toast.LENGTH_SHORT).show();
-                    return; // Don't proceed with sign-in if fields are empty
+                    return;
                 }
 
                 mAuth.signInWithEmailAndPassword(email, password)
@@ -110,6 +166,8 @@ public class SignInActivity extends AppCompatActivity {
                                     Log.d("FireBase", "signInWithEmail:success");
                                     Toast.makeText(SignInActivity.this, "Welcome " + user.getDisplayName(),
                                             Toast.LENGTH_SHORT).show();
+                                    // Sync with Firestore
+                                    localDataSource.syncWithFirestore();
                                 } else {
                                     Exception exception = task.getException();
                                     if (exception instanceof FirebaseAuthInvalidUserException) {
@@ -117,37 +175,27 @@ public class SignInActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                         Log.e("FireBase", "No account with this email!");
                                     } else if (exception instanceof FirebaseAuthInvalidCredentialsException) {
-                                        // Wrong password or malformed email
                                         Toast.makeText(SignInActivity.this, "Email or Password is incorrect!",
                                                 Toast.LENGTH_SHORT).show();
                                         Log.e("FireBase", "Invalid credentials.");
                                     } else {
-                                        // General error
                                         Log.e("FireBase", "Sign-in failed: " + exception.getMessage());
                                         Toast.makeText(SignInActivity.this, "Something went wrong, please try again!",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 }
-                                updateUI(user); // or provide a more detailed UI update
+                                updateUI(user);
                             }
 
                             @Nullable
                             private FirebaseUser getFirebaseUser() {
                                 FirebaseUser user = mAuth.getInstance().getCurrentUser();
                                 if (user != null) {
-                                    // Name, email address, and profile photo Url
                                     String name = user.getDisplayName();
                                     String email = user.getEmail();
-//                                    Uri photoUrl = user.getPhotoUrl();
-
-                                    // Check if user's email is verified
                                     boolean emailVerified = user.isEmailVerified();
-
-                                    // The user's ID, unique to the Firebase project. Do NOT use this value to
-                                    // authenticate with your backend server, if you have one. Use
-                                    // FirebaseUser.getIdToken() instead.
                                     String uid = user.getUid();
-                                    Log.i("FireBase",email);
+                                    Log.i("FireBase", email);
                                 }
                                 return user;
                             }
@@ -159,26 +207,24 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null){
-            reload();
+        if (currentUser != null) {
+            localDataSource.syncWithFirestore();
+            updateUI(currentUser);
         }
     }
 
-    private void updateUI(FirebaseUser user){
-        if(user != null) {
+    private void updateUI(FirebaseUser user) {
+        if (user != null) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        }
-        else{
+        } else {
             edtEmail.setText("");
             edtPassword.setText("");
         }
     }
 
-    private void reload(){
-
+    private void reload() {
     }
 }
