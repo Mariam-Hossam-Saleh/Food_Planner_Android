@@ -2,19 +2,13 @@ package com.example.food_planner;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.example.food_planner.model.database.mealsdatabase.MealLocalDataSourceImp;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -23,14 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.food_planner.databinding.ActivityMainBinding;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,13 +34,17 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Bundle bundle = new Bundle();
+        Button btnLogOut = binding.btnLogOut;
+        Button btnLoginReg = binding.btnLoginRegister;
 
-        String userName = "User"; // default value
-        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().getDisplayName() != null) {
-            userName = mAuth.getCurrentUser().getDisplayName();
+        if(mAuth.getCurrentUser() == null){
+            btnLogOut.setVisibility(View.GONE);
+            btnLoginReg.setVisibility(View.VISIBLE);
         }
-        bundle.putString("UserName", userName);
-        Log.d("MainActivity", "Setting username: " + userName);
+        else{
+            btnLoginReg.setVisibility(View.GONE);
+            btnLogOut.setVisibility(View.VISIBLE);
+        }
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         navController.setGraph(R.navigation.mobile_navigation, bundle);
@@ -70,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        Button btnLogOut = binding.btnLogOut;
 
         btnLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,20 +70,19 @@ public class MainActivity extends AppCompatActivity {
                 localDataSource.clearAllFavoriteMeals();
                 localDataSource.clearAllPlannedMeals();
 
-                // Perform logout
                 mAuth.signOut();
                 startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
                 finish();
             }
         });
-//        btnLogOut.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mAuth.signOut();
-//                startActivity(new Intent(MainActivity.this,WelcomeActivity.class));
-//                finish();
-//            }
-//        });
+
+        btnLoginReg.setOnClickListener( v -> {
+            startActivity(new Intent(MainActivity.this, WelcomeActivity.class));
+            finish();
+        });
+
+
+
     }
 
     @Override

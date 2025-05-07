@@ -50,4 +50,5 @@
     <string name="welcome_guest">Welcome Guest</string>
     <string name="meal_name">Meal Name</string>
     <string name="meal_of_the_day">Meal of the Day</string>
+    <string name="loginRegister">Login/Register</string>
 </resources>

@@ -58,7 +58,8 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentMealsBinding.inflate(inflater, container, false);
 
-        if (getArguments() != null) {
+
+        if (getArguments() != null && getArguments().getString("meal") != null) {
             String meal = getArguments().getString("meal");
 
             mealsArrayList = new ArrayList<>();
@@ -73,7 +74,8 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
             recyclerviewMeals.setAdapter(mealAdapter);
 
             mealsPresenter = new MealsPresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
-            switch (Objects.requireNonNull(meal))
+
+            switch (meal)
             {
                 case "ingredient" : mealsPresenter.filterByMainIngredient(getArguments().getString("ingredientName")); break;
                 case "category" : mealsPresenter.filterMealByCategory(getArguments().getString("categoryName")); break;

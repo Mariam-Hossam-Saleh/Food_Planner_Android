@@ -67,6 +67,7 @@ public class SearchMealsAdapter extends RecyclerView.Adapter<SearchMealsAdapter.
                         .error(R.drawable.imagefailed))
                 .into(holder.imageView);
         holder.favouriteIcon.setVisibility(View.GONE);
+        holder.calendarIcon.setVisibility(View.GONE);
         holder.imageView.setOnClickListener( v -> {
             if (onMealClickListener != null) {
                 onMealClickListener.onMealClickListener(holder.favouriteIcon, meal);
@@ -88,12 +89,14 @@ public class SearchMealsAdapter extends RecyclerView.Adapter<SearchMealsAdapter.
         TextView txtMealTitle;
         ImageView imageView;
         ImageView favouriteIcon;
+        ImageView calendarIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtMealTitle = itemView.findViewById(R.id.mealName);
             imageView = itemView.findViewById(R.id.mealImage);
             favouriteIcon = itemView.findViewById(R.id.addFavouritesIcon);
+            calendarIcon = itemView.findViewById(R.id.addCalendarIcon);
         }
     }
 }

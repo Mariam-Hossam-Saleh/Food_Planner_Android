@@ -31,7 +31,6 @@ import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
 import com.example.food_planner.model.repositories.meal.MealsRepositoryImp;
-//import com.example.food_planner.utils.FirebaseSyncHelper;
 import com.example.food_planner.utils.mutual_interfaces.OnCalendarIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnFavIconClickListener;
 import com.example.food_planner.utils.mutual_interfaces.OnMealClickListener;
@@ -105,6 +104,13 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
                 favoriteMealsAdapter = new FavoriteMealsAdapter(getActivity(),meals,FavouriteFragment.this,FavouriteFragment.this);
                 mealRecyclerView.setAdapter(favoriteMealsAdapter);
                 favoriteMealsAdapter.setMeals(meals);
+                if (meals == null || meals.isEmpty()) {
+                    favoriteAnimationView.setVisibility(View.VISIBLE);
+                    mealRecyclerView.setVisibility(View.GONE);
+                } else {
+                    favoriteAnimationView.setVisibility(View.GONE);
+                    mealRecyclerView.setVisibility(View.VISIBLE);
+                }
 
             }
         });

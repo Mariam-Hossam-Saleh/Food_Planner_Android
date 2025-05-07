@@ -74,6 +74,8 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        searchMealsAdapter = new SearchMealsAdapter(getContext(), new ArrayList<>(), this);
+
         searchPresenter = new SearchPresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
                 IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),
                 CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())),
@@ -257,7 +259,7 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
             bundle.putString("mealID", meal.getIdMeal());
 
             NavController navController = NavHostFragment.findNavController(SearchFragment.this);
-            navController.navigate(R.id.action_nav_favourite_to_mealDetailsFragment, bundle);
+            navController.navigate(R.id.action_nav_search_to_mealDetailsFragment, bundle);
         } else {
             Toast.makeText(requireContext(), "Meal is missing!", Toast.LENGTH_SHORT).show();
         }

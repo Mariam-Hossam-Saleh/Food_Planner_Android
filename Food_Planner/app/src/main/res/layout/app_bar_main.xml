@@ -20,16 +20,8 @@
 
         </androidx.appcompat.widget.Toolbar>
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <include layout="@layout/content_main" />
 
-<!--    <ImageView-->
-<!--        android:id="@+id/calendarIcon"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_gravity="bottom|end"-->
-<!--        android:layout_margin="20dp"-->
-<!--        android:src="@drawable/calendar_colored"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

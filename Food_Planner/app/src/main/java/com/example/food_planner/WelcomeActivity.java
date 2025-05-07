@@ -81,7 +81,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
         btnRegister.setOnClickListener(v -> startActivity(new Intent(this, RegisterActivity.class)));
         btnSignIn.setOnClickListener(v -> startActivity(new Intent(this, SignInActivity.class)));
-        btnSkip.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        btnSkip.setOnClickListener(v -> {
+            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         googleSign.setOnClickListener(v -> {
             oneTapClient.beginSignIn(signInRequest)

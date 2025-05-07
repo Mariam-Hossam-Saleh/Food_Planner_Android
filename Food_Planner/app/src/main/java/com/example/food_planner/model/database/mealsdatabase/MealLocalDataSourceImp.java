@@ -128,6 +128,7 @@ public class MealLocalDataSourceImp implements MealLocalDataSource {
             Log.d("LocalDataSource", "All planned meals cleared");
         }).start();
     }
+
     public void syncWithFirestore() {
         // Sync favorite meals
         firestoreDataSource.getFavoriteMealsFromFirestore()
