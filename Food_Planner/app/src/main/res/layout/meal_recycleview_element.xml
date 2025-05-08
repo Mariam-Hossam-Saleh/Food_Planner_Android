@@ -17,7 +17,8 @@
     app:cardPreventCornerOverlap="true"
     app:strokeColor="#E0E0E0"
     app:strokeWidth="1dp"
-    android:layout_marginTop="10dp" >
+    android:layout_marginTop="20dp"
+    android:layout_margin="10dp" >
 
     <FrameLayout
         android:layout_width="match_parent"

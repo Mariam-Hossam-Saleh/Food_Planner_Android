@@ -2,7 +2,12 @@ package com.example.food_planner.home.view;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +27,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -93,13 +99,25 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     LinearLayoutManager ingredientLayoutManager;
     LinearLayoutManager categoryLayoutManager;
     LinearLayoutManager areaLayoutManager;
+    LottieAnimationView noConnectionAnimation;
     FirebaseAuth firebaseAuth;
+    private ConnectivityManager.NetworkCallback networkCallback;
     private FragmentHomeBinding binding;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
+        noConnectionAnimation = binding.noConnection;
+        noConnectionAnimation.setVisibility(View.GONE);
+        // check if there is network or no
+        if (!isConnected()) {
+            noConnectionAnimation.setVisibility(View.VISIBLE);
+            binding.mainContent.setVisibility(View.GONE);
+            Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+            return binding.getRoot();
+        }
 
         tenRandomMealArrayList = new ArrayList<>();
         tenRandomMealAdapter = new MealAdapter(getContext(), tenRandomMealArrayList, this,this,this,this);
@@ -160,6 +178,33 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkRequest request = new NetworkRequest.Builder().build();
+
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                requireActivity().runOnUiThread(() -> {
+                    noConnectionAnimation.setVisibility(View.GONE);
+                    binding.mainContent.setVisibility(View.VISIBLE);
+                    Toast.makeText(requireContext(), "Internet connection restored", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onLost(@NonNull Network network) {
+                requireActivity().runOnUiThread(() -> {
+                    noConnectionAnimation.setVisibility(View.VISIBLE);
+                    binding.mainContent.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+                });
+            }
+        };
+
+        connectivityManager.registerNetworkCallback(request, networkCallback);
+
         super.onViewCreated(view, savedInstanceState);
         String userName;
         if (getArguments() != null) {
@@ -183,8 +228,14 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (networkCallback != null) {
+            ConnectivityManager connectivityManager =
+                    (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.unregisterNetworkCallback(networkCallback);
+        }
         binding = null;
     }
+
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
@@ -427,4 +478,12 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
             }
         });
     }
+
+    private boolean isConnected() {
+        ConnectivityManager cm =
+                (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+
 }

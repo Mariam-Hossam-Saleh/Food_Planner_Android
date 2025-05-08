@@ -11,197 +11,217 @@
         android:layout_height="wrap_content"
         tools:context=".home.view.HomeFragment">
 
-        <TextView
-            android:id="@+id/welcomeMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/noConnection"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/meal_of_the_day"
-            android:textColor="@color/light_red"
-            android:fontFamily="@font/amita"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            android:layout_margin="20dp"
-            />
-        <!-- Featured Meal Card -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/nointernet" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/mainContent"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            app:layout_constraintTop_toBottomOf="@+id/welcomeMessage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="6dp"
-            app:cardUseCompatPadding="true"
-            app:cardPreventCornerOverlap="true"
-            app:strokeColor="#E0E0E0"
-            app:strokeWidth="1dp">
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <FrameLayout
+            <TextView
+                android:id="@+id/welcomeMessage"
                 android:layout_width="match_parent"
-                android:layout_height="250dp">
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/meal_of_the_day"
+                android:textColor="@color/light_red"
+                android:fontFamily="@font/amita"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                android:layout_margin="20dp"
+                />
+            <!-- Featured Meal Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:layout_constraintTop_toBottomOf="@+id/welcomeMessage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="6dp"
+                app:cardUseCompatPadding="true"
+                app:cardPreventCornerOverlap="true"
+                app:strokeColor="#E0E0E0"
+                app:strokeWidth="1dp">
 
-                <!-- Meal Image -->
-                <ImageView
-                    android:id="@+id/singleRandomMeal"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:outlineProvider="background" />
+                    android:layout_height="250dp">
 
-                <!-- Gradient Overlay -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/gradient" />
+                    <!-- Meal Image -->
+                    <ImageView
+                        android:id="@+id/singleRandomMeal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:outlineProvider="background" />
 
-                <!-- Favorite Icon -->
-                <ImageView
-                    android:id="@+id/addFavouritesIcon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="top|end"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/favourite"
-                    android:contentDescription="@string/add_to_favourites"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless" />
-                <ImageView
-                    android:id="@+id/addCalendarIcon"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="top|end"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/calendar"
-                    android:contentDescription="@string/add_to_favourites"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    <!-- Gradient Overlay -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/gradient" />
 
-                <TextView
-                    android:id="@+id/mealName"
-                    android:layout_gravity="bottom"
-                    android:padding="12dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/meal_name"
-                    android:textColor="@android:color/white"
-                    android:fontFamily="@font/amita"
-                    android:textSize="22sp"
-                    android:textStyle="bold" />
-            </FrameLayout>
-        </com.google.android.material.card.MaterialCardView>
-        <TextView
-            android:id="@+id/suggestedMeals"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/cardView"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/suggestedMeals"
-            android:textColor="@color/light_red"
-            android:fontFamily="@font/amita"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            />
-        <!-- Carousel for Random Meals -->
-        <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
-            android:id="@+id/carouselRecyclerviewTenRandomMeals"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@+id/suggestedMeals"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_recycleview_element" />
+                    <!-- Favorite Icon -->
+                    <ImageView
+                        android:id="@+id/addFavouritesIcon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/favourite"
+                        android:contentDescription="@string/add_to_favourites"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    <ImageView
+                        android:id="@+id/addCalendarIcon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginEnd="20dp"
+                        android:src="@drawable/calendar"
+                        android:contentDescription="@string/add_to_favourites"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackgroundBorderless" />
 
-        <TextView
-            android:id="@+id/viewByIngredients"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/carouselRecyclerviewTenRandomMeals"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/viewByIngredoent"
-            android:textColor="@color/light_red"
-            android:fontFamily="@font/amita"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            />
-        <!-- Ingredients RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewIngredients"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/viewByIngredients"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_recycleview_element" />
+                    <TextView
+                        android:id="@+id/mealName"
+                        android:layout_gravity="bottom"
+                        android:padding="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/meal_name"
+                        android:textColor="@android:color/white"
+                        android:fontFamily="@font/amita"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/suggestedMeals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/cardView"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/suggestedMeals"
+                android:textColor="@color/light_red"
+                android:fontFamily="@font/amita"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                />
+            <!-- Carousel for Random Meals -->
+            <com.jackandphantom.carouselrecyclerview.CarouselRecyclerview
+                android:id="@+id/carouselRecyclerviewTenRandomMeals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@+id/suggestedMeals"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/meal_recycleview_element" />
 
-        <TextView
-            android:id="@+id/viewByCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerviewIngredients"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/viewByCategory"
-            android:textColor="@color/light_red"
-            android:fontFamily="@font/amita"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            />
-        <!-- Categories RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewCategories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/viewByCategories"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_recycleview_element" />
+            <TextView
+                android:id="@+id/viewByIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/carouselRecyclerviewTenRandomMeals"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/viewByIngredoent"
+                android:textColor="@color/light_red"
+                android:fontFamily="@font/amita"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                />
+            <!-- Ingredients RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/viewByIngredients"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/meal_recycleview_element" />
 
-        <TextView
-            android:id="@+id/viewByAreas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerviewCategories"
-            app:layout_constraintStart_toStartOf="parent"
-            android:text="@string/viewByArea"
-            android:textColor="@color/light_red"
-            android:fontFamily="@font/amita"
-            android:textStyle="bold"
-            android:textSize="28sp"
-            />
-        <!-- Areas RecyclerView -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewAreas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@id/viewByAreas"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/meal_recycleview_element" />
+            <TextView
+                android:id="@+id/viewByCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerviewIngredients"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/viewByCategory"
+                android:textColor="@color/light_red"
+                android:fontFamily="@font/amita"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                />
+            <!-- Categories RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewCategories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/viewByCategories"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/meal_recycleview_element" />
 
+            <TextView
+                android:id="@+id/viewByAreas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/recyclerviewCategories"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/viewByArea"
+                android:textColor="@color/light_red"
+                android:fontFamily="@font/amita"
+                android:textStyle="bold"
+                android:textSize="28sp"
+                />
+            <!-- Areas RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewAreas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/viewByAreas"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:listitem="@layout/meal_recycleview_element" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,6 +1,10 @@
 package com.example.food_planner.search.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkRequest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,13 +66,13 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
     CategoryAdapter categoryAdapter;
     AreaAdapter areaAdapter;
     RecyclerView mealRecyclerView;
-    ImageView favoriteIcon;
     Button btnCategories;
     Button btnIngredients;
     Button btnCountries;
     android.widget.SearchView searchView;
     SearchPresenter searchPresenter;
     String searchElement;
+    private ConnectivityManager.NetworkCallback networkCallback;
     private FragmentSearchBinding binding;
 
     @Override
@@ -196,11 +200,42 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkRequest request = new NetworkRequest.Builder().build();
+
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(@NonNull Network network) {
+                requireActivity().runOnUiThread(() -> {
+                    binding.noConnection.setVisibility(View.GONE);
+                    binding.mainContent.setVisibility(View.VISIBLE);
+                    Toast.makeText(requireContext(), "Internet connection restored", Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @Override
+            public void onLost(@NonNull Network network) {
+                requireActivity().runOnUiThread(() -> {
+                    binding.noConnection.setVisibility(View.VISIBLE);
+                    binding.mainContent.setVisibility(View.GONE);
+                    Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+                });
+            }
+        };
+
+        connectivityManager.registerNetworkCallback(request, networkCallback);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (networkCallback != null) {
+            ConnectivityManager connectivityManager =
+                    (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            connectivityManager.unregisterNetworkCallback(networkCallback);
+        }
         binding = null;
     }
 
