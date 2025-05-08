@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/areaImage"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background" />
 
@@ -17,7 +17,7 @@
         android:id="@+id/areaName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fad4d4"
+        android:background="@drawable/rounded_text_background"
         android:fontFamily="@font/amita"
         android:gravity="center"
         android:text="Area 1"

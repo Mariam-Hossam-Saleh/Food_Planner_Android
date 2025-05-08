@@ -82,7 +82,7 @@ public class CalendarFragment extends Fragment implements CalendarView, OnMealCl
 
         calendarPresenter = new CalendarPresenterImp(
                 MealsRepositoryImp.getInstance(
-                        MealRemoteDataSourceImp.getInstance(),
+                        getContext(),MealRemoteDataSourceImp.getInstance(),
                         MealLocalDataSourceImp.getInstance(getContext())),
                 this);
 

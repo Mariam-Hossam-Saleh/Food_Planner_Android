@@ -1,5 +1,6 @@
 package com.example.food_planner.model.repositories.meal;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -11,10 +12,16 @@ import com.example.food_planner.model.network.meal.MealRemoteDataSource;
 import com.example.food_planner.model.pojos.meal.FavoriteMeal;
 import com.example.food_planner.model.pojos.meal.Meal;
 import com.example.food_planner.model.pojos.meal.PlannedMeal;
+import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MealsRepositoryImp implements MealsRepository {
     private final MealRemoteDataSource remoteDataSource;
@@ -22,15 +29,18 @@ public class MealsRepositoryImp implements MealsRepository {
     private final FirebaseAuth auth;
     private final FirebaseFirestore firestore;
     private static MealsRepositoryImp productsRepository = null;
+    private final Context context;
 
-    public static MealsRepositoryImp getInstance(MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource) {
+
+    public static MealsRepositoryImp getInstance(Context context,MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource) {
         if (productsRepository == null) {
-            productsRepository = new MealsRepositoryImp(remoteDataSource, mealLocalDataSource);
+            productsRepository = new MealsRepositoryImp( context,remoteDataSource, mealLocalDataSource);
         }
         return productsRepository;
     }
 
-    private MealsRepositoryImp(MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource) {
+    private MealsRepositoryImp(Context context,MealRemoteDataSource remoteDataSource, MealLocalDataSource mealLocalDataSource) {
+        this.context = context;
         this.remoteDataSource = remoteDataSource;
         this.mealLocalDataSource = mealLocalDataSource;
         this.auth = FirebaseAuth.getInstance();
@@ -46,10 +56,36 @@ public class MealsRepositoryImp implements MealsRepository {
     public void searchMealByID(MealNetworkCallback mealNetworkCallback, String mealID) {
         remoteDataSource.makeNetworkCallToFilterMealByID(mealNetworkCallback, mealID);
     }
-
     @Override
     public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback, Boolean isSingle) {
-        if(isSingle){
+        if (isSingle &&  context != null) {
+            SharedPreferences prefs = context.getSharedPreferences("MealPrefs", Context.MODE_PRIVATE);
+            String storedDate = prefs.getString("KEY_DATE", "");
+            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+            if (storedDate.equals(today)) {
+                String mealsJson = prefs.getString("KEY_MEALS_JSON", "");
+                if (!mealsJson.isEmpty()) {
+                    try {
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<List<Meal>>() {}.getType();
+                        List<Meal> meals = gson.fromJson(mealsJson, type);
+                        mealNetworkCallback.onSuccessMeal(meals);
+                        return;
+                    } catch (Exception e) {
+                        Log.e("MealsRepo", "Failed to parse cached meals JSON", e);
+                    }
+                }
+            }
+        }
+
+        remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback, isSingle);
+    }
+
+//
+//    @Override
+//    public void getSingleRandomMeal(MealNetworkCallback mealNetworkCallback, Boolean isSingle) {
+//        if(isSingle) {
 //            SharedPreferences prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 //            String storedDate = prefs.getString(KEY_DATE, "");
 //            String today = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -59,7 +95,8 @@ public class MealsRepositoryImp implements MealsRepository {
 //                if (!mealsJson.isEmpty()) {
 //                    try {
 //                        Gson gson = new Gson();
-//                        Type type = new TypeToken<List<Meal>>(){}.getType();
+//                        Type type = new TypeToken<List<Meal>>() {
+//                        }.getType();
 //                        List<Meal> meals = gson.fromJson(mealsJson, type);
 //                        callback.onSuccessResult(meals);
 //                        return;
@@ -68,19 +105,9 @@ public class MealsRepositoryImp implements MealsRepository {
 //                    }
 //                }
 //            }
-//            remoteDataSource.makeNetworkCallgetRandomMeal(new NetworkCallBack<List<Meal>>() {
-//                @Override
-//                public void onSuccessResult(List<Meal> result) {
-//                    Gson gson = new Gson();
-//                    String json = gson.toJson(result);
-//                    SharedPreferences.Editor editor = prefs.edit();
-//                    editor.putString(KEY_MEALS_JSON, json);
-//                    editor.putString(KEY_DATE, today);
-//                    editor.apply();
-//                    callback.onSuccessResult(result);
-                }
-        remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback, isSingle);
-    }
+//        }
+//        remoteDataSource.makeNetworkCallForSingleRandomMeal(mealNetworkCallback, isSingle);
+//    }
 
     @Override
     public void getMealsByFirstLetter(MealNetworkCallback mealNetworkCallback, String letter) {

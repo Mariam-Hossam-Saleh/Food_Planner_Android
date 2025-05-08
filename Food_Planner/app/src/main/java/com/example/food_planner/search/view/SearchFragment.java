@@ -80,7 +80,7 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
         super.onCreate(savedInstanceState);
         searchMealsAdapter = new SearchMealsAdapter(getContext(), new ArrayList<>(), this);
 
-        searchPresenter = new SearchPresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
+        searchPresenter = new SearchPresenterImp(MealsRepositoryImp.getInstance(getContext(),MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
                 IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),
                 CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())),
                 AreaRepositoryImp.getInstance(AreaRemoteDataSourceImp.getInstance(), AreaLocalDataSourceImp.getInstance(getContext())),this);
@@ -211,7 +211,7 @@ public class SearchFragment extends Fragment implements SearchView, OnMealClickL
                 requireActivity().runOnUiThread(() -> {
                     binding.noConnection.setVisibility(View.GONE);
                     binding.mainContent.setVisibility(View.VISIBLE);
-                    Toast.makeText(requireContext(), "Internet connection restored", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(requireContext(), "Internet connection restored", Toast.LENGTH_SHORT).show();
                 });
             }
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -71,8 +72,10 @@ import com.example.food_planner.utils.mutual_interfaces.SetIconsStatus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.jackandphantom.carouselrecyclerview.CarouselRecyclerview;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -161,7 +164,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
         recyclerViewAreas.setLayoutManager(areaLayoutManager);
         recyclerViewAreas.setAdapter(areaAdapter);
 
-        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
+        homePresenter = new HomePresenterImp(MealsRepositoryImp.getInstance(getContext(),MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),
                 IngredientsRepositoryImp.getInstance(IngredientsRemoteDataSourceImp.getInstance(), IngredientsLocalDataSourceImp.getInstance(getContext())),
                 CategoryRepositoryImp.getInstance(CategoryRemoteDataSourceImp.getInstance(), CategoryLocalDataSourceImp.getInstance(getContext())),
                 AreaRepositoryImp.getInstance(AreaRemoteDataSourceImp.getInstance(), AreaLocalDataSourceImp.getInstance(getContext())),this);
@@ -189,7 +192,7 @@ public class HomeFragment extends Fragment implements HomeView, OnMealClickListe
                 requireActivity().runOnUiThread(() -> {
                     noConnectionAnimation.setVisibility(View.GONE);
                     binding.mainContent.setVisibility(View.VISIBLE);
-                    Toast.makeText(requireContext(), "Internet connection restored", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(requireContext(), "Internet connection restored", Toast.LENGTH_SHORT).show();
                 });
             }
 

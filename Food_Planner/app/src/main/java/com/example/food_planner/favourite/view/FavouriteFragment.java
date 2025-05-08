@@ -60,7 +60,7 @@ public class FavouriteFragment extends Fragment implements FavouriteView, OnMeal
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         favouritePresenter = new FavouritePresenterImp(
-                MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(),MealLocalDataSourceImp.getInstance(getContext())),
+                MealsRepositoryImp.getInstance(getContext(),MealRemoteDataSourceImp.getInstance(),MealLocalDataSourceImp.getInstance(getContext())),
                 this);
 
     }

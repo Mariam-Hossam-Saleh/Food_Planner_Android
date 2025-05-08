@@ -79,7 +79,7 @@ public class MealsFragment extends Fragment implements MealsView,OnMealClickList
             recyclerviewMeals.setLayoutManager(linearLayoutManager);
             recyclerviewMeals.setAdapter(mealAdapter);
 
-            mealsPresenter = new MealsPresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
+            mealsPresenter = new MealsPresenterImp(MealsRepositoryImp.getInstance(getContext(),MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
 
             switch (meal)
             {

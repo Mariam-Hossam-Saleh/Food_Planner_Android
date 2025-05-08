@@ -105,7 +105,7 @@ public class MealDetailsFragment extends Fragment implements MealDetailsView, On
             recyclerviewIngredients.setLayoutManager(linearLayoutManager);
             recyclerviewIngredients.setAdapter(mealIngredientsAdapter);
 
-            mealDetailsPresenter = new MealDetailsPresenterImp(MealsRepositoryImp.getInstance(MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
+            mealDetailsPresenter = new MealDetailsPresenterImp(MealsRepositoryImp.getInstance(getContext(),MealRemoteDataSourceImp.getInstance(), MealLocalDataSourceImp.getInstance(getContext())),this);
             mealDetailsPresenter.searchMealByID(mealID);
 
         }
